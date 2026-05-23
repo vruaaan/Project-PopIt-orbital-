@@ -10,9 +10,15 @@ import LeaderboardPage from './LeaderboardPage'
 
 export default function App() { // defines and exports a react component (reusable UI block)
   const [count, setCount] = useState(0)
+  const [clickPower, setClickPower] = useState(1) 
   const [page, setPage] = useState('home')
   if (page === 'shop') {
-    return <ShopPage onBack={() => setPage('home')} />
+    return <ShopPage 
+    onBack={() => setPage('home')}
+    count = {count}
+    setCount = {setCount}
+    clickPower = {clickPower}
+    setClickPower = {setClickPower} />
   }
   if (page === 'leaderboard') {
     return <LeaderboardPage onBack={() => setPage('home')} />
@@ -35,7 +41,7 @@ export default function App() { // defines and exports a react component (reusab
 
           <button
             type="button"
-            onClick={() => setCount(c => c + 1)} // include game logic of popping animation later on
+            onClick={() => setCount(c => c + clickPower)} // include game logic of popping animation later on
             className="mt-8 p-0 bg-transparent border-0 focus:outline-none rounded-full fixed bottom-0 left-1/2 -translate-x-1/2">
             <span className="block w-44 shrink-0">
               <img src={can} alt="PopIt Can" className="block w-full h-110 origin-center hover:scale-105 transition-transform"/>
