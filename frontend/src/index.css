@@ -1,99 +1,133 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Libre+Baskerville:wght@400;700&family=Playfair+Display:wght@400;700&display=swap');
+@import "tailwindcss";
 
-:root { /*css custom properties */
-  --text: #B16650; /*text*/
-  --text-h: #B04A30; /*header*/
-  --bg: #EEE6D8; /*background*/
-  --border: #AF4D32; /*border, separators, subtle outlines*/
-  --code-bg: #e4ddd3; /*background for code blocks and subtle outlines*/
-  --accent: #B04A30; /*accent for buttons links and highlights*/
+:root {
+  /* colors */
+  --text: #B16650;
+  --text-h: #B04A30;
+  --bg: #EEE6D8;
+  --border: #AF4D32;
+  --code-bg: #e4ddd3;
+
+  --accent: #B04A30;
   --accent-bg: rgba(192, 74, 42, 0.1);
   --accent-border: rgba(192, 74, 42, 0.45);
   --social-bg: rgba(192, 74, 42, 0.06);
+
+  /* shadows */
   --shadow:
     rgba(192, 74, 42, 0.12) 0 10px 15px -3px,
     rgba(192, 74, 42, 0.06) 0 4px 6px -2px;
 
-  --sans: 'Libre Baskerville', Georgia, serif;
+  /* fonts */
+  --sans: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
   --heading: 'Playfair Display', 'Times New Roman', serif;
   --mono: ui-monospace, Consolas, monospace;
 }
 
-/* custom properties for dark mode, DO AT LATER TIME*/
-@media (prefers-color-scheme: dark) { 
-  :root { /*css custom properties */
-    --text: #B16650; /*text*/
-    --text-h: #B04A30; /*header*/
-    --bg: #EEE6D8; /*background*/
-    --border: #AF4D32; /*border, separators, subtle outlines*/
-    --code-bg: #e4ddd3; /*background for code blocks and subtle outlines*/
-    --accent: #B04A30; /*accent for buttons links and highlights*/
-    --accent-bg: rgba(192, 74, 42, 0.1);
-    --accent-border: rgba(192, 74, 42, 0.45);
-    --social-bg: rgba(192, 74, 42, 0.06);
-    --shadow:
-      rgba(192, 74, 42, 0.12) 0 10px 15px -3px,
-      rgba(192, 74, 42, 0.06) 0 4px 6px -2px;
-  }
-}
-body { /*reset default body margin*/
-  margin: 0;
+/* base font size: adjust here to scale the whole UI (1rem = 16px by default) */
+html { font-size: 16px; }
+
+/* Counter badge font + size */
+.counter-badge {
+  color: var(--text-h);
+  font-family: 'Libre Baskerville', sans-serif;
+  font-size: 6rem;
+  line-height: 1;
+  font-weight: 500;
 }
 
-#root {/*app container sizing and layout*/
-  width: 1126px;
-  max-width: 100%;
-  margin: 0 auto;
-  text-align: center;
-  border-inline: 1px solid var(--border);
-  min-height: 100svh;
-  display: flex;
-  flex-direction: column;
+/* Page title used in small headers (e.g. Leaderboard) */
+.pagename {
+  color: var(--text-h);
+  font-family:'Libre Baskerville', sans-serif;
+  font-size: 4rem; 
+  font-weight: 500;
+}
+
+
+@media (prefers-color-scheme: dark) { /*DARK MODE, EDIT LATER*/
+  :root {
+    --text: #B16650;
+    --text-h: #B04A30;
+    --bg: #EEE6D8;
+    --border: #AF4D32;
+    --code-bg: #e4ddd3;
+  }
+}
+
+
+* {
   box-sizing: border-box;
 }
 
+body {
+  margin: 0;
+  background-color: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+}
+
+
+#root {
+  width: 1126px;
+  max-width: 100%;
+  min-height: 100vh;
+
+  margin: 0 auto;
+
+  display: flex;
+  flex-direction: column;
+
+  text-align: center;
+
+  border-inline: 1px solid var(--border);
+}
+
 h1,
-h2 { /*heading base*/
+h2 {
   font-family: var(--heading);
   font-weight: 500;
   color: var(--text-h);
 }
 
-h1 { /*unique to h1*/
+h1 {
   font-size: 56px;
   letter-spacing: -1.68px;
   margin: 32px 0;
-  @media (max-width: 1024px) {
-    font-size: 36px;
-    margin: 20px 0;
-  }
 }
 
-h2 { /*unique to h2*/
+h2 {
   font-size: 24px;
   line-height: 118%;
   letter-spacing: -0.24px;
   margin: 0 0 8px;
-  @media (max-width: 1024px) {
+}
+
+@media (max-width: 1024px) {
+  h1 {
+    font-size: 36px;
+    margin: 20px 0;
+  }
+
+  h2 {
     font-size: 20px;
   }
 }
 
-p { /*paragraph reset*/
+p {
   margin: 0;
 }
 
 code,
-.counter { /*styling and visual treatment for inline code and .counter.*/
+.counter {
   font-family: var(--mono);
   display: inline-flex;
   border-radius: 4px;
   color: var(--text-h);
 }
 
-code { /*unique to code blocks*/
+code {
   font-size: 15px;
   line-height: 135%;
   padding: 4px 8px;
