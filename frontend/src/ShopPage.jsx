@@ -6,15 +6,14 @@ export default function ShopPage({ onBack, count, setCount, clickPower, setClick
     { id: 3, name: "Mega Factory", desc: "Supercharges all automatic poppers by 5x.", price: "500 chips" , clickMultiplier: 5},
   ];
   return (
-    <div className="min-h-screen bg-[#e7dfd2] px-6 py-6 text-[#b55334]">
+    <div className="page-base">
 
       {/* Main Container */}
-      <div className="mx-auto flex min-h-screen w-full max-w-5xl flex-col rounded-[2rem] border
-          border-[#d8c7b0] bg-[rgba(238,230,216,0.72)] p-10 shadow-lg">
+        <div className="main-card max-w-5xl">
         {/* Header */}
         <div className="flex items-start justify-between w-full">
           {/* Page Title */}
-          <h1 className="text-6xl font-serif text-[#b55334] drop-shadow-[0_3px_2px_rgba(0,0,0,0.2)]">
+          <h1 className="title-huge">
             Shop.
           </h1>
           {/* Back Button */}
@@ -23,7 +22,7 @@ export default function ShopPage({ onBack, count, setCount, clickPower, setClick
             onClick={onBack}
             className="bg-transparent border-0 transition-transform hover:scale-105"
             aria-label="Go back">
-            <img src={back} alt="back" className="w-20 h-auto"/>
+            <img src={back} alt="back" className="back-img"/>
           </button>
         </div>
         {/* Shop Table */}
@@ -31,7 +30,7 @@ export default function ShopPage({ onBack, count, setCount, clickPower, setClick
           <table className="w-full border-collapse">
             {/* Table Headers */}
             <thead>
-              <tr className="border-b border-[#cfae94] text-2xl font-serif">
+              <tr className="table-headers">
                 <th className="pb-6 text-left"> Description</th>
                 <th className="pb-6 text-right">Cost & Action</th>
               </tr>
@@ -39,7 +38,7 @@ export default function ShopPage({ onBack, count, setCount, clickPower, setClick
             {/* Table Body */}
             <tbody>
               {upgrades.map((item) => (
-                <tr key={item.id} className="border-b border-[#d8c7b0] hover:bg-white/20 transition-colors">
+                <tr key={item.id} className="row-hover">
                   {/* Left Side */}
                   <td className="py-8 pr-8">
                     <h3 className="text-3xl font-serif text-[#b55334] drop-shadow-[0_2px_1px_rgba(0,0,0,0.15)]">
@@ -53,13 +52,13 @@ export default function ShopPage({ onBack, count, setCount, clickPower, setClick
                   <td className="py-8">
                     <div className="flex flex-col items-end gap-4">
                       {/* Price */}
-                      <span className="rounded-full bg-[#e5c5a8] px-5 py-2 text-lg font-serif text-[#8d3f26] shadow-sm">
+                      <span className="pill">
                         {item.price}
                       </span>
                       {/* Upgrade Button */}
                       <button type="button"
                         onClick={() => buyUpgrade(item)}
-                        className="rounded-full bg-[#b55334] px-8 py-3 text-lg font-serif text-white shadow-md transition-transform hover:scale-105 active:scale-95">
+                        className="btn-upgrade px-8 py-3">
                         Upgrade
                       </button>
                     </div>
@@ -70,7 +69,7 @@ export default function ShopPage({ onBack, count, setCount, clickPower, setClick
           </table>
         </div>
         {/* Bottom Stats */}
-        <div className="mt-10 flex items-center justify-between rounded-2xl bg-white/20 px-6 py-4">
+        <div className="stats-bar">
           <div className="text-xl font-serif">
             Chips: {count}
           </div>

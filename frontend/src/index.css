@@ -133,3 +133,93 @@ code {
   padding: 4px 8px;
   background: var(--code-bg);
 }
+
+/* Consolidated classes extracted from repeated component utilities */
+/* Page base used on top-level page wrappers */
+.page-base {
+  min-height: 100vh;
+  background-color: #e7dfd2;
+  padding: 1.5rem;
+  color: #b55334;
+}
+
+/* Card / main content container shared by pages */
+.main-card {
+  margin-left: auto;
+  margin-right: auto;
+  display: flex;
+  min-height: 100vh;
+  width: 100%;
+  flex-direction: column;
+  border-radius: 2rem;
+  border: 1px solid #d8c7b0;
+  background: rgba(238,230,216,0.72);
+  padding: 2.5rem;
+  box-shadow: var(--shadow);
+}
+
+/* Large page title used across screens */
+.title-huge {
+  font-size: 3.75rem; /* equivalent to text-6xl */
+  font-family: var(--heading);
+  color: var(--text-h);
+  text-shadow: 0 3px 2px rgba(0,0,0,0.2);
+}
+
+/* Back button image */
+.back-img {
+  width: 5rem;
+  height: auto;
+  transition: transform 160ms ease;
+}
+.back-img:hover { transform: scale(1.05); }
+
+/* Table and list rows */
+.table-headers {
+  border-bottom: 1px solid #cfae94;
+  font-size: 1.5rem; /* text-2xl */
+  font-family: var(--heading);
+}
+.row-hover {
+  border-bottom: 1px solid #d8c7b0;
+  transition: background-color 160ms ease;
+}
+.row-hover:hover { background: rgba(255,255,255,0.2); }
+
+/* Price pill */
+.pill {
+  border-radius: 9999px;
+  background: #e5c5a8;
+  padding: 0.5rem 1.25rem;
+  font-size: 1.125rem;
+  font-family: var(--heading);
+  color: #8d3f26;
+  box-shadow: 0 1px 0 rgba(0,0,0,0.04);
+}
+
+/* Primary rounded button used for upgrades */
+.btn-upgrade {
+  border-radius: 9999px;
+  background: #b55334;
+  padding: 0.75rem 2rem;
+  font-size: 1.125rem;
+  font-family: var(--heading);
+  color: white;
+  box-shadow: 0 6px 10px -4px rgba(0,0,0,0.2);
+  transition: transform 120ms ease;
+  border: 0;
+  cursor: pointer;
+}
+.btn-upgrade:hover { transform: scale(1.05); }
+.btn-upgrade:active { transform: scale(0.95); }
+
+/* Bottom stats bar */
+.stats-bar {
+  margin-top: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-radius: 1rem;
+  background: rgba(255,255,255,0.2);
+  padding: 1rem 1.5rem;
+}
