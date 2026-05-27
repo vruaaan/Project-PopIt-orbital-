@@ -11,7 +11,7 @@ const leaderboardData = [
   {rank: '09', user: '-', cosmetics: '-', score: '-'},
   {rank: '10', user: '-', cosmetics: '-', score: '-',}]
 
-export default function LeaderboardPage({ onBack }) {
+export default function LeaderboardPage({ onBack, onLogout }) {
   return (
     <div className="page-base">
       {/* Main container */}
@@ -20,10 +20,17 @@ export default function LeaderboardPage({ onBack }) {
         <div className="flex items-start justify-between">
           {/* Title */}
           <h1 className="title-huge">Leaderboard.</h1>
-          {/* Back button */}
-          <button type="button" onClick={onBack} className="bg-transparent border-0">
-            <img src={back} alt="back" className="back-img" />
-          </button>
+          <div className="flex items-center gap-3">
+            {onLogout ? (
+              <button type="button" onClick={onLogout} className="btn-upgrade px-6 py-3 text-lg">
+                log out
+              </button>
+            ) : null}
+            {/* Back button */}
+            <button type="button" onClick={onBack} className="bg-transparent border-0">
+              <img src={back} alt="back" className="back-img" />
+            </button>
+          </div>
         </div>
         {/* Table */}
         <div className="mt-10 flex-1">
