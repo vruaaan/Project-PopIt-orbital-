@@ -40,3 +40,51 @@ This allows us to explore full-stack development while keeping the project fun a
 - Implement user testing to check for bugs
 
 
+### Project Structure:
+```
+project-root/
+│
+├── backend/
+|
+├── frontend/
+│    ├── public/
+|    ├── src/
+|    |    ├── assets/
+|    |    |    ├── back.png
+|    |    |    ├── chip1.png
+|    |    |    ├── chip2.png
+|    |    |    ├── chip3.png
+|    |    |    ├── cow.png
+|    |    |    ├── dolphin.png
+|    |    |    ├── home-icon.png
+|    |    |    ├── leaderboard.png
+|    |    |    ├── login.png
+|    |    |    ├── plain-can.png
+|    |    |    ├── seal-can.png
+|    |    |    ├── shop.png
+|    |    |    └── threechips.png
+|    |    |
+|    |    ├── lib/
+|    |    |    ├── playerService.js
+|    |    |    └── supabase.js
+|    |    |
+|    |    ├── App.css
+|    |    ├── App.jsx
+|    |    ├── index.css
+|    |    ├── Leaderboard.jsx
+|    |    ├── LoginPage.jsx
+|    |    ├── main.jsx
+|    |    └── ShopPage.jsx
+|    |
+│    ├── .env
+│    ├── eslint.config.js
+|    ├── index.html
+|    ├── package-lock.json
+|    ├── package.json
+|    └── vite.config.jst
+│   
+├── .gitignore
+├── package-lock.json
+└── README.md
+```
+
