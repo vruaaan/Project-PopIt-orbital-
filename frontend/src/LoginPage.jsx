@@ -1,35 +1,49 @@
 import { useState } from 'react'
 import back from './assets/back.png'
+import { createProfile } from './lib/playerService'
 
 export default function LoginPage({ onBack, onLogin, onCreateAccount }) {
   const [username, setUsername] = useState('')
+  const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [success, setSuccess] = useState('')
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault()
-
-    const loggedIn = onLogin(username, password)
-    if (!loggedIn) {
-      setError('Invalid username or password.')
+    const result = await onLogin(username, email, password)
+    if (!result || !result.success) {
+      setError(result?.message || 'Invalid username or password.')
       setSuccess('')
       return
     }
     setError('')
     setSuccess('Logged in successfully.')
   }
-  const handleCreateAccount = (event) => {
+
+  const handleCreateAccount = async (event) => {
     event.preventDefault()
-    const created = onCreateAccount(username, password)
-    if (!created) {
-      setError('Enter both a username and password to create an account.')
+    const result = await onCreateAccount(username, email, password)
+    if (!result || !result.success) {
+      setError(result?.message || 'Enter a username, email, and password to create an account.')
       setSuccess('')
       return
     }
+
+    if (result.userId) {
+      const { error } = await createProfile(result.userId, result.username || username.trim())
+      if (error) {
+        setError(error.message || 'Account created, but the profile row could not be created.')
+        setSuccess('')
+        return
+      }
+    }
+
     setError('')
-    setSuccess('Account created successfully.')
+    setSuccess('Account created successfully, check your email for confirmation link before logging in')
   }
+
+
   return (
     <div className="page-base">
       <div className="main-card max-w-5xl justify-center gap-8">
@@ -48,10 +62,22 @@ export default function LoginPage({ onBack, onLogin, onCreateAccount }) {
               <label className="flex flex-col gap-2 text-lg font-serif text-[#8d3f26]">
                 Username
                 <input
+                  type="text"
                   value={username}
                   onChange={(event) => setUsername(event.target.value)}
                   className="rounded-2xl border border-[#cfae94] bg-[rgba(255,255,255,0.35)] px-4 py-3 text-xl text-[#8d3f26] outline-none transition focus:border-[#b55334]"
-                  placeholder="Enter any username"
+                  placeholder="Choose a username"
+                />
+              </label>
+
+              <label className="flex flex-col gap-2 text-lg font-serif text-[#8d3f26]">
+                Email
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(event) => setEmail(event.target.value)}
+                  className="rounded-2xl border border-[#cfae94] bg-[rgba(255,255,255,0.35)] px-4 py-3 text-xl text-[#8d3f26] outline-none transition focus:border-[#b55334]"
+                  placeholder="Enter your email"
                 />
               </label>
 
