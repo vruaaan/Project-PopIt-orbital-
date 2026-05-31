@@ -9,7 +9,7 @@ PopIt is an idle interactive, satisfying, idle game where users tap on a virtual
 This allows us to explore full-stack development while keeping the project fun and motivating to build.
 
 ## Level of Achievement:
-- Gemini
+- Gemini 
 
 ## Link of Hosted Web Game:
 - https://project-pop-it-orbital.vercel.app/
