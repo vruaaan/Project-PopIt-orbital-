@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import back from './assets/back.png'
-import { createProfile } from './lib/playerService'
 
 export default function LoginPage({ onBack, onLogin, onCreateAccount }) {
   const [username, setUsername] = useState('')
@@ -29,16 +28,6 @@ export default function LoginPage({ onBack, onLogin, onCreateAccount }) {
       setSuccess('')
       return
     }
-
-    if (result.userId) {
-      const { error } = await createProfile(result.userId, result.username || username.trim())
-      if (error) {
-        setError(error.message || 'Account created, but the profile row could not be created.')
-        setSuccess('')
-        return
-      }
-    }
-
     setError('')
     setSuccess('Account created successfully, check your email for confirmation link before logging in')
   }

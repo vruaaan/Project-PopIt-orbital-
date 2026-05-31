@@ -13,7 +13,7 @@ import LoginPage from './LoginPage'
 
 // import supabase stuff
 import { supabase } from './lib/supabase'
-import { loadProfile } from './lib/playerService'
+import { createProfile, loadProfile } from './lib/playerService'
 
 
 export default function App() { // defines and exports a react component, everything within function runs when react renders the page
@@ -86,6 +86,20 @@ export default function App() { // defines and exports a react component, everyt
     if (error) {
       return { success: false, message: error.message || 'Failed to create account.' }
     }
+
+    const userId = data?.user?.id
+    if (!userId) {
+      return { success: false, message: 'Account created, but no user id was returned.' }
+    }
+
+    const { error: profileError } = await createProfile(userId, username.trim())
+    if (profileError) {
+      return {
+        success: false,
+        message: profileError.message || 'Account created, but the profile row could not be created.',
+      }
+    }
+
     const session = data?.session
     setIsLoggedIn(Boolean(session))
     if (session) { // if true
