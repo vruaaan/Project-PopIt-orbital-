@@ -1,15 +1,25 @@
 import back from './assets/back.png'
 export default function ShopPage({ onBack, count, setCount, clickPower, setClickPower }) {
-    const upgrades = [
-    { id: 1, name: "Auto-Popper v1", desc: "Automatically pops 1 can every second.", price: "50 chips" , clickMultiplier: 1},
-    { id: 2, name: "Golden Fizz", desc: "Doubles the value of every manual pop.", price: "150 chips" , clickMultiplier: 2},
-    { id: 3, name: "Mega Factory", desc: "Supercharges all automatic poppers by 5x.", price: "500 chips" , clickMultiplier: 5},
+  const upgrades = [
+    { id: 1, name: "Auto-Popper v1", desc: "Automatically pops 1 can every second.", price: "50 chips", clickMultiplier: 1 },
+    { id: 2, name: "Golden Fizz", desc: "Doubles the value of every manual pop.", price: "150 chips", clickMultiplier: 2 },
+    { id: 3, name: "Mega Factory", desc: "Supercharges all automatic poppers by 5x.", price: "500 chips", clickMultiplier: 5 },
   ];
+
+  function buyUpgrade(upgrade) {
+    const price = parseInt(upgrade.price);
+    if (count >= price) {
+      setCount(count - price);
+      setClickPower(clickPower + upgrade.clickMultiplier);
+    } else {
+      alert("Not enough chips to buy this upgrade!");
+    }
+  }
   return (
     <div className="page-base">
 
       {/* Main Container */}
-        <div className="main-card max-w-5xl">
+      <div className="main-card max-w-5xl">
         {/* Header */}
         <div className="flex items-start justify-between w-full">
           {/* Page Title */}
@@ -22,7 +32,7 @@ export default function ShopPage({ onBack, count, setCount, clickPower, setClick
             onClick={onBack}
             className="bg-transparent border-0 transition-transform hover:scale-105"
             aria-label="Go back">
-            <img src={back} alt="back" className="back-img"/>
+            <img src={back} alt="back" className="back-img" />
           </button>
         </div>
         {/* Shop Table */}
