@@ -3,21 +3,15 @@ import { supabase } from './supabase'
 export async function createProfile(userId, name) {
   return await supabase
     .from('profile')
-    .upsert([
-      {
-        user_id: userId,
-        username: name,
-        curr_count: 0,
-        cum_count: 0,
-        upgrade_count: 0,
-      },
-    ], {
-      onConflict: 'user_id',
-    })
+    .insert([{user_id: userId,
+            username: name,
+            curr_count: 0,
+            cum_count: 0,
+            upgrade_count: 0,}], 
+            {onConflict: 'user_id'})
     .select()
     .single()
 }
-
 
 export async function loadProfile(userId) {
   return await supabase // starts a supabase query
