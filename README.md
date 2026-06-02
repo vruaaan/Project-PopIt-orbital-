@@ -20,7 +20,7 @@ This allows us to explore full-stack development while keeping the project fun a
 - Setup the 4 core pages:
   1. Home Page
   2. Shop Page
-  3. Login Page
+  3. Login Page 
   4. Leaderboard Page
 - Setup Navigation rules between the 4 pages so that users can navigate between them
 - Setup basic 'popping' logic to increase counter on home page when the virtual can is clicked
