@@ -10,6 +10,7 @@ import can from './assets/plain can.png'
 import ShopPage from './ShopPage'
 import LeaderboardPage from './LeaderboardPage'
 import LoginPage from './LoginPage'
+import CreateAccountPage from './CreateAccountPage'
 
 import { getCurrentSessionUser, signInWithEmail, signOutUser, signUpWithEmail } from './lib/firebase'
 import { createProfile, loadProfile } from './lib/playerService'
@@ -98,7 +99,10 @@ export default function App() { // defines and exports a react component, everyt
     setClickPower = {setClickPower} />
   }
   if (page === 'login') {
-    return <LoginPage onBack={() => setPage('home')} onLogin={handleLogin} onCreateAccount={handleCreateAccount} />
+    return <LoginPage onBack={() => setPage('home')} onLogin={handleLogin} onToCreateAccount={() => setPage('createAccount')} />
+  }
+  if (page === 'createAccount') {
+    return <CreateAccountPage onBack={() => setPage('login')} onCreateAccount={handleCreateAccount} />
   }
   if (page === 'leaderboard') {
     return <LeaderboardPage onBack={() => setPage('home')} onLogout={handleLogout} />
