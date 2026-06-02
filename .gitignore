@@ -24,16 +24,12 @@ dist-ssr
 *.sw?
 
 
-# Environment variables (important for Supabase)
+# Environment variables
 .env
 .env.*
 !.env.example
 
-# Supabase local config + generated files
-.supabase/
-supabase/.branches/
-supabase/.temp/
-supabase/.env
-
-# Supabase debug / logs
-supabase/logs/
+# Firebase service-account keys (never commit)
+*firebase_account*.json
+*firebase_account*.js
+*serviceAccount*.json

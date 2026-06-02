@@ -29,7 +29,7 @@ This allows us to explore full-stack development while keeping the project fun a
 - Implement buying logic so that the shop is functioning 
 - Setup advanced 'popping' logic so that items will pop out of the can
 - Setup game physics so that the items popped will fall after popping out of the can
-- Wire up backend features to the Supabase databsae so that:
+- Wire up backend features to Firebase so that:
   1. Users can create their account to save progress
   2. Users can login back to their account to access their previous progress
   3. Leaderboard functions properly
@@ -66,7 +66,7 @@ project-root/
 |    |    |
 |    |    ├── lib/
 |    |    |    ├── playerService.js
-|    |    |    └── supabase.js
+|    |    |    └── firebase.js
 |    |    |
 |    |    ├── App.css
 |    |    ├── App.jsx

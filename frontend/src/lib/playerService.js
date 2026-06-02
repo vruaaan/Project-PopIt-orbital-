@@ -1,40 +1,75 @@
-import { supabase } from './supabase'
+import { doc, getDoc, serverTimestamp, setDoc } from 'firebase/firestore'
+import { db } from './firebase'
 
 export async function createProfile(userId, name) {
-  return await supabase
-    .from('profile')
-    .insert([{user_id: userId,
-            username: name,
-            curr_count: 0,
-            cum_count: 0,
-            upgrade_count: 0,}], 
-            {onConflict: 'user_id'})
-    .select()
-    .single()
+  try {
+    const profileRef = doc(db, 'profiles', userId)
+    const payload = {
+      user_id: userId,
+      username: name,
+      chips: 0,
+      click_power: 1,
+      created_at: serverTimestamp(),
+      updated_at: serverTimestamp(),
+    }
+
+    await setDoc(profileRef, payload, { merge: true })
+
+    const snapshot = await getDoc(profileRef)
+    return { data: snapshot.exists() ? snapshot.data() : null, error: null }
+  } catch (error) {
+    return { data: null, error }
+  }
 }
 
 export async function loadProfile(userId) {
-  return await supabase // starts a supabase query
-    .from('profile') 
-    .select('*')
-    .eq('user_id', userId) 
-    .single()
-}
-// SELECT * FROM PROFILES WHERE user_id = userId LIMIT 1;
+  try {
+    const profileRef = doc(db, 'profiles', userId)
+    const snapshot = await getDoc(profileRef)
+    if (!snapshot.exists()) {
+      return { data: null, error: null }
+    }
 
+    return { data: snapshot.data(), error: null }
+  } catch (error) {
+    return { data: null, error }
+  }
+}
 
 export async function updateChips(userId, chips) {
-  return await supabase
-    .from('profile')
-    .update({ chips })
-    .eq('user_id', userId)
+  try {
+    const profileRef = doc(db, 'profiles', userId)
+    await setDoc(
+      profileRef,
+      {
+        user_id: userId,
+        chips,
+        updated_at: serverTimestamp(),
+      },
+      { merge: true }
+    )
+
+    return { error: null }
+  } catch (error) {
+    return { error }
+  }
 }
-// UPDATE PROFILE SET chips = <chips> WHERE user_id = userId
 
 export async function updateClickPower(userId, clickPower) {
-  return await supabase
-    .from('profile')
-    .update({ click_power: clickPower })
-    .eq('user_id', userId)
+  try {
+    const profileRef = doc(db, 'profiles', userId)
+    await setDoc(
+      profileRef,
+      {
+        user_id: userId,
+        click_power: clickPower,
+        updated_at: serverTimestamp(),
+      },
+      { merge: true }
+    )
+
+    return { error: null }
+  } catch (error) {
+    return { error }
+  }
 }
-// UPDATE PROFILE SET click_power = clickPower

@@ -11,9 +11,8 @@ import ShopPage from './ShopPage'
 import LeaderboardPage from './LeaderboardPage'
 import LoginPage from './LoginPage'
 
-// import supabase stuff
-import { supabase } from './lib/supabase'
-import { loadProfile } from './lib/playerService'
+import { getCurrentSessionUser, signInWithEmail, signOutUser, signUpWithEmail } from './lib/firebase'
+import { createProfile, loadProfile } from './lib/playerService'
 
 
 export default function App() { // defines and exports a react component, everything within function runs when react renders the page
@@ -23,17 +22,13 @@ export default function App() { // defines and exports a react component, everyt
   const [isLoggedIn, setIsLoggedIn] = useState(false) // default login status (not logged in)
 
   useEffect(() => { // checking login on page load
-    const loadSession = async () => { 
-      const { data, error } = await supabase.auth.getSession() // fetches the current auth session
-      if (error) {
-        return
-      }
-      const session = data.session
-      setIsLoggedIn(Boolean(session)) // if data.session is null, it sets to false, else it sets to true
+    const loadSession = async () => {
+      const currentUser = getCurrentSessionUser()
+      setIsLoggedIn(Boolean(currentUser))
 
       // if user is logged in, load their profile (chips, click power)
-      if (session) {
-        const { data: profile, error: profileError } = await loadProfile(session.user.id)
+      if (currentUser) {
+        const { data: profile, error: profileError } = await loadProfile(currentUser.uid)
         if (!profileError && profile) {
           setCount(profile.chips ?? 0)
           setClickPower(profile.click_power ?? 1)
@@ -44,23 +39,18 @@ export default function App() { // defines and exports a react component, everyt
   }, [])
 
   const handleLogin = async (username, email, password) => { // takes in the username, email and password
-    const { data, error } = await supabase.auth.signInWithPassword({ // calls supabase, sign in 
-      email: email.trim(),
-      password,
-    })
+    const { user, error } = await signInWithEmail(email, password)
     if (error) { // if error triggered
       return { success: false, message: error.message || 'Invalid username or password.' }
     }
 
-    const session = data?.session
-    if (!session) {
-      // No active session; often happens when email confirmation is required
-      return { success: false, message: 'No active session. Check your email for a confirmation link.' }
+    if (!user) {
+      return { success: false, message: 'Unable to create an active session.' }
     }
 
     setIsLoggedIn(true)
 
-    const { data: profile, error: profileError } = await loadProfile(session.user.id)
+    const { data: profile, error: profileError } = await loadProfile(user.uid)
     if (!profileError && profile) {
       setCount(profile.chips ?? 0)
       setClickPower(profile.click_power ?? 1)
@@ -74,33 +64,27 @@ export default function App() { // defines and exports a react component, everyt
     if (!username.trim() || !email.trim() || !password.trim()) {
       return { success: false, message: 'Enter a username, email, and password to create an account.' }
     }
-    const { data, error } = await supabase.auth.signUp({ 
-      email: email.trim(),
-      password,
-      options: {
-        data: {
-          username: username.trim(),
-        },
-      },
-    })
+    const { user, error } = await signUpWithEmail(username, email, password)
     if (error) {
       return { success: false, message: error.message || 'Failed to create account.' }
     }
-    const session = data?.session
-    setIsLoggedIn(Boolean(session))
-    if (session) { // if true
-      const { data: profile, error: profileError } = await loadProfile(session.user.id)
-      if (!profileError && profile) {
-        setCount(profile.chips ?? 0)
-        setClickPower(profile.click_power ?? 1)
-      }
-      setPage('leaderboard') // set page to leaderboard
+
+    if (!user) {
+      return { success: false, message: 'Account created, but user session was not initialized.' }
     }
-    return { success: true, userId: data?.user?.id, username: username.trim(), session }
+
+    await createProfile(user.uid, username.trim())
+
+    setIsLoggedIn(true)
+    setCount(0)
+    setClickPower(1)
+    setPage('leaderboard')
+
+    return { success: true, userId: user.uid, username: username.trim() }
   }
 
   const handleLogout = async () => {
-    await supabase.auth.signOut()
+    await signOutUser()
     setIsLoggedIn(false)
     setPage('home')
   }
