@@ -1,73 +1,67 @@
 import { doc, getDoc, serverTimestamp, setDoc } from 'firebase/firestore'
 import { db } from './firebase'
 
-export async function createProfile(userId, name) {
+/** 
+Creates a document in the 'users' collection, identified by the user's email, alled immediately after Firebase Auth signup.
+ @param {string} email // - The user's email (used as the document ID)
+ @param {string} username // - The display name chosen during signup
+ @param {string} userId // - The Firebase Auth UID (stored as a field for cross-reference)
+*/
+export async function createProfile(email, username, userId) {
   try {
-    const profileRef = doc(db, 'profiles', userId)
+    const userRef = doc(db, 'users', email)
     const payload = {
-      user_id: userId,
-      username: name,
+      uid: userId,
+      email,
+      username,
       chips: 0,
       click_power: 1,
       created_at: serverTimestamp(),
       updated_at: serverTimestamp(),
     }
-
-    await setDoc(profileRef, payload, { merge: true })
-
-    const snapshot = await getDoc(profileRef)
+    // merge: true means re-signup won't wipe existing data
+    await setDoc(userRef, payload, { merge: true })
+    const snapshot = await getDoc(userRef)
     return { data: snapshot.exists() ? snapshot.data() : null, error: null }
   } catch (error) {
     return { data: null, error }
   }
 }
 
-export async function loadProfile(userId) {
+// Loads a user's profile by email.
+export async function loadProfile(email) {
   try {
-    const profileRef = doc(db, 'profiles', userId)
-    const snapshot = await getDoc(profileRef)
+    const userRef = doc(db, 'users', email)
+    const snapshot = await getDoc(userRef)
     if (!snapshot.exists()) {
       return { data: null, error: null }
     }
-
     return { data: snapshot.data(), error: null }
   } catch (error) {
     return { data: null, error }
   }
 }
 
-export async function updateChips(userId, chips) {
+//Persists the current chip count to Firestore.
+export async function updateChips(email, chips) {
   try {
-    const profileRef = doc(db, 'profiles', userId)
-    await setDoc(
-      profileRef,
-      {
-        user_id: userId,
-        chips,
-        updated_at: serverTimestamp(),
-      },
-      { merge: true }
-    )
-
+    const userRef = doc(db, 'users', email)
+    await setDoc(userRef, { chips, updated_at: serverTimestamp() }, { merge: true })
     return { error: null }
   } catch (error) {
     return { error }
   }
 }
 
-export async function updateClickPower(userId, clickPower) {
+//Persists the current click power to Firestore.
+export async function updateClickPower(email, clickPower) {
   try {
-    const profileRef = doc(db, 'profiles', userId)
+    const userRef = doc(db, 'users', email)
     await setDoc(
-      profileRef,
-      {
-        user_id: userId,
-        click_power: clickPower,
-        updated_at: serverTimestamp(),
-      },
+      userRef,
+      { click_power: clickPower, updated_at: serverTimestamp() },
       { merge: true }
     )
-
     return { error: null }
   } catch (error) {
     return { error }

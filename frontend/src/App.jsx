@@ -1,102 +1,126 @@
 import './App.css'
-import { useEffect, useState } from 'react' //useEffect runs code when the components load or updates, useState stores data that can change
-// import png images
+import { useEffect, useState } from 'react'
 import threechips from './assets/threechips.png'
 import shop from './assets/shop.png'
 import loginIcon from './assets/Login.png'
 import leaderboard from './assets/leaderboard.png'
 import can from './assets/plain can.png'
-// import other react components (screens)
 import ShopPage from './ShopPage'
 import LeaderboardPage from './LeaderboardPage'
 import LoginPage from './LoginPage'
 import CreateAccountPage from './CreateAccountPage'
 
-import { getCurrentSessionUser, signInWithEmail, signOutUser, signUpWithEmail } from './lib/firebase'
-import { createProfile, loadProfile } from './lib/playerService'
+import { getCurrentUser, signInWithEmail, signOutUser, signUpWithEmail } from './lib/firebase'
+import { createProfile, loadProfile, updateChips, updateClickPower } from './lib/playerService'
 
 
-export default function App() { // defines and exports a react component, everything within function runs when react renders the page
-  const [count, setCount] = useState(0) // default value for the count 
-  const [clickPower, setClickPower] = useState(1)  // default value for click power
-  const [page, setPage] = useState('home') // default page to start at (home page)
-  const [isLoggedIn, setIsLoggedIn] = useState(false) // default login status (not logged in)
+export default function App() {
+  const [count, setCount] = useState(0)
+  const [clickPower, setClickPower] = useState(1)
+  const [page, setPage] = useState('home')
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const [userEmail, setUserEmail] = useState(null)
 
-  useEffect(() => { // checking login on page load
+  useEffect(() => {
     const loadSession = async () => {
-      const currentUser = getCurrentSessionUser()
-      setIsLoggedIn(Boolean(currentUser))
+      const currentUser = await getCurrentUser()
+      if (!currentUser) return
 
-      // if user is logged in, load their profile (chips, click power)
-      if (currentUser) {
-        const { data: profile, error: profileError } = await loadProfile(currentUser.uid)
-        if (!profileError && profile) {
-          setCount(profile.chips ?? 0)
-          setClickPower(profile.click_power ?? 1)
-        }
+      setIsLoggedIn(true)
+      setUserEmail(currentUser.email)
+
+      const { data: profile, error: profileError } = await loadProfile(currentUser.email)
+      if (!profileError && profile) {
+        setCount(profile.chips ?? 0)
+        setClickPower(profile.click_power ?? 1)
       }
     }
     loadSession()
   }, [])
 
-  const handleLogin = async (username, email, password) => { // takes in the username, email and password
+  const handleLogin = async (email, password) => {
     const { user, error } = await signInWithEmail(email, password)
-    if (error) { // if error triggered
-      return { success: false, message: error.message || 'Invalid username or password.' }
+    if (error) {
+      return { success: false, message: error.message || 'Invalid email or password.' }
     }
-
     if (!user) {
       return { success: false, message: 'Unable to create an active session.' }
     }
 
     setIsLoggedIn(true)
+    setUserEmail(user.email)
 
-    const { data: profile, error: profileError } = await loadProfile(user.uid)
+    const { data: profile, error: profileError } = await loadProfile(user.email)
     if (!profileError && profile) {
       setCount(profile.chips ?? 0)
       setClickPower(profile.click_power ?? 1)
     }
 
-    setPage('leaderboard') // page set to leaderboard
+    setPage('leaderboard')
     return { success: true }
   }
 
-  const handleCreateAccount = async (username, email, password) => { // creates an account
+  const handleCreateAccount = async (username, email, password) => {
     if (!username.trim() || !email.trim() || !password.trim()) {
       return { success: false, message: 'Enter a username, email, and password to create an account.' }
     }
+
     const { user, error } = await signUpWithEmail(username, email, password)
     if (error) {
       return { success: false, message: error.message || 'Failed to create account.' }
     }
-
     if (!user) {
       return { success: false, message: 'Account created, but user session was not initialized.' }
     }
 
-    await createProfile(user.uid, username.trim())
+    // Create the Firestore document, keyed by email
+    const { error: profileError } = await createProfile(user.email, username.trim(), user.uid)
+    if (profileError) {
+      console.error('Failed to create Firestore profile:', profileError)
+    }
 
     setIsLoggedIn(true)
+    setUserEmail(user.email)
     setCount(0)
     setClickPower(1)
     setPage('leaderboard')
 
-    return { success: true, userId: user.uid, username: username.trim() }
+    return { success: true }
   }
 
   const handleLogout = async () => {
     await signOutUser()
     setIsLoggedIn(false)
+    setUserEmail(null)
     setPage('home')
   }
 
+  const handleSetCount = (updater) => {
+    setCount((prev) => {
+      const next = typeof updater === 'function' ? updater(prev) : updater
+      if (userEmail) updateChips(userEmail, next)
+      return next
+    })
+  }
+
+  const handleSetClickPower = (updater) => {
+    setClickPower((prev) => {
+      const next = typeof updater === 'function' ? updater(prev) : updater
+      if (userEmail) updateClickPower(userEmail, next)
+      return next
+    })
+  }
+
   if (page === 'shop') {
-    return <ShopPage 
-    onBack={() => setPage('home')}
-    count = {count}
-    setCount = {setCount}
-    clickPower = {clickPower}
-    setClickPower = {setClickPower} />
+    return (
+      <ShopPage
+        onBack={() => setPage('home')}
+        count={count}
+        setCount={handleSetCount}
+        clickPower={clickPower}
+        setClickPower={handleSetClickPower}
+      />
+    )
   }
   if (page === 'login') {
     return <LoginPage onBack={() => setPage('home')} onLogin={handleLogin} onToCreateAccount={() => setPage('createAccount')} />
@@ -115,29 +139,29 @@ export default function App() { // defines and exports a react component, everyt
           <div />
         </div>
         <div className="flex flex-1 items-end justify-center pb-0 relative">
-          <div className="fixed left-21 top-4"> {/*positions the counter on the top left */}
-              <div className="counter-badge">{count}</div>
+          <div className="fixed left-21 top-4">
+            <div className="counter-badge">{count}</div>
           </div>
-          
-          <div className="fixed left-4 top-4"> {/* stacked chips icon*/} 
-            <img src={threechips} alt="3 chips stacked" className="w-16 h-auto"/>
+
+          <div className="fixed left-4 top-4">
+            <img src={threechips} alt="3 chips stacked" className="w-16 h-auto" />
           </div>
 
           <button
             type="button"
-            onClick={() => setCount(c => c + clickPower)} // include game logic of popping animation later on
+            onClick={() => handleSetCount((c) => c + clickPower)}
             className="mt-8 p-0 bg-transparent border-0 focus:outline-none rounded-full fixed bottom-0 left-1/2 -translate-x-1/2">
             <span className="block w-44 shrink-0">
-              <img src={can} alt="PopIt Can" className="block w-full h-110 origin-center hover:scale-105 transition-transform"/>
+              <img src={can} alt="PopIt Can" className="block w-full h-110 origin-center hover:scale-105 transition-transform" />
             </span>
           </button>
 
           <button
             type="button"
-            onClick={() => setPage('shop')} // open the shop page
+            onClick={() => setPage('shop')}
             className="mt-8 p-0 bg-transparent border-0 focus:outline-none rounded-full">
             <span className="fixed right-4 top-4">
-              <img src={shop} alt="shop icon" className="block w-20 h-auto  origin-center hover:scale-105 transition-transform"/>
+              <img src={shop} alt="shop icon" className="block w-20 h-auto origin-center hover:scale-105 transition-transform" />
             </span>
           </button>
 
@@ -149,16 +173,12 @@ export default function App() { // defines and exports a react component, everyt
               <img
                 src={isLoggedIn ? leaderboard : loginIcon}
                 alt={isLoggedIn ? 'leaderboard icon' : 'login icon'}
-                className="block w-20 h-auto  origin-center hover:scale-105 transition-transform"
+                className="block w-20 h-auto origin-center hover:scale-105 transition-transform"
               />
             </span>
           </button>
-
-          
         </div>
       </div>
     </div>
   )
 }
-
-

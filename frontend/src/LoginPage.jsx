@@ -2,7 +2,6 @@ import { useState } from 'react'
 import back from './assets/back.png'
 
 export default function LoginPage({ onBack, onLogin, onToCreateAccount }) {
-  const [username, setUsername] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
@@ -10,16 +9,15 @@ export default function LoginPage({ onBack, onLogin, onToCreateAccount }) {
 
   const handleSubmit = async (event) => {
     event.preventDefault()
-    const result = await onLogin(username, email, password)
+    const result = await onLogin(email, password)
     if (!result || !result.success) {
-      setError(result?.message || 'Invalid username or password.')
+      setError(result?.message || 'Invalid email or password.')
       setSuccess('')
       return
     }
     setError('')
     setSuccess('Logged in successfully.')
   }
-
 
   return (
     <div className="page-base">
@@ -36,17 +34,6 @@ export default function LoginPage({ onBack, onLogin, onToCreateAccount }) {
               Sign in to open the leaderboard.
             </p>
             <div className="grid gap-4 rounded-[1.5rem] border border-[#d8c7b0] bg-[rgba(255,255,255,0.18)] p-6 shadow-[0_4px_10px_rgba(0,0,0,0.04)]">
-              <label className="flex flex-col gap-2 text-lg font-serif text-[#8d3f26]">
-                Username
-                <input
-                  type="text"
-                  value={username}
-                  onChange={(event) => setUsername(event.target.value)}
-                  className="rounded-2xl border border-[#cfae94] bg-[rgba(255,255,255,0.35)] px-4 py-3 text-xl text-[#8d3f26] outline-none transition focus:border-[#b55334]"
-                  placeholder="Choose a username"
-                />
-              </label>
-
               <label className="flex flex-col gap-2 text-lg font-serif text-[#8d3f26]">
                 Email
                 <input

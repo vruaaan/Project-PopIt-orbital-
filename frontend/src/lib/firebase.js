@@ -2,6 +2,7 @@ import { initializeApp } from 'firebase/app'
 import {
   createUserWithEmailAndPassword,
   getAuth,
+  onAuthStateChanged,
   signInWithEmailAndPassword,
   signOut,
   updateProfile,
@@ -30,8 +31,18 @@ const app = initializeApp(firebaseConfig)
 export const auth = getAuth(app)
 export const db = getFirestore(app)
 
-export function getCurrentSessionUser() {
-  return auth.currentUser
+/**
+ * Returns a Promise that resolves with the current user (or null)
+ * once Firebase has finished restoring the session from storage.
+ * Use this instead of auth.currentUser on app load.
+ */
+export function getCurrentUser() {
+  return new Promise((resolve) => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      unsubscribe()
+      resolve(user)
+    })
+  })
 }
 
 export async function signInWithEmail(email, password) {
