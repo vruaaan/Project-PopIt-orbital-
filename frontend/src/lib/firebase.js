@@ -31,11 +31,8 @@ const app = initializeApp(firebaseConfig)
 export const auth = getAuth(app)
 export const db = getFirestore(app)
 
-/**
- * Returns a Promise that resolves with the current user (or null)
- * once Firebase has finished restoring the session from storage.
- * Use this instead of auth.currentUser on app load.
- */
+// Returns a Promise that resolves with the current user (or null) once Firebase has finished restoring the session from storage.
+// Use this instead of auth.currentUser on app load.
 export function getCurrentUser() {
   return new Promise((resolve) => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {

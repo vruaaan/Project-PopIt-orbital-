@@ -12,12 +12,22 @@ export async function createProfile(email, username, userId) {
     const userRef = doc(db, 'users', email)
     const payload = {
       uid: userId,
-      email,
+      email, 
       username,
-      chips: 0,
-      click_power: 1,
+      curr_count: 0,
+      cum_count:0,
+      purchase_count:0,
+      click_pow: 1,
+      auto_popper: 0,
+      default_cp: 0,
       created_at: serverTimestamp(),
       updated_at: serverTimestamp(),
+      seal_cp: 0,
+      seal_prob: 0,
+      cow_cp : 0,
+      cow_prob: 0,
+      dol_cp: 0,
+      dol_prob : 0
     }
     // merge: true means re-signup won't wipe existing data
     await setDoc(userRef, payload, { merge: true })
