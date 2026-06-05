@@ -1,3 +1,5 @@
+/* global module */
+
 module.exports = {
   env: {
     es6: true,

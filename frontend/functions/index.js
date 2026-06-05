@@ -7,8 +7,11 @@
  * See a full list of supported triggers at https://firebase.google.com/docs/functions
  */
 
+/* global require, exports */
+
 const {setGlobalOptions} = require("firebase-functions");
-const {onRequest} = require("firebase-functions/https");
+const functions = require("firebase-functions");
+const admin = require("firebase-admin");
 const logger = require("firebase-functions/logger");
 
 // For cost control, you can set the maximum number of containers that can be
@@ -23,6 +26,8 @@ const logger = require("firebase-functions/logger");
 // this will be the maximum concurrent request count.
 setGlobalOptions({ maxInstances: 10 });
 
+admin.initializeApp();
+
 // Create and deploy your first functions
 // https://firebase.google.com/docs/functions/get-started
 
@@ -30,3 +35,22 @@ setGlobalOptions({ maxInstances: 10 });
 //   logger.info("Hello logs!", {structuredData: true});
 //   response.send("Hello from Firebase!");
 // });
+
+exports.createPlayerProfile = functions.auth.user().onCreate(async (user) => {
+  const profileRef = admin.firestore().collection("profiles").doc(user.uid);
+
+  await profileRef.set(
+    {
+      user_id: user.uid,
+      username: user.displayName || user.email || "",
+      email: user.email || "",
+      chips: 0,
+      click_power: 1,
+      created_at: admin.firestore.FieldValue.serverTimestamp(),
+      updated_at: admin.firestore.FieldValue.serverTimestamp(),
+    },
+    {merge: true}
+  );
+
+  logger.info("Created profile for new user", {uid: user.uid});
+});
