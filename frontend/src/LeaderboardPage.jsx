@@ -60,7 +60,7 @@ export default function LeaderboardPage({ onBack, onLogout }) {
                 {/* User */}
                 <div>{entry.user}</div>
                 {/* Cosmetics */}
-                <div>{entry.Chips}</div>
+                <div>{entry.cosmetics}</div>
                 {/* Score */}
                 <div className="text-right">{entry.Chips}</div>
               </div>

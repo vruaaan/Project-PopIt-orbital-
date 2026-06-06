@@ -16,7 +16,8 @@ import { updateChips, updateClickPower } from './lib/gameplayLogic'
 
 
 export default function App() {
-  const [count, setCount] = useState(0)
+  const [count, setCount] = useState(0)        // curr_count
+  const [cumCount, setCumCount] = useState(0)  // cum_count
   const [clickPower, setClickPower] = useState(1)
   const [page, setPage] = useState('home')
   const [isLoggedIn, setIsLoggedIn] = useState(false)
@@ -49,7 +50,8 @@ export default function App() {
     setUserEmail(user.email)
     const { data: profile, error: profileError } = await loadProfile(user.email)
     if (!profileError && profile) {
-      setCount(profile.chips ?? 0)
+      setCount(profile.curr_count ?? 0)
+      setCumCount(profile.cum_count ?? 0)
       setClickPower(profile.click_power ?? 1)
     }
     setPage('leaderboard') // login page becomes leaderboard after logging in
@@ -86,13 +88,14 @@ export default function App() {
     setPage('home')
   }
 
-  const handleSetCount = (updater) => { // setting count and up
-    setCount((prev) => {
-      const next = typeof updater === 'function' ? updater(prev) : updater
-      if (userEmail) updateChips(userEmail, next)
-      return next
-    })
-  }
+const handleSetCount = (isEarning = false) => {
+  const earned = clickPower
+  const nextCount = count + earned
+  const nextCum = isEarning ? cumCount + earned : cumCount
+  setCount(nextCount)
+  if (isEarning) setCumCount(nextCum)
+  if (userEmail) updateChips(userEmail, nextCount, nextCum)
+}
 
   const handleSetClickPower = (updater) => { // handle setting 
     setClickPower((prev) => {
@@ -140,7 +143,7 @@ export default function App() {
 
           <button
             type="button"
-            onClick={() => handleSetCount((c) => c + clickPower)}
+           onClick={() => handleSetCount(true)}
             className="mt-8 p-0 bg-transparent border-0 focus:outline-none rounded-full fixed bottom-0 left-1/2 -translate-x-1/2">
             <span className="block w-44 shrink-0">
               <img src={can} alt="PopIt Can" className="block w-full h-110 origin-center hover:scale-105 transition-transform" />
