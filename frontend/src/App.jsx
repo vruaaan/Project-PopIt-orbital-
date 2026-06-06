@@ -11,7 +11,8 @@ import LoginPage from './LoginPage'
 import CreateAccountPage from './CreateAccountPage'
 
 import { getCurrentUser, signInWithEmail, signOutUser, signUpWithEmail } from './lib/firebase'
-import { createProfile, loadProfile, updateChips, updateClickPower } from './lib/playerService'
+import { createProfile, loadProfile} from './lib/playerService'
+import { updateChips, updateClickPower } from './lib/gameplayLogic'
 
 
 export default function App() {
@@ -25,10 +26,8 @@ export default function App() {
     const loadSession = async () => {
       const currentUser = await getCurrentUser()
       if (!currentUser) return
-
       setIsLoggedIn(true)
       setUserEmail(currentUser.email)
-
       const { data: profile, error: profileError } = await loadProfile(currentUser.email)
       if (!profileError && profile) {
         setCount(profile.chips ?? 0)
@@ -38,7 +37,7 @@ export default function App() {
     loadSession()
   }, [])
 
-  const handleLogin = async (email, password) => {
+  const handleLogin = async (email, password) => { // handle logging in 
     const { user, error } = await signInWithEmail(email, password)
     if (error) {
       return { success: false, message: error.message || 'Invalid email or password.' }
@@ -46,25 +45,21 @@ export default function App() {
     if (!user) {
       return { success: false, message: 'Unable to create an active session.' }
     }
-
     setIsLoggedIn(true)
     setUserEmail(user.email)
-
     const { data: profile, error: profileError } = await loadProfile(user.email)
     if (!profileError && profile) {
       setCount(profile.chips ?? 0)
       setClickPower(profile.click_power ?? 1)
     }
-
-    setPage('leaderboard')
+    setPage('leaderboard') // login page becomes leaderboard after logging in
     return { success: true }
   }
 
-  const handleCreateAccount = async (username, email, password) => {
+  const handleCreateAccount = async (username, email, password) => { // handle creating account 
     if (!username.trim() || !email.trim() || !password.trim()) {
       return { success: false, message: 'Enter a username, email, and password to create an account.' }
     }
-
     const { user, error } = await signUpWithEmail(username, email, password)
     if (error) {
       return { success: false, message: error.message || 'Failed to create account.' }
@@ -72,30 +67,26 @@ export default function App() {
     if (!user) {
       return { success: false, message: 'Account created, but user session was not initialized.' }
     }
-
-    // Create the Firestore document, keyed by email
-    const { error: profileError } = await createProfile(user.email, username.trim(), user.uid)
+    const { error: profileError } = await createProfile(user.email, username.trim(), user.uid) // Create the Firestore document, keyed by email
     if (profileError) {
       console.error('Failed to create Firestore profile:', profileError)
     }
-
     setIsLoggedIn(true)
     setUserEmail(user.email)
     setCount(0)
     setClickPower(1)
     setPage('leaderboard')
-
     return { success: true }
   }
 
-  const handleLogout = async () => {
+  const handleLogout = async () => { // handle what happens when user logs out
     await signOutUser()
     setIsLoggedIn(false)
     setUserEmail(null)
     setPage('home')
   }
 
-  const handleSetCount = (updater) => {
+  const handleSetCount = (updater) => { // setting count and up
     setCount((prev) => {
       const next = typeof updater === 'function' ? updater(prev) : updater
       if (userEmail) updateChips(userEmail, next)
@@ -103,7 +94,7 @@ export default function App() {
     })
   }
 
-  const handleSetClickPower = (updater) => {
+  const handleSetClickPower = (updater) => { // handle setting 
     setClickPower((prev) => {
       const next = typeof updater === 'function' ? updater(prev) : updater
       if (userEmail) updateClickPower(userEmail, next)
@@ -132,7 +123,7 @@ export default function App() {
     return <LeaderboardPage onBack={() => setPage('home')} onLogout={handleLogout} />
   }
 
-  return (
+  return ( // constructing page
     <div className="min-h-screen px-6 py-6 text-[var(--text)]">
       <div className="mx-auto flex min-h-screen w-full max-w-5xl flex-col gap-8 rounded-[2rem] border border-[var(--border)] bg-[rgba(238,230,216,0.72)] p-8 shadow-[var(--shadow)] backdrop-blur-sm">
         <div className="flex items-center justify-between gap-4">

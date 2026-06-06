@@ -7,30 +7,30 @@ Creates a document in the 'users' collection, identified by the user's email, al
  @param {string} username // - The display name chosen during signup
  @param {string} userId // - The Firebase Auth UID (stored as a field for cross-reference)
 */
+
+// create account
 export async function createProfile(email, username, userId) {
   try {
     const userRef = doc(db, 'users', email)
     const payload = {
-      uid: userId,
+      uid: userId, 
       email, 
       username,
-      curr_count: 0,
-      cum_count:0,
-      purchase_count:0,
-      click_pow: 1,
-      auto_popper: 0,
-      default_cp: 0,
-      created_at: serverTimestamp(),
-      updated_at: serverTimestamp(),
-      seal_cp: 0,
-      seal_prob: 0,
-      cow_cp : 0,
-      cow_prob: 0,
-      dol_cp: 0,
-      dol_prob : 0
+      curr_count: 0, // curr chip count
+      cum_count:0, // cumulative chip count
+      purchase_count:0, // number of purchases made
+      click_pow: 1, // how much 1 chip is worth
+      auto_popper: 0, // auto popper 
+      created_at: serverTimestamp(), // created at
+      updated_at: serverTimestamp(), // last updated
+      seal_cp: 0, // how much a seal is worth
+      seal_prob: 0, // probability of spawning a seal
+      cow_cp : 0, // how much a cow is worth
+      cow_prob: 0, // probability of spawning a cow
+      dol_cp: 0, // how much a dolphin is worth
+      dol_prob : 0 // probability of spawning a dolphin
     }
-    // merge: true means re-signup won't wipe existing data
-    await setDoc(userRef, payload, { merge: true })
+    await setDoc(userRef, payload, { merge: true }) // merge: true means re-signup won't wipe existing data
     const snapshot = await getDoc(userRef)
     return { data: snapshot.exists() ? snapshot.data() : null, error: null }
   } catch (error) {
@@ -38,10 +38,10 @@ export async function createProfile(email, username, userId) {
   }
 }
 
-// Loads a user's profile by email.
+ // reads a single user's document from Firestore by their email, called on app load after session restore/login
 export async function loadProfile(email) {
   try {
-    const userRef = doc(db, 'users', email)
+    const userRef = doc(db, 'users', email) // reads a single user's document from Firestore by their email
     const snapshot = await getDoc(userRef)
     if (!snapshot.exists()) {
       return { data: null, error: null }
@@ -49,31 +49,5 @@ export async function loadProfile(email) {
     return { data: snapshot.data(), error: null }
   } catch (error) {
     return { data: null, error }
-  }
-}
-
-//Persists the current chip count to Firestore.
-export async function updateChips(email, chips) {
-  try {
-    const userRef = doc(db, 'users', email)
-    await setDoc(userRef, { chips, updated_at: serverTimestamp() }, { merge: true })
-    return { error: null }
-  } catch (error) {
-    return { error }
-  }
-}
-
-//Persists the current click power to Firestore.
-export async function updateClickPower(email, clickPower) {
-  try {
-    const userRef = doc(db, 'users', email)
-    await setDoc(
-      userRef,
-      { click_power: clickPower, updated_at: serverTimestamp() },
-      { merge: true }
-    )
-    return { error: null }
-  } catch (error) {
-    return { error }
   }
 }
