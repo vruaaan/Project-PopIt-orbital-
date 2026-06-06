@@ -1,17 +1,22 @@
+import { useState, useEffect } from 'react'
 import back from './assets/back.png'
-const leaderboardData = [
-  {rank: '01', user: 'seapanda47', cosmetics: 15, score: 305},
-  {rank: '02', user: 'FakeSlimShady1', cosmetics: 10, score: 259},
-  {rank: '03', user: 'sphericow', cosmetics: 5, score: 214},
-  {rank: '04', user: 'ethanwje', cosmetics: 3, score: 200},
-  {rank: '05', user: '-', cosmetics: '-', score: '-'},
-  {rank: '06', user: '-', cosmetics: '-', score: '-'},
-  {rank: '07', user: '-', cosmetics: '-', score: '-'},
-  {rank: '08', user: '-', cosmetics: '-', score: '-'},
-  {rank: '09', user: '-', cosmetics: '-', score: '-'},
-  {rank: '10', user: '-', cosmetics: '-', score: '-',}]
+import {getLeaderboardDefault} from './lib/leaderboardLogic'
+
+
+const leaderboardData = getLeaderboardDefault()
 
 export default function LeaderboardPage({ onBack, onLogout }) {
+  const [leaderboardData, setLeaderboardData] = useState([])
+  const [loading, setLoading] = useState(true)
+  useEffect(() => {
+    const fetch = async () => {
+      const { data, error } = await getLeaderboardDefault()
+      if (!error) setLeaderboardData(data)
+      setLoading(false)
+    }
+    fetch()
+  }, []) // empty array meaning this runs once when the component mounts
+  if (loading) return <p>Loading...</p>
   return (
     <div className="page-base">
       {/* Main container */}
@@ -39,7 +44,7 @@ export default function LeaderboardPage({ onBack, onLogout }) {
             <div>Rankings</div>
             <div>User</div>
             <div>Cosmetics unlocked</div>
-            <div className="text-right">Score</div>
+            <div className="text-right">Popped!</div>
           </div>
           {/* Rows */}
           <div className="flex flex-col gap-5">
@@ -55,9 +60,9 @@ export default function LeaderboardPage({ onBack, onLogout }) {
                 {/* User */}
                 <div>{entry.user}</div>
                 {/* Cosmetics */}
-                <div>{entry.cosmetics}</div>
+                <div>{entry.Chips}</div>
                 {/* Score */}
-                <div className="text-right">{entry.score}</div>
+                <div className="text-right">{entry.Chips}</div>
               </div>
             ))}
           </div>
