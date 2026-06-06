@@ -97,6 +97,11 @@ const handleSetCount = (isEarning = false) => {
   if (userEmail) updateChips(userEmail, nextCount, nextCum)
 }
 
+const handleSpendChips = (newCount) => {
+  setCount(newCount);
+  if (userEmail) updateChips(userEmail, newCount, cumCount);
+}
+
   const handleSetClickPower = (updater) => { // handle setting 
     setClickPower((prev) => {
       const next = typeof updater === 'function' ? updater(prev) : updater
@@ -110,7 +115,7 @@ const handleSetCount = (isEarning = false) => {
       <ShopPage
         onBack={() => setPage('home')}
         count={count}
-        setCount={handleSetCount}
+        setCount={handleSpendChips}
         clickPower={clickPower}
         setClickPower={handleSetClickPower}
       />
