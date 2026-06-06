@@ -22,6 +22,10 @@ export default function App() {
   const [page, setPage] = useState('home')
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   const [userEmail, setUserEmail] = useState(null)
+  const [animalLevels, setAnimalLevels] = useState(
+  { 1: { chanceLvl: 0, multLvl: 0, owned: false },
+    2: { chanceLvl: 0, multLvl: 0, owned: false } }
+);
 
   useEffect(() => {
     const loadSession = async () => {
@@ -118,6 +122,8 @@ const handleSpendChips = (newCount) => {
         setCount={handleSpendChips}
         clickPower={clickPower}
         setClickPower={handleSetClickPower}
+        setAnimalLevels={setAnimalLevels}
+        animalLevels={animalLevels}
       />
     )
   }
