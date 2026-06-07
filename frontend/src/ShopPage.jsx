@@ -1,7 +1,9 @@
-import { useState } from "react";
+import { useState } from "react"
 import back from './assets/back.png'
+import SpecialUpgrades from "./SpecialUpgrades"
 
-export default function ShopPage({ onBack, count, setCount, clickPower, setClickPower }) {
+
+export default function ShopPage({ onBack, count, setCount, clickPower, setClickPower, animalLevels, setAnimalLevels }) {
   const [activeCategory, setActiveCategory] = useState("click");
 
   const allUpgrades = [
@@ -10,20 +12,22 @@ export default function ShopPage({ onBack, count, setCount, clickPower, setClick
     { id: 3, name: "Mega Factory",    desc: "Supercharges all automatic poppers by 5x.",      price: 500, clickMultiplier: 5, category: "click"    },
     { id: 4, name: "Seal",    desc: "5% chance to triple chips on each pop.",         price: 200, clickMultiplier: 0, category: "special"  },
     { id: 5, name: "Cow",      desc: "Unleashes a burst of 10 pops instantly.",        price: 350, clickMultiplier: 0, category: "special"  },
-    { id: 6, name: "Seal Can",     desc: "Your can becomes covered in a thick layer of seal blubber.",           price: 100, clickMultiplier: 0, category: "cosmetic" },
-    { id: 7, name: "Cow Can",     desc: "Your can becomes blessed by the spherical cow.",        price: 250, clickMultiplier: 0, category: "cosmetic" },
+    { id: 6, name: "Seal Can",     desc: "Your can becomes covered in a thick layer of seal blubber.",           price: 10000, clickMultiplier: 0, category: "cosmetic" },
+    { id: 7, name: "Cow Can",     desc: "Your can becomes blessed by the spherical cow.",        price: 25000, clickMultiplier: 0, category: "cosmetic" },
   ];
 
   const categories = ["click", "special", "cosmetic"];
   const upgrades = allUpgrades.filter(u => u.category === activeCategory);
 
   function buyUpgrade(upgrade) {
-    if (count >= upgrade.price) {
-      setCount(count - upgrade.price);
-      setClickPower(clickPower + upgrade.clickMultiplier);
+    if (upgrade.category === "click") {
+      if (count >= upgrade.price) {
+        setCount(count - upgrade.price);
+        setClickPower(clickPower + upgrade.clickMultiplier);
     } else {
       alert("Not enough chips to buy this upgrade!");
     }
+  }
   }
 
   return (
@@ -62,6 +66,9 @@ export default function ShopPage({ onBack, count, setCount, clickPower, setClick
 
         {/* Shop Table */}
         <div className="flex-1 mt-8 overflow-x-auto">
+          {activeCategory === "special" ? (
+            <SpecialUpgrades count={count} setCount={setCount} animalLevels={animalLevels} setAnimalLevels={setAnimalLevels} />
+          ) : (
           <table className="w-full border-collapse">
             <thead>
               <tr className="table-headers">
@@ -92,7 +99,8 @@ export default function ShopPage({ onBack, count, setCount, clickPower, setClick
                 </tr>
               ))}
             </tbody>
-          </table>
+          </table>  
+          )}
         </div>
 
         {/* Bottom Stats */}

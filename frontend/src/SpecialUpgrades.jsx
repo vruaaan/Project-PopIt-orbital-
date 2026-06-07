@@ -1,0 +1,118 @@
+// SpecialUpgrades.jsx
+
+const ANIMALS = [
+  {
+    id: 1,
+    name: "Seal",
+    desc: "A lucky seal that slaps bonus chips your way.",
+    chance: { base: 5, perLevel: 2, baseCost: 200, costScale: 1.8 },
+    multiplier: { base: 2, perLevel: 1, baseCost: 300, costScale: 2.0 },
+  },
+  {
+    id: 2,
+    name: "Cow",
+    desc: "A spherical cow of pure mathematical fortune.",
+    chance: { base: 3, perLevel: 1.5, baseCost: 350, costScale: 2.0 },
+    multiplier: { base: 3, perLevel: 1.5, baseCost: 500, costScale: 2.2 },
+  },
+];
+
+function calcCost(baseCost, costScale, level) {
+  return Math.floor(baseCost * Math.pow(costScale, level));
+}
+
+function calcStat(base, perLevel, level) {
+  return +(base + perLevel * level).toFixed(1);
+}
+
+export default function SpecialUpgrades({ count, setCount, animalLevels, setAnimalLevels }) {
+
+  function buyAnimal(animal) {
+    const state = animalLevels[animal.id];
+    if (state.owned) return;
+    if (count >= animal.chance.baseCost) {
+      setCount(count - animal.chance.baseCost);
+      setAnimalLevels(prev => ({ ...prev, [animal.id]: { ...prev[animal.id], owned: true } }));
+    } else {
+      alert("Not enough chips!");
+    }
+  }
+
+  function upgradeChance(animal) {
+    const state = animalLevels[animal.id];
+    const cost = calcCost(animal.chance.baseCost, animal.chance.costScale, state.chanceLvl);
+    if (count >= cost) {
+      setCount(count - cost);
+      setAnimalLevels(prev => ({ ...prev, [animal.id]: { ...prev[animal.id], chanceLvl: prev[animal.id].chanceLvl + 1 } }));
+    } else {
+      alert("Not enough chips!");
+    }
+  }
+
+  function upgradeMultiplier(animal) {
+    const state = animalLevels[animal.id];
+    const cost = calcCost(animal.multiplier.baseCost, animal.multiplier.costScale, state.multLvl);
+    if (count >= cost) {
+      setCount(count - cost);
+      setAnimalLevels(prev => ({ ...prev, [animal.id]: { ...prev[animal.id], multLvl: prev[animal.id].multLvl + 1 } }));
+    } else {
+      alert("Not enough chips!");
+    }
+  }
+
+  return (
+    <div className="flex flex-col gap-6 mt-8">
+      {ANIMALS.map(animal => {
+        const state = animalLevels[animal.id];
+        const currentChance = calcStat(animal.chance.base, animal.chance.perLevel, state.chanceLvl);
+        const currentMult = calcStat(animal.multiplier.base, animal.multiplier.perLevel, state.multLvl);
+        const chanceCost = calcCost(animal.chance.baseCost, animal.chance.costScale, state.chanceLvl);
+        const multCost = calcCost(animal.multiplier.baseCost, animal.multiplier.costScale, state.multLvl);
+
+        return (
+          <div key={animal.id} className={`rounded-2xl border p-6 transition-all ${state.owned ? "border-[#b55334] bg-[#b55334]/5" : "border-[#d4a792] bg-white/40"}`}>
+            <div className="flex items-center justify-between">
+              <div>
+                <h3 className="text-2xl font-serif text-[#b55334]">{animal.name}</h3>
+                <p className="text-[#8d5d46] mt-1">{animal.desc}</p>
+              </div>
+              {!state.owned ? (
+                <button type="button" onClick={() => buyAnimal(animal)} className="btn-upgrade px-6 py-2">
+                  Buy — {animal.chance.baseCost} chips
+                </button>
+              ) : (
+                <span className="pill">Owned</span>
+              )}
+            </div>
+
+            {state.owned && (
+              <div className="mt-6 flex flex-col gap-4">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="font-serif text-[#b55334]">Trigger Chance</p>
+                    <p className="text-[#8d5d46] text-sm">Level {state.chanceLvl} → {currentChance}%</p>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <span className="pill">{chanceCost} chips</span>
+                    <button type="button" onClick={() => upgradeChance(animal)} className="btn-upgrade px-5 py-2">Upgrade</button>
+                  </div>
+                </div>
+
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="font-serif text-[#b55334]">Multiplier</p>
+                    <p className="text-[#8d5d46] text-sm">Level {state.multLvl} → {currentMult}x</p>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <span className="pill">{multCost} chips</span>
+                    <button type="button" onClick={() => upgradeMultiplier(animal)} className="btn-upgrade px-5 py-2">Upgrade</button>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        );
+      })}
+    </div>
+  );
+}
