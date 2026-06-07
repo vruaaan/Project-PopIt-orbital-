@@ -31,8 +31,8 @@ export default function App() {
       setUserEmail(currentUser.email)
       const { data: profile, error: profileError } = await loadProfile(currentUser.email)
       if (!profileError && profile) {
-        setCount(profile.chips ?? 0)
-        setClickPower(profile.click_power ?? 1)
+        setCount(profile.curr_count ?? 0)
+        setClickPower(profile.click_pow ?? 1)
       }
     }
     loadSession()
