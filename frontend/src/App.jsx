@@ -22,21 +22,27 @@ export default function App() {
   const [page, setPage] = useState('home')
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   const [userEmail, setUserEmail] = useState(null)
+  const [sessionLoaded, setSessionLoaded] = useState(false)
 
-  useEffect(() => {
-    const loadSession = async () => {
-      const currentUser = await getCurrentUser()
-      if (!currentUser) return
-      setIsLoggedIn(true)
-      setUserEmail(currentUser.email)
-      const { data: profile, error: profileError } = await loadProfile(currentUser.email)
-      if (!profileError && profile) {
-        setCount(profile.curr_count ?? 0)
-        setClickPower(profile.click_pow ?? 1)
-      }
+ useEffect(() => {
+  const loadSession = async () => {
+    const currentUser = await getCurrentUser()
+    if (!currentUser) {
+      setSessionLoaded(true) //no user, but still done loading
+      return
     }
-    loadSession()
-  }, [])
+    setIsLoggedIn(true)
+    setUserEmail(currentUser.email)
+    const { data: profile, error: profileError } = await loadProfile(currentUser.email)
+    if (!profileError && profile) {
+      setCount(profile.curr_count ?? 0)
+      setCumCount(profile.cum_count ?? 0)
+      setClickPower(profile.click_pow ?? 1)
+    }
+    setSessionLoaded(true) //done loading, safe to write
+  }
+  loadSession()
+}, [])
 
   const handleLogin = async (email, password) => { // handle logging in 
     const { user, error } = await signInWithEmail(email, password)
