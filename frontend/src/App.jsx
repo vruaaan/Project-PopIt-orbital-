@@ -1,6 +1,7 @@
 import './App.css'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import threechips from './assets/threechips.png'
+import chip1 from './assets/chip1.png'
 import shop from './assets/shop.png'
 import loginIcon from './assets/Login.png'
 import leaderboard from './assets/leaderboard.png'
@@ -13,6 +14,7 @@ import CreateAccountPage from './CreateAccountPage'
 import { getCurrentUser, signInWithEmail, signOutUser, signUpWithEmail } from './lib/firebase'
 import { createProfile, loadProfile} from './lib/playerService'
 import { updateChips, updateClickPower } from './lib/gameplayLogic'
+import { createChipParticles, updateParticles } from './physics/physics'
 
 
 export default function App() {
@@ -26,6 +28,11 @@ export default function App() {
   { 1: { chanceLvl: 0, multLvl: 0, owned: false },
     2: { chanceLvl: 0, multLvl: 0, owned: false } }
 );
+  const [particles, setParticles] = useState([])
+  const [isPopping, setIsPopping] = useState(false)
+  const overlayRef = useRef(null)
+  const canRef = useRef(null)
+  const popTimeoutRef = useRef(null)
 
  useEffect(() => {
   const loadSession = async () => {
@@ -106,6 +113,43 @@ const handleSetCount = (isEarning = false) => {
   if (userEmail) updateChips(userEmail, nextCount, nextCum)
 }
 
+useEffect(() => {
+  let rafId
+  let lastTime = performance.now()
+
+  const tick = (now) => {
+    const dt = Math.min((now - lastTime) / 1000, 0.03)
+    lastTime = now
+    setParticles((prev) => updateParticles(prev, dt))
+    rafId = requestAnimationFrame(tick)
+  }
+
+  rafId = requestAnimationFrame(tick)
+  return () => {
+    cancelAnimationFrame(rafId)
+    clearTimeout(popTimeoutRef.current)
+  }
+}, [])
+
+const spawnChipParticles = () => {
+  if (!overlayRef.current || !canRef.current) return
+
+  const overlayRect = overlayRef.current.getBoundingClientRect()
+  const canRect = canRef.current.getBoundingClientRect()
+  const originX = canRect.left - overlayRect.left + canRect.width / 2
+  const originY = canRect.top - overlayRect.top + canRect.height * 0.12
+
+  setParticles((prev) => [...prev, ...createChipParticles(originX, originY, 1)])
+  setIsPopping(true)
+  clearTimeout(popTimeoutRef.current)
+  popTimeoutRef.current = window.setTimeout(() => setIsPopping(false), 120)
+}
+
+const handlePop = () => {
+  spawnChipParticles()
+  handleSetCount(true)
+}
+
 const handleSpendChips = (newCount) => {
   setCount(newCount);
   if (userEmail) updateChips(userEmail, newCount, cumCount);
@@ -143,7 +187,23 @@ const handleSpendChips = (newCount) => {
   }
 
   return ( // constructing page
-    <div className="min-h-screen px-6 py-6 text-[var(--text)]">
+    <div className="min-h-screen px-6 py-6 text-[var(--text)] relative">
+      <div ref={overlayRef} className="particle-overlay">
+        {particles.map((particle) => (
+          <img
+            key={particle.id}
+            src={chip1}
+            alt=""
+            className="chip-particle"
+            style={{
+              left: particle.x,
+              top: particle.y,
+              opacity: 1 - particle.life / particle.duration,
+              transform: `translate(-50%, -50%) rotate(${particle.rotation}deg) scale(${1.05 - particle.life / particle.duration * 0.3})`,
+            }}
+          />
+        ))}
+      </div>
       <div className="mx-auto flex min-h-screen w-full max-w-5xl flex-col gap-8 rounded-[2rem] border border-[var(--border)] bg-[rgba(238,230,216,0.72)] p-8 shadow-[var(--shadow)] backdrop-blur-sm">
         <div className="flex items-center justify-between gap-4">
           <div />
@@ -159,10 +219,15 @@ const handleSpendChips = (newCount) => {
 
           <button
             type="button"
-           onClick={() => handleSetCount(true)}
+            onClick={handlePop}
+            ref={canRef}
             className="mt-8 p-0 bg-transparent border-0 focus:outline-none rounded-full fixed bottom-0 left-1/2 -translate-x-1/2">
             <span className="block w-44 shrink-0">
-              <img src={can} alt="PopIt Can" className="block w-full h-110 origin-center hover:scale-105 transition-transform" />
+              <img
+                src={can}
+                alt="PopIt Can"
+                className={`block w-full h-110 origin-center hover:scale-105 transition-transform ${isPopping ? 'pop-can-active' : ''}`}
+              />
             </span>
           </button>
 

@@ -129,6 +129,27 @@
   }
 }
 
+.particle-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 10;
+}
+
+.chip-particle {
+  position: absolute;
+  width: 96px;
+  height: auto;
+  pointer-events: none;
+  will-change: transform, opacity;
+  filter: drop-shadow(0 16px 20px rgba(0, 0, 0, 0.22));
+}
+
+.pop-can-active {
+  transform: scale(1.08);
+}
+
 .ticks {
   position: relative;
   width: 100%;
