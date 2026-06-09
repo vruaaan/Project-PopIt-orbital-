@@ -24,6 +24,8 @@ export default function App() {
   const [page, setPage] = useState('home')
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   const [userEmail, setUserEmail] = useState(null)
+  const [clickLevels, setClickLevels] = useState({ 1: 0, 2: 0, 3: 0 });
+  const [cosmeticOwned, setCosmeticOwned] = useState({ 1: false, 2: false });
   const [animalLevels, setAnimalLevels] = useState(
   { 1: { chanceLvl: 0, multLvl: 0, owned: false },
     2: { chanceLvl: 0, multLvl: 0, owned: false } }

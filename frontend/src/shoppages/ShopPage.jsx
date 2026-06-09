@@ -1,34 +1,19 @@
 import { useState } from "react"
 import back from '../assets/back.png'
 import SpecialUpgrades from "./SpecialUpgrades"
+import ClickUpgrades from "./ClickUpgrades"
+import CosmeticUpgrades from "./CosmeticUpgrades"
 
-
-export default function ShopPage({ onBack, count, setCount, clickPower, setClickPower, animalLevels, setAnimalLevels }) {
+export default function ShopPage({
+  onBack,
+  count, setCount,
+  clickPower, setClickPower,
+  clickLevels, setClickLevels,
+  animalLevels, setAnimalLevels,
+  cosmeticOwned, setCosmeticOwned,
+}) {
   const [activeCategory, setActiveCategory] = useState("click");
-
-  const allUpgrades = [
-    { id: 1, name: "Auto-Popper v1",  desc: "Automatically pops 1 can every second.",        price: 50,  clickMultiplier: 1, category: "click"    },
-    { id: 2, name: "Golden Fizz",     desc: "Doubles the value of every manual pop.",         price: 150, clickMultiplier: 2, category: "click"    },
-    { id: 3, name: "Mega Factory",    desc: "Supercharges all automatic poppers by 5x.",      price: 500, clickMultiplier: 5, category: "click"    },
-    { id: 4, name: "Seal",    desc: "5% chance to triple chips on each pop.",         price: 200, clickMultiplier: 0, category: "special"  },
-    { id: 5, name: "Cow",      desc: "Unleashes a burst of 10 pops instantly.",        price: 350, clickMultiplier: 0, category: "special"  },
-    { id: 6, name: "Seal Can",     desc: "Your can becomes covered in a thick layer of seal blubber.",           price: 10000, clickMultiplier: 0, category: "cosmetic" },
-    { id: 7, name: "Cow Can",     desc: "Your can becomes blessed by the spherical cow.",        price: 25000, clickMultiplier: 0, category: "cosmetic" },
-  ];
-
   const categories = ["click", "special", "cosmetic"];
-  const upgrades = allUpgrades.filter(u => u.category === activeCategory);
-
-  function buyUpgrade(upgrade) {
-    if (upgrade.category === "click") {
-      if (count >= upgrade.price) {
-        setCount(count - upgrade.price);
-        setClickPower(clickPower + upgrade.clickMultiplier);
-    } else {
-      alert("Not enough chips to buy this upgrade!");
-    }
-  }
-  }
 
   return (
     <div className="page-base">
@@ -64,42 +49,32 @@ export default function ShopPage({ onBack, count, setCount, clickPower, setClick
           ))}
         </div>
 
-        {/* Shop Table */}
+        {/* Tab Content */}
         <div className="flex-1 mt-8 overflow-x-auto">
-          {activeCategory === "special" ? (
-            <SpecialUpgrades count={count} setCount={setCount} animalLevels={animalLevels} setAnimalLevels={setAnimalLevels} />
-          ) : (
-          <table className="w-full border-collapse">
-            <thead>
-              <tr className="table-headers">
-                <th className="pb-6 text-left">Description</th>
-                <th className="pb-6 text-right">Cost & Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {upgrades.map((item) => (
-                <tr key={item.id} className="row-hover">
-                  <td className="py-8 pr-8">
-                    <h3 className="text-3xl font-serif text-[#b55334] drop-shadow-[0_2px_1px_rgba(0,0,0,0.15)]">
-                      {item.name}
-                    </h3>
-                    <p className="mt-2 text-lg text-[#8d5d46]">{item.desc}</p>
-                  </td>
-                  <td className="py-8">
-                    <div className="flex flex-col items-end gap-4">
-                      <span className="pill">{item.price} chips</span>
-                      <button
-                        type="button"
-                        onClick={() => buyUpgrade(item)}
-                        className="btn-upgrade px-8 py-3">
-                        Upgrade
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>  
+          {activeCategory === "click" && (
+            <ClickUpgrades
+              count={count}
+              setCount={setCount}
+              clickLevels={clickLevels}
+              setClickLevels={setClickLevels}
+              setClickPower={setClickPower}
+            />
+          )}
+          {activeCategory === "special" && (
+            <SpecialUpgrades
+              count={count}
+              setCount={setCount}
+              animalLevels={animalLevels}
+              setAnimalLevels={setAnimalLevels}
+            />
+          )}
+          {activeCategory === "cosmetic" && (
+            <CosmeticUpgrades
+              count={count}
+              setCount={setCount}
+              cosmeticOwned={cosmeticOwned}
+              setCosmeticOwned={setCosmeticOwned}
+            />
           )}
         </div>
 
