@@ -1,5 +1,5 @@
 import { useState } from "react"
-import back from './assets/back.png'
+import back from '../assets/back.png'
 import SpecialUpgrades from "./SpecialUpgrades"
 
 

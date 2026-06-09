@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
-import back from './assets/back.png'
-import {getLeaderboardDefault} from './lib/leaderboardLogic'
+import back from '../assets/back.png'
+import {getLeaderboardDefault} from '../lib/leaderboardLogic'
 
 
 const leaderboardData = getLeaderboardDefault()
