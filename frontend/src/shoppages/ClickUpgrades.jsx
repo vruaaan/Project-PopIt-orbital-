@@ -1,7 +1,7 @@
+import threechips from '../assets/threechips.png'
 const CLICK_UPGRADES = [
-  { id: 1, name: "Auto-Popper v1", desc: "Automatically pops 1 can every second.",       baseCost: 50,  costScale: 1.5, powerPerLevel: 1 },
-  { id: 2, name: "Golden Fizz",    desc: "Doubles the value of every manual pop.",        baseCost: 150, costScale: 1.8, powerPerLevel: 2 },
-  { id: 3, name: "Mega Factory",   desc: "Supercharges all automatic poppers by 5x.",     baseCost: 500, costScale: 2.0, powerPerLevel: 5 },
+  { id: 1, name: "Lazy Feeder", desc: "Free your hands, automatically popping chips", baseCost: 50,  costScale: 1.5, powerPerLevel: 1 },
+  { id: 2, name: "Flavour Town",  desc: "Flavour your chips with each upgrade, increasing the value of each chip popped !", baseCost: 150, costScale: 1.8, powerPerLevel: 2 },
 ];
 
 function calcCost(baseCost, costScale, level) {

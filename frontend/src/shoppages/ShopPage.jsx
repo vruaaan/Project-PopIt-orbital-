@@ -33,7 +33,7 @@ export default function ShopPage({
           </button>
         </div>
         {/* Category Tab*/}
-        <div className="flex justify-center gap-2 mt-8">
+        <div className="flex justify-center gap-5 mt-5">
           {categories.map((cat, index) => ( // building the row of buttions 
             <button
               key={cat}
