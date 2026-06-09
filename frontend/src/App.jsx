@@ -13,7 +13,6 @@ import CreateAccountPage from './userpages/CreateAccountPage'
 
 import { getCurrentUser, signInWithEmail, signOutUser, signUpWithEmail } from './lib/firebase'
 import { updateChips, updateClickPower, updateAutoPopper, updateSeal, updateCow, updateDol } from './lib/gameplayLogic'
-import { updateChips, updateClickPower } from './lib/gameplayLogic'
 import { createChipParticles, updateParticles } from './physics/physics'
 
 
