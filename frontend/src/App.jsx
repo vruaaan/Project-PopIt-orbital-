@@ -15,7 +15,7 @@ import { getCurrentUser, signInWithEmail, signOutUser, signUpWithEmail } from '.
 import { createProfile, loadProfile} from './lib/playerService'
 import { updateChips, updateClickPower } from './lib/gameplayLogic'
 import { createChipParticles, updateParticles } from './physics/physics'
-
+import { updateChips, updateClickPower, updateAutoPopper, updateSeal, updateCow, updateDol } from './lib/gameplayLogic'
 
 export default function App() {
   const [count, setCount] = useState(0)
@@ -50,6 +50,7 @@ export default function App() {
       setUserEmail(currentUser.email)
       const { data: profile, error: profileError } = await loadProfile(currentUser.email)
       if (!profileError && profile) {
+        setProfile(profile)
         setCount(profile.curr_count ?? 0)
         setCumCount(profile.cum_count ?? 0)
         setClickPower(profile.click_pow ?? 1)

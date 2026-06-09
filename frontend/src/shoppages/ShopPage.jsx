@@ -14,6 +14,7 @@ export default function ShopPage({
   clickLevels, setClickLevels,
   animalLevels, setAnimalLevels,
   cosmeticOwned, setCosmeticOwned,
+  profile
 }) {
   const [activeCategory, setActiveCategory] = useState("Pop!"); // default tab
   const categories = ["Pop!", "Specials", "Cosmetics"]; // initialising array of the 3 categories
