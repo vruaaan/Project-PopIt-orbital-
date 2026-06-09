@@ -288,25 +288,40 @@ code {
   background: rgba(181, 83, 52, 0.05);
 }
 
-.shop-upgrade-row {
+.shop-upgrade-row-top {
+  display: flex;
+  align-items: center;
+  padding-left: rem; /* adjust to taste */
+}
+
+.shop-upgrade-row-bottom {
   display: flex;
   align-items: center;
   justify-content: space-between;
+}
+
+.shop-upgrade-row {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
 }
 
 .shop-upgrade-title {
   font-family: var(--heading);
   font-size: 1.5rem;
   color: #b55334;
+  text-align: left;
 }
 
 .shop-upgrade-desc {
   margin-top: 0.25rem;
   color: #8d5d46;
+  text-align: left;
 }
 
 .shop-upgrade-meta {
   margin-top: 0.5rem;
   color: #8d5d46;
   font-size: 0.875rem;
+  text-align: left;
 }

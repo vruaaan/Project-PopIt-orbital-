@@ -56,6 +56,7 @@ export default function ShopPage({
               clickLevels={clickLevels}
               setClickLevels={setClickLevels}
               setClickPower={setClickPower}
+              profile = {profile}
             />
           )}
           {activeCategory === "Specials" && ( // if active = Specials

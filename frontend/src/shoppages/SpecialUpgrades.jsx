@@ -1,10 +1,13 @@
-
+import threechips from '../assets/threechips.png'
+import seal from '../assets/seal.png'
+import cow from '../assets/cow.png'
+import dol from '../assets/dolphin.png'
 
 const ANIMALS = [
   {
     id: 1,
     name: "Seal",
-    desc: "Not fake, not slim, not shady",
+    desc: "Neither fake, slim nor shady",
     chance: { base: 5, perLevel: 2, baseCost: 200, costScale: 1.8 },
     multiplier: { base: 2, perLevel: 1, baseCost: 300, costScale: 2.0 },
   },
@@ -12,6 +15,13 @@ const ANIMALS = [
     id: 2,
     name: "Cow",
     desc: "Aerodynamically accurate",
+    chance: { base: 3, perLevel: 1.5, baseCost: 350, costScale: 2.0 },
+    multiplier: { base: 3, perLevel: 1.5, baseCost: 500, costScale: 2.2 },
+  },
+  {
+    id: 3,
+    name: "Dolphin",
+    desc: "Anatomically accurate",
     chance: { base: 3, perLevel: 1.5, baseCost: 350, costScale: 2.0 },
     multiplier: { base: 3, perLevel: 1.5, baseCost: 500, costScale: 2.2 },
   }

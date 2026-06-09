@@ -24,12 +24,14 @@ export default function App() {
   const [page, setPage] = useState('home')
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   const [userEmail, setUserEmail] = useState(null)
+  const [profile, setProfile] = useState(null)
   const [sessionLoaded, setSessionLoaded] = useState(false)
   const [clickLevels, setClickLevels] = useState({ 1: 0, 2: 0, 3: 0 })
   const [cosmeticOwned, setCosmeticOwned] = useState({ 1: false, 2: false })
   const [animalLevels, setAnimalLevels] = useState({
     1: { chanceLvl: 0, multLvl: 0, owned: false },
-    2: { chanceLvl: 0, multLvl: 0, owned: false }
+    2: { chanceLvl: 0, multLvl: 0, owned: false },
+    3: { chanceLvl: 0, multLvl: 0, owned: false }
   })
   const [particles, setParticles] = useState([])
   const [isPopping, setIsPopping] = useState(false)
@@ -68,10 +70,17 @@ export default function App() {
     setIsLoggedIn(true)
     setUserEmail(user.email)
     const { data: profile, error: profileError } = await loadProfile(user.email)
-    if (!profileError && profile) {
+    if (!profileError && profile) { // loading user data
+      setProfile(profile)
       setCount(profile.curr_count ?? 0)
       setCumCount(profile.cum_count ?? 0)
       setClickPower(profile.click_power ?? 1)
+      setAutoClicker(profile.auto_popper ?? 0)
+      setAnimalLevels({ 
+        1: {owned: profile.seal_prob > 0, chanceLvl: profile.seal_prob ?? 0, multLvl: profile.seal_cp ?? 0 },
+        2: {owned: profile.cow_prob > 0, chanceLvl: profile.cow_prob ?? 0, multLvl: profile.cow_cp ?? 0 },
+        3: {owned: profile.dol_prob > 0, chanceLvl: profile.dol_prob ?? 0, multLvl: profile.dol_cp ?? 0 }
+      })
     }
     setPage('leaderboard')
     return { success: true }
@@ -165,23 +174,45 @@ export default function App() {
       return next
     })
   }
+  
+  const handleSetAutoClicker = (updater) => {
+    setClickLevels(prev => {
+      const next = typeof updater === 'function' ? updater(prev) : updater
+      if (userEmail) updateAutoPopper(userEmail, next[1] ?? 0)
+      return next
+    })
+  }
 
+  const handleSetAnimalLevels = (updater) => {
+    setAnimalLevels(prev => {
+      const next = typeof updater === 'function' ? updater(prev) : updater
+      if (userEmail) {
+        updateSeal(userEmail, next[1].chanceLvl, next[1].multLvl)
+        updateCow(userEmail, next[2].chanceLvl, next[2].multLvl)
+        updateDol(userEmail, next[3].chanceLvl, next[3].multLvl)
+      }
+      return next
+    })
+  }
+
+  // NAVIGATION
   if (page === 'shop') {
-    return (
-      <ShopPage
-        onBack={() => setPage('home')}
-        count={count}
-        setCount={handleSpendChips}
-        clickPower={clickPower}
-        setClickPower={handleSetClickPower}
-        clickLevels={clickLevels} 
-        setClickLevels={setClickLevels} 
-        animalLevels={animalLevels}
-        setAnimalLevels={setAnimalLevels}
-        cosmeticOwned={cosmeticOwned} 
-        setCosmeticOwned={setCosmeticOwned}
-      />
-    )
+      return (
+        <ShopPage
+          onBack={() => setPage('home')}
+          count={count}
+          setCount={handleSpendChips}
+          clickPower={clickPower}
+          setClickPower={handleSetClickPower}
+          clickLevels={clickLevels} 
+          setClickLevels={setClickLevels} 
+          animalLevels={animalLevels}
+          setAnimalLevels={setAnimalLevels}
+          cosmeticOwned={cosmeticOwned} 
+          setCosmeticOwned={setCosmeticOwned}
+          profile = {profile}
+        />
+      )
   }
   if (page === 'login') {
     return <LoginPage onBack={() => setPage('home')} onLogin={handleLogin} onToCreateAccount={() => setPage('createAccount')} />

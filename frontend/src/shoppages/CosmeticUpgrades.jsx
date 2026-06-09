@@ -1,3 +1,8 @@
+import threechips from '../assets/threechips.png'
+import sealcan from '../assets/sealcan.png'
+import cowcan from '../assets/cowcan.png'
+import dolcan from '../assets/dolphincan.png'
+
 const COSMETICS = [
   { id: 1, name: "Seal Can",   desc: "Your can becomes covered in a thick layer of seal blubber.",  price: 10000 },
   { id: 2, name: "Cow Can",    desc: "Your can becomes blessed by the spherical cow.",               price: 25000 },
