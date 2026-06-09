@@ -16,16 +16,16 @@ export default function CosmeticUpgrades({ count, setCount, cosmeticOwned, setCo
   }
 
   return (
-    <div className="flex flex-col gap-6 mt-8">
+    <div className="shop-upgrade-list">
       {COSMETICS.map(item => {
         const owned = cosmeticOwned[item.id] ?? false;
 
         return (
-          <div key={item.id} className={`rounded-2xl border p-6 transition-all ${owned ? "border-[#b55334] bg-[#b55334]/5" : "border-[#d4a792] bg-white/40"}`}>
-            <div className="flex items-center justify-between">
+          <div key={item.id} className={`shop-upgrade-card ${owned ? "shop-upgrade-card--owned" : ""}`}>
+            <div className="shop-upgrade-row">
               <div>
-                <h3 className="text-2xl font-serif text-[#b55334]">{item.name}</h3>
-                <p className="text-[#8d5d46] mt-1">{item.desc}</p>
+                <h3 className="shop-upgrade-title">{item.name}</h3>
+                <p className="shop-upgrade-desc">{item.desc}</p>
               </div>
               {owned ? (
                 <span className="pill">Owned</span>

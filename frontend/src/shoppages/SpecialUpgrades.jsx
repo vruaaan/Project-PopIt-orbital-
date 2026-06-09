@@ -61,7 +61,7 @@ export default function SpecialUpgrades({ count, setCount, animalLevels, setAnim
   }
 
   return (
-    <div className="flex flex-col gap-6 mt-8">
+    <div className="shop-upgrade-list">
       {ANIMALS.map(animal => {
         const state = animalLevels[animal.id];
         const currentChance = calcStat(animal.chance.base, animal.chance.perLevel, state.chanceLvl);
@@ -70,11 +70,11 @@ export default function SpecialUpgrades({ count, setCount, animalLevels, setAnim
         const multCost = calcCost(animal.multiplier.baseCost, animal.multiplier.costScale, state.multLvl);
 
         return (
-          <div key={animal.id} className={`rounded-2xl border p-6 transition-all ${state.owned ? "border-[#b55334] bg-[#b55334]/5" : "border-[#d4a792] bg-white/40"}`}>
-            <div className="flex items-center justify-between">
+          <div key={animal.id} className={`shop-upgrade-card ${state.owned ? "shop-upgrade-card--owned" : ""}`}>
+            <div className="shop-upgrade-row">
               <div>
-                <h3 className="text-2xl font-serif text-[#b55334]">{animal.name}</h3>
-                <p className="text-[#8d5d46] mt-1">{animal.desc}</p>
+                <h3 className="shop-upgrade-title">{animal.name}</h3>
+                <p className="shop-upgrade-desc">{animal.desc}</p>
               </div>
               {!state.owned ? (
                 <button type="button" onClick={() => buyAnimal(animal)} className="btn-upgrade px-6 py-2">
@@ -87,10 +87,10 @@ export default function SpecialUpgrades({ count, setCount, animalLevels, setAnim
 
             {state.owned && (
               <div className="mt-6 flex flex-col gap-4">
-                <div className="flex items-center justify-between">
+                <div className="shop-upgrade-row">
                   <div>
                     <p className="font-serif text-[#b55334]">Trigger Chance</p>
-                    <p className="text-[#8d5d46] text-sm">Level {state.chanceLvl} → {currentChance}%</p>
+                    <p className="shop-upgrade-meta">Level {state.chanceLvl} → {currentChance}%</p>
                   </div>
                   <div className="flex items-center gap-3">
                     <span className="pill">{chanceCost} chips</span>
@@ -98,10 +98,10 @@ export default function SpecialUpgrades({ count, setCount, animalLevels, setAnim
                   </div>
                 </div>
 
-                <div className="flex items-center justify-between">
+                <div className="shop-upgrade-row">
                   <div>
                     <p className="font-serif text-[#b55334]">Multiplier</p>
-                    <p className="text-[#8d5d46] text-sm">Level {state.multLvl} → {currentMult}x</p>
+                    <p className="shop-upgrade-meta">Level {state.multLvl} → {currentMult}x</p>
                   </div>
                   <div className="flex items-center gap-3">
                     <span className="pill">{multCost} chips</span>

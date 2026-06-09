@@ -23,19 +23,19 @@ export default function ClickUpgrades({ count, setCount, clickLevels, setClickLe
   }
 
   return (
-    <div className="flex flex-col gap-6 mt-8">
+    <div className="shop-upgrade-list">
       {CLICK_UPGRADES.map(item => {
         const lvl = clickLevels[item.id] ?? 0;
         const cost = calcCost(item.baseCost, item.costScale, lvl);
         const totalPower = item.powerPerLevel * lvl;
 
         return (
-          <div key={item.id} className={`rounded-2xl border p-6 transition-all ${lvl > 0 ? "border-[#b55334] bg-[#b55334]/5" : "border-[#d4a792] bg-white/40"}`}>
-            <div className="flex items-center justify-between">
+          <div key={item.id} className={`shop-upgrade-card ${lvl > 0 ? "shop-upgrade-card--owned" : ""}`}>
+            <div className="shop-upgrade-row">
               <div>
-                <h3 className="text-2xl font-serif text-[#b55334]">{item.name}</h3>
-                <p className="text-[#8d5d46] mt-1">{item.desc}</p>
-                <p className="text-[#8d5d46] text-sm mt-2">
+                <h3 className="shop-upgrade-title">{item.name}</h3>
+                <p className="shop-upgrade-desc">{item.desc}</p>
+                <p className="shop-upgrade-meta">
                   Level {lvl} — +{totalPower} click power total
                 </p>
               </div>

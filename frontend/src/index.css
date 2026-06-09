@@ -23,6 +23,7 @@
   --sans: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
   --heading: 'Playfair Display', 'Times New Roman', serif;
   --mono: ui-monospace, Consolas, monospace;
+  --normal: serif;
 }
 
 /* base font size: adjust here to scale the whole UI (1rem = 16px by default) */
@@ -35,6 +36,48 @@ html { font-size: 16px; }
   font-size: 6rem;
   line-height: 1;
   font-weight: 500;
+}
+
+/* shop counter font + size */
+.counter-shop {
+  color: var(--text-h);
+  font-family: 'Libre Baskerville', sans-serif;
+  font-size: 3rem;
+  line-height: 1;
+  font-weight: 500;
+}
+
+/* shop tab sizing*/
+.tab-btn {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.5rem 1.5rem;
+  border-radius: 9999px;
+  font-family: var(--normal);
+  font-size: 2rem;
+  text-transform: capitalize;
+  transition: all 120ms ease;
+  cursor: pointer;
+  border: 0;
+}
+
+.tab-btn-active {
+  background: var(--accent);
+  color: var(--bg);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+
+.tab-btn-inactive {
+  background: transparent;
+  border: 1px solid #b55334;
+  color: #b55334;
+}
+
+.tab-btn-inactive:hover {
+  background: rgba(181, 83, 52, 0.1);
 }
 
 /* Page title used in small headers (e.g. Leaderboard) */
@@ -222,4 +265,48 @@ code {
   border-radius: 1rem;
   background: rgba(255,255,255,0.2);
   padding: 1rem 1.5rem;
+}
+
+/* Shared shop upgrade layout */
+.shop-upgrade-list {
+  margin-top: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.shop-upgrade-card {
+  border-radius: 1.5rem;
+  border: 1px solid #d4a792;
+  background: rgba(255,255,255,0.4);
+  padding: 1.5rem;
+  transition: all 160ms ease;
+}
+
+.shop-upgrade-card--owned {
+  border-color: #b55334;
+  background: rgba(181, 83, 52, 0.05);
+}
+
+.shop-upgrade-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.shop-upgrade-title {
+  font-family: var(--heading);
+  font-size: 1.5rem;
+  color: #b55334;
+}
+
+.shop-upgrade-desc {
+  margin-top: 0.25rem;
+  color: #8d5d46;
+}
+
+.shop-upgrade-meta {
+  margin-top: 0.5rem;
+  color: #8d5d46;
+  font-size: 0.875rem;
 }
