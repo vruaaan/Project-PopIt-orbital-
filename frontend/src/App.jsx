@@ -18,45 +18,46 @@ import { createChipParticles, updateParticles } from './physics/physics'
 
 
 export default function App() {
-  const [count, setCount] = useState(0)        // curr_count
-  const [cumCount, setCumCount] = useState(0)  // cum_count
+  const [count, setCount] = useState(0)
+  const [cumCount, setCumCount] = useState(0)
   const [clickPower, setClickPower] = useState(1)
   const [page, setPage] = useState('home')
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   const [userEmail, setUserEmail] = useState(null)
-  const [clickLevels, setClickLevels] = useState({ 1: 0, 2: 0, 3: 0 });
-  const [cosmeticOwned, setCosmeticOwned] = useState({ 1: false, 2: false });
-  const [animalLevels, setAnimalLevels] = useState(
-  { 1: { chanceLvl: 0, multLvl: 0, owned: false },
-    2: { chanceLvl: 0, multLvl: 0, owned: false } }
-);
+  const [sessionLoaded, setSessionLoaded] = useState(false)
+  const [clickLevels, setClickLevels] = useState({ 1: 0, 2: 0, 3: 0 })
+  const [cosmeticOwned, setCosmeticOwned] = useState({ 1: false, 2: false })
+  const [animalLevels, setAnimalLevels] = useState({
+    1: { chanceLvl: 0, multLvl: 0, owned: false },
+    2: { chanceLvl: 0, multLvl: 0, owned: false }
+  })
   const [particles, setParticles] = useState([])
   const [isPopping, setIsPopping] = useState(false)
   const overlayRef = useRef(null)
   const canRef = useRef(null)
   const popTimeoutRef = useRef(null)
 
- useEffect(() => {
-  const loadSession = async () => {
-    const currentUser = await getCurrentUser()
-    if (!currentUser) {
-      setSessionLoaded(true) //no user, but still done loading
-      return
+  useEffect(() => {
+    const loadSession = async () => {
+      const currentUser = await getCurrentUser()
+      if (!currentUser) {
+        setSessionLoaded(true)
+        return
+      }
+      setIsLoggedIn(true)
+      setUserEmail(currentUser.email)
+      const { data: profile, error: profileError } = await loadProfile(currentUser.email)
+      if (!profileError && profile) {
+        setCount(profile.curr_count ?? 0)
+        setCumCount(profile.cum_count ?? 0)
+        setClickPower(profile.click_pow ?? 1)
+      }
+      setSessionLoaded(true)
     }
-    setIsLoggedIn(true)
-    setUserEmail(currentUser.email)
-    const { data: profile, error: profileError } = await loadProfile(currentUser.email)
-    if (!profileError && profile) {
-      setCount(profile.curr_count ?? 0)
-      setCumCount(profile.cum_count ?? 0)
-      setClickPower(profile.click_pow ?? 1)
-    }
-    setSessionLoaded(true) //done loading, safe to write
-  }
-  loadSession()
-}, [])
+    loadSession()
+  }, [])
 
-  const handleLogin = async (email, password) => { // handle logging in 
+  const handleLogin = async (email, password) => {
     const { user, error } = await signInWithEmail(email, password)
     if (error) {
       return { success: false, message: error.message || 'Invalid email or password.' }
@@ -72,11 +73,11 @@ export default function App() {
       setCumCount(profile.cum_count ?? 0)
       setClickPower(profile.click_power ?? 1)
     }
-    setPage('leaderboard') // login page becomes leaderboard after logging in
+    setPage('leaderboard')
     return { success: true }
   }
 
-  const handleCreateAccount = async (username, email, password) => { // handle creating account 
+  const handleCreateAccount = async (username, email, password) => {
     if (!username.trim() || !email.trim() || !password.trim()) {
       return { success: false, message: 'Enter a username, email, and password to create an account.' }
     }
@@ -87,7 +88,7 @@ export default function App() {
     if (!user) {
       return { success: false, message: 'Account created, but user session was not initialized.' }
     }
-    const { error: profileError } = await createProfile(user.email, username.trim(), user.uid) // Create the Firestore document, keyed by email
+    const { error: profileError } = await createProfile(user.email, username.trim(), user.uid)
     if (profileError) {
       console.error('Failed to create Firestore profile:', profileError)
     }
@@ -99,65 +100,65 @@ export default function App() {
     return { success: true }
   }
 
-  const handleLogout = async () => { // handle what happens when user logs out
+  const handleLogout = async () => {
     await signOutUser()
     setIsLoggedIn(false)
     setUserEmail(null)
     setPage('home')
   }
 
-const handleSetCount = (isEarning = false) => {
-  const earned = clickPower
-  const nextCount = count + earned
-  const nextCum = isEarning ? cumCount + earned : cumCount
-  setCount(nextCount)
-  if (isEarning) setCumCount(nextCum)
-  if (userEmail) updateChips(userEmail, nextCount, nextCum)
-}
+  const handleSetCount = (isEarning = false) => {
+    const earned = clickPower
+    const nextCount = count + earned
+    const nextCum = isEarning ? cumCount + earned : cumCount
+    setCount(nextCount)
+    if (isEarning) setCumCount(nextCum)
+    if (userEmail) updateChips(userEmail, nextCount, nextCum)
+  }
 
-useEffect(() => {
-  let rafId
-  let lastTime = performance.now()
+  useEffect(() => {
+    let rafId
+    let lastTime = performance.now()
 
-  const tick = (now) => {
-    const dt = Math.min((now - lastTime) / 1000, 0.03)
-    lastTime = now
-    setParticles((prev) => updateParticles(prev, dt))
+    const tick = (now) => {
+      const dt = Math.min((now - lastTime) / 1000, 0.03)
+      lastTime = now
+      setParticles((prev) => updateParticles(prev, dt))
+      rafId = requestAnimationFrame(tick)
+    }
+
     rafId = requestAnimationFrame(tick)
-  }
+    return () => {
+      cancelAnimationFrame(rafId)
+      clearTimeout(popTimeoutRef.current)
+    }
+  }, [])
 
-  rafId = requestAnimationFrame(tick)
-  return () => {
-    cancelAnimationFrame(rafId)
+  const spawnChipParticles = () => {
+    if (!overlayRef.current || !canRef.current) return
+
+    const overlayRect = overlayRef.current.getBoundingClientRect()
+    const canRect = canRef.current.getBoundingClientRect()
+    const originX = canRect.left - overlayRect.left + canRect.width / 2
+    const originY = canRect.top - overlayRect.top + canRect.height * 0.12
+
+    setParticles((prev) => [...prev, ...createChipParticles(originX, originY, 1)])
+    setIsPopping(true)
     clearTimeout(popTimeoutRef.current)
+    popTimeoutRef.current = window.setTimeout(() => setIsPopping(false), 120)
   }
-}, [])
 
-const spawnChipParticles = () => {
-  if (!overlayRef.current || !canRef.current) return
+  const handlePop = () => {
+    spawnChipParticles()
+    handleSetCount(true)
+  }
 
-  const overlayRect = overlayRef.current.getBoundingClientRect()
-  const canRect = canRef.current.getBoundingClientRect()
-  const originX = canRect.left - overlayRect.left + canRect.width / 2
-  const originY = canRect.top - overlayRect.top + canRect.height * 0.12
+  const handleSpendChips = (newCount) => {
+    setCount(newCount)
+    if (userEmail) updateChips(userEmail, newCount, cumCount)
+  }
 
-  setParticles((prev) => [...prev, ...createChipParticles(originX, originY, 1)])
-  setIsPopping(true)
-  clearTimeout(popTimeoutRef.current)
-  popTimeoutRef.current = window.setTimeout(() => setIsPopping(false), 120)
-}
-
-const handlePop = () => {
-  spawnChipParticles()
-  handleSetCount(true)
-}
-
-const handleSpendChips = (newCount) => {
-  setCount(newCount);
-  if (userEmail) updateChips(userEmail, newCount, cumCount);
-}
-
-  const handleSetClickPower = (updater) => { // handle setting 
+  const handleSetClickPower = (updater) => {
     setClickPower((prev) => {
       const next = typeof updater === 'function' ? updater(prev) : updater
       if (userEmail) updateClickPower(userEmail, next)
@@ -173,8 +174,12 @@ const handleSpendChips = (newCount) => {
         setCount={handleSpendChips}
         clickPower={clickPower}
         setClickPower={handleSetClickPower}
-        setAnimalLevels={setAnimalLevels}
+        clickLevels={clickLevels} 
+        setClickLevels={setClickLevels} 
         animalLevels={animalLevels}
+        setAnimalLevels={setAnimalLevels}
+        cosmeticOwned={cosmeticOwned} 
+        setCosmeticOwned={setCosmeticOwned}
       />
     )
   }
@@ -188,7 +193,7 @@ const handleSpendChips = (newCount) => {
     return <LeaderboardPage onBack={() => setPage('home')} onLogout={handleLogout} />
   }
 
-  return ( // constructing page
+  return (
     <div className="min-h-screen px-6 py-6 text-[var(--text)] relative">
       <div ref={overlayRef} className="particle-overlay">
         {particles.map((particle) => (
