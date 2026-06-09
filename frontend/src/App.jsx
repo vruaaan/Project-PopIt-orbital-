@@ -12,10 +12,10 @@ import LoginPage from './userpages/LoginPage'
 import CreateAccountPage from './userpages/CreateAccountPage'
 
 import { getCurrentUser, signInWithEmail, signOutUser, signUpWithEmail } from './lib/firebase'
-import { createProfile, loadProfile} from './lib/playerService'
+import { updateChips, updateClickPower, updateAutoPopper, updateSeal, updateCow, updateDol } from './lib/gameplayLogic'
 import { updateChips, updateClickPower } from './lib/gameplayLogic'
 import { createChipParticles, updateParticles } from './physics/physics'
-import { updateChips, updateClickPower, updateAutoPopper, updateSeal, updateCow, updateDol } from './lib/gameplayLogic'
+
 
 export default function App() {
   const [count, setCount] = useState(0)
