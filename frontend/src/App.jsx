@@ -10,8 +10,9 @@ import ShopPage from './shoppages/ShopPage'
 import LeaderboardPage from './userpages/LeaderboardPage'
 import LoginPage from './userpages/LoginPage'
 import CreateAccountPage from './userpages/CreateAccountPage'
+import ResetPasswordPage from './userpages/ResetPasswordPage'
 
-import { getCurrentUser, signInWithEmail, signOutUser, signUpWithEmail } from './lib/firebase'
+import { getCurrentUser, resetPassword, signInWithEmail, signOutUser, signUpWithEmail } from './lib/firebase'
 import { updateChips, updateClickPower, updateAutoPopper, updateSeal, updateCow, updateDol } from './lib/gameplayLogic'
 import { createChipParticles, updateParticles } from './physics/physics'
 
@@ -106,6 +107,14 @@ export default function App() {
     setCount(0)
     setClickPower(1)
     setPage('leaderboard')
+    return { success: true }
+  }
+
+  const handleResetPassword = async (email) => {
+    const { error } = await resetPassword(email)
+    if (error) {
+      return { success: false, message: error.message || 'Failed to send reset email.' }
+    }
     return { success: true }
   }
 
@@ -215,7 +224,10 @@ export default function App() {
       )
   }
   if (page === 'login') {
-    return <LoginPage onBack={() => setPage('home')} onLogin={handleLogin} onToCreateAccount={() => setPage('createAccount')} />
+    return <LoginPage onBack={() => setPage('home')} onLogin={handleLogin} onToCreateAccount={() => setPage('createAccount')} onToResetPassword={() => setPage('resetPassword')} />
+  }
+  if (page === 'resetPassword') {
+    return <ResetPasswordPage onBack={() => setPage('login')} onResetPassword={handleResetPassword} />
   }
   if (page === 'createAccount') {
     return <CreateAccountPage onBack={() => setPage('login')} onCreateAccount={handleCreateAccount} />

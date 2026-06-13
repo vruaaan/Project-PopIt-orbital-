@@ -3,6 +3,7 @@ import {
   createUserWithEmailAndPassword,
   getAuth,
   onAuthStateChanged,
+  sendPasswordResetEmail,
   signInWithEmailAndPassword,
   signOut,
   updateProfile,
@@ -60,6 +61,15 @@ export async function signUpWithEmail(username, email, password) {
     return { user: credential.user, error: null }
   } catch (error) {
     return { user: null, error }
+  }
+}
+
+export async function resetPassword(email) {
+  try {
+    await sendPasswordResetEmail(auth, email.trim())
+    return { error: null }
+  } catch (error) {
+    return { error }
   }
 }
 
