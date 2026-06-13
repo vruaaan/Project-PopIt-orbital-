@@ -27,7 +27,7 @@ const ANIMALS = [
   },
   {
     id: 3,
-    name: "Eat Sleep Shit",
+    name: "What do i put here",
     desc: "Anatomically accurate",
     img: dol,
     imgClass: "w-24 h-24",
