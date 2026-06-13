@@ -30,7 +30,7 @@ export default function CosmeticUpgrades({ count, setCount, cosmeticOwned, setCo
         const owned = cosmeticOwned[item.id] ?? false;
         return (
           <div key={item.id} className={`cosmetic-card ${owned ? "cosmetic-card--owned" : ""}`}>
-            <img src={item.img} alt={item.name} className="w-32 h-32 object-contain" />
+            <img src={item.img} alt={item.name} className="w-48 h-48 object-contain" />
             <div className="text-center flex-1">
               <h3 className="shop-upgrade-title">{item.name}</h3>
               <p className="shop-upgrade-desc mt-1">{item.desc}</p>
@@ -45,7 +45,7 @@ export default function CosmeticUpgrades({ count, setCount, cosmeticOwned, setCo
                   onClick={() => buy(item)}
                   className="btn-upgrade px-6 py-2"
                 >
-                  Buy
+                  Unlock
                 </button>
               </div>
             )}
