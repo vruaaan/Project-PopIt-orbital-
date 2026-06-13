@@ -1,10 +1,15 @@
 import threechips from '../assets/threechips.png'
+import defaultcan from '../assets/plain can.png'
 import sealcan from '../assets/sealcan.png'
 import cowcan from '../assets/cowcan.png'
+import dolpcan from '../assets/dolphincan.png'
+
 
 const COSMETICS = [
-  { id: 1, name: "Seal Can",   desc: "Your can becomes covered in a thick layer of seal blubber.",  price: 10000 },
-  { id: 2, name: "Cow Can",    desc: "Your can becomes blessed by the spherical cow.",               price: 25000 },
+  { id: 1, name: "Original", img : defaultcan, price :10000 },
+  { id: 2, name: "Truffle", img: sealcan, price: 10000 },
+  { id: 3, name: "Sour Cream 'n Onion", img: cowcan, price: 10000 },
+  { id: 4, name: "Barbeque", img: dolpcan, price:10000 }
 ];
 
 export default function CosmeticUpgrades({ count, setCount, cosmeticOwned, setCosmeticOwned }) {
@@ -23,7 +28,6 @@ export default function CosmeticUpgrades({ count, setCount, cosmeticOwned, setCo
     <div className="mt-8 grid grid-cols-2 gap-6">
       {COSMETICS.map(item => {
         const owned = cosmeticOwned[item.id] ?? false;
-
         return (
           <div key={item.id} className={`shop-upgrade-card flex flex-col items-center gap-4 ${owned ? "shop-upgrade-card--owned" : ""}`}>
             <img src={item.img} alt={item.name} className="w-32 h-32 object-contain" />
