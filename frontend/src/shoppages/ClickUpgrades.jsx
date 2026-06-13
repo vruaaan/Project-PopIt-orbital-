@@ -35,7 +35,9 @@ export default function ClickUpgrades({ count, setCount, clickLevels, setClickLe
         return (
           <div key={item.id} className={`shop-upgrade-card ${lvl > 0 ? "shop-upgrade-card--owned" : ""}`}>
             <div className="shop-upgrade-row">
-              <img src={item.img} alt={item.name} className={`${item.imgClass} object-contain shrink-0`}/>
+              <div className="w-30 flex items-center justify-center shrink-0">
+                <img src={item.img} alt={item.name} className={`${item.imgClass} object-contain`}/>
+              </div>
               <div className="flex-1 text-left ">
                 <h3 className="shop-upgrade-title">{item.name}</h3>
                 <p className="shop-upgrade-desc">{item.desc}</p>

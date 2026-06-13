@@ -98,7 +98,7 @@ export default function SpecialUpgrades({ count, setCount, animalLevels, setAnim
         return (
           <div key={animal.id} className={`shop-upgrade-card ${isOwned ? "shop-upgrade-card--owned" : ""}`}>
             {/* Top row: image + name/desc + unlock or owned pill */}
-            <div className="shop-upgrade-row">
+            <div className="shop-upgrade-row gap-6">
               <img src={animal.img} alt={animal.name} className={`${animal.imgClass} object-contain shrink-0`} />
               <div className="flex-1 text-left">
                 <h3 className="shop-upgrade-title">{animal.name}</h3>
