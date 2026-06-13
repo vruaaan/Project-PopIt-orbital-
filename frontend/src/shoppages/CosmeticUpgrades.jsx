@@ -25,11 +25,11 @@ export default function CosmeticUpgrades({ count, setCount, cosmeticOwned, setCo
   }
 
   return (
-    <div className="mt-8 grid grid-cols-2 gap-6">
+    <div className="mt-8 grid grid-cols-4 gap-6">
       {COSMETICS.map(item => {
         const owned = cosmeticOwned[item.id] ?? false;
         return (
-          <div key={item.id} className={`shop-upgrade-card flex flex-col items-center gap-4 ${owned ? "shop-upgrade-card--owned" : ""}`}>
+          <div key={item.id} className={`cosmetic-card ${owned ? "cosmetic-card--owned" : ""}`}>
             <img src={item.img} alt={item.name} className="w-32 h-32 object-contain" />
             <div className="text-center flex-1">
               <h3 className="shop-upgrade-title">{item.name}</h3>

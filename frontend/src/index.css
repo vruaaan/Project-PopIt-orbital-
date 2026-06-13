@@ -288,6 +288,24 @@ code {
   background: rgba(181, 83, 52, 0.05);
 }
 
+/* Vertical card used in CosmeticUpgrades */
+.cosmetic-card {
+  border-radius: 1.5rem;
+  border: 1px solid #d4a792;
+  background: rgba(255, 255, 255, 0.4);
+  padding: 1.5rem;
+  transition: all 160ms ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.cosmetic-card--owned {
+  border-color: #b55334;
+  background: rgba(181, 83, 52, 0.05);
+}
+
 .shop-upgrade-row-top {
   display: flex;
   align-items: center;
