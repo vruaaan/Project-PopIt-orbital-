@@ -38,8 +38,7 @@ export default function CosmeticUpgrades({ count, setCount, cosmeticOwned, setCo
             {owned ? (
               <span className="pill">Owned</span>
             ) : (
-              <div className="flex items-center gap-3">
-                <span className="pill">{item.price} chips</span>
+              <div className="upgrade-action">
                 <button
                   type="button"
                   onClick={() => buy(item)}
@@ -47,6 +46,7 @@ export default function CosmeticUpgrades({ count, setCount, cosmeticOwned, setCo
                 >
                   Unlock
                 </button>
+                <span className="pill flex items-center gap-1">{item.price} <img src={threechips} alt="chips" className="w-8 h-8 object-contain" /></span>
               </div>
             )}
           </div>

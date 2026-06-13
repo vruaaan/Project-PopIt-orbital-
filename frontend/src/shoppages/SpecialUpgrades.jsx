@@ -1,3 +1,4 @@
+import threechips from '../assets/threechips.png'
 import seal from '../assets/seal.png'
 import cow from '../assets/cow.png'
 import dol from '../assets/dolphin.png'
@@ -100,13 +101,12 @@ export default function SpecialUpgrades({ count, setCount, animalLevels, setAnim
             {/* Top row: image + name/desc + unlock or owned pill */}
             <div className="shop-upgrade-row gap-6">
               <img src={animal.img} alt={animal.name} className={`${animal.imgClass} object-contain shrink-0`} />
-              <div className="flex-1 text-left">
+              <div className="upgrade-text-block">
                 <h3 className="shop-upgrade-title">{animal.name}</h3>
                 <p className="shop-upgrade-desc">{animal.desc}</p>
               </div>
               {!isOwned ? (
-                <div className="ml-auto flex items-center gap-3">
-                  <span className="pill">{animal.chance.baseCost} chips</span>
+                <div className="upgrade-action upgrade-action--right">
                   <button
                     type="button"
                     onClick={() => unlockAnimal(animal)}
@@ -114,6 +114,7 @@ export default function SpecialUpgrades({ count, setCount, animalLevels, setAnim
                   >
                     Unlock
                   </button>
+                  <span className="pill flex items-center gap-1">{animal.chance.baseCost} <img src={threechips} alt="chips" className="w-8 h-8 object-contain" /></span>
                 </div>
               ) : (
                 <span className="pill ml-auto">Owned</span>
@@ -126,12 +127,11 @@ export default function SpecialUpgrades({ count, setCount, animalLevels, setAnim
 
                 {/* Upgrade Probability */}
                 <div className="shop-upgrade-row">
-                  <div className="flex-1 text-left">
+                  <div className="upgrade-text-block">
                     <p className="shop-upgrade-title">Spawn Chance</p>
                     <p className="shop-upgrade-meta">Level {state.chanceLvl} → {currentChance}%</p>
                   </div>
-                  <div className="flex items-center gap-3">
-                    <span className="pill">{chanceCost} chips</span>
+                  <div className="upgrade-action">
                     <button
                       type="button"
                       onClick={() => upgradeChance(animal)}
@@ -139,17 +139,17 @@ export default function SpecialUpgrades({ count, setCount, animalLevels, setAnim
                     >
                       Upgrade Chance
                     </button>
+                    <span className="pill flex items-center gap-1">{chanceCost} <img src={threechips} alt="chips" className="w-8 h-8 object-contain" /></span>
                   </div>
                 </div>
 
                 {/* Upgrade Value */}
                 <div className="shop-upgrade-row">
-                  <div className="flex-1 text-left">
+                  <div className="upgrade-text-block">
                     <p className="shop-upgrade-title">Chip Value</p>
                     <p className="shop-upgrade-meta">Level {state.multLvl} → {currentMult}x</p>
                   </div>
-                  <div className="flex items-center gap-3">
-                    <span className="pill">{multCost} chips</span>
+                  <div className="upgrade-action">
                     <button
                       type="button"
                       onClick={() => upgradeMultiplier(animal)}
@@ -157,6 +157,7 @@ export default function SpecialUpgrades({ count, setCount, animalLevels, setAnim
                     >
                       Upgrade Value
                     </button>
+                    <span className="pill flex items-center gap-1">{multCost} <img src={threechips} alt="chips" className="w-8 h-8 object-contain" /></span>
                   </div>
                 </div>
 

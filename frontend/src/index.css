@@ -343,3 +343,31 @@ code {
   font-size: 0.875rem;
   text-align: left;
 }
+
+/* Button + price pill stacked vertically */
+.upgrade-action {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Same as upgrade-action but pushed to the right */
+.upgrade-action--right {
+  margin-left: auto;
+}
+
+/* Fixed-width image container so text aligns across cards */
+.upgrade-img-box {
+  width: 7.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+/* Text block inside upgrade rows */
+.upgrade-text-block {
+  flex: 1;
+  text-align: left;
+}
