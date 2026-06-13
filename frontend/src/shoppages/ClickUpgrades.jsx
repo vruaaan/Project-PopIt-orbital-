@@ -35,19 +35,19 @@ export default function ClickUpgrades({ count, setCount, clickLevels, setClickLe
         return (
           <div key={item.id} className={`shop-upgrade-card ${lvl > 0 ? "shop-upgrade-card--owned" : ""}`}>
             <div className="shop-upgrade-row">
-              <div className="w-30 flex items-center justify-center shrink-0">
+              <div className="upgrade-img-box">
                 <img src={item.img} alt={item.name} className={`${item.imgClass} object-contain`}/>
               </div>
-              <div className="flex-1 text-left ">
+              <div className="upgrade-text-block">
                 <h3 className="shop-upgrade-title">{item.name}</h3>
                 <p className="shop-upgrade-desc">{item.desc}</p>
                 <p className="shop-upgrade-meta">Level {lvl} — +{totalPower} click power total</p>
               </div>
-              <div className="ml-auto flex items-center gap-3">
-                <span className="pill">{cost} chips</span>
+              <div className="upgrade-action upgrade-action--right">
                 <button type="button" onClick={() => upgrade(item)} className="btn-upgrade px-6 py-2">
                   {isUnlocked ? "Upgrade" : "Unlock"}
                 </button>
+                <span className="pill flex items-center gap-1">{cost} <img src={threechips} alt="chips" className="w-8 h-8 object-contain" /></span>
               </div>
             </div>
           </div>
