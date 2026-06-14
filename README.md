@@ -1,90 +1,96 @@
 # PopIt
 
-PopIt is an idle interactive, satisfying, idle game where users tap on a virtual "can" to generate collectible items. This project is interesting because it combines:
-  1. Real-time user interaction (frontend)
-  2. Game logic and probability systems
-  3. Persistent user data (backend)
-  4. Upgrade and progression mechanics
+PopIt is an idle clicker game where users tap a virtual can to pop chips, earn currency, and spend it on upgrades. The project combines real-time user interaction, game logic with probability systems, persistent cloud-saved progress, and a full upgrade/cosmetics shop.
 
-This allows us to explore full-stack development while keeping the project fun and motivating to build.
+## Level of Achievement
+- Gemini
 
-## Level of Achievement:
-- Gemini 
-
-## Link of Hosted Web Game:
+## Hosted Web Game
 - https://project-pop-it-orbital.vercel.app/
 
-## Progress by Milestones:
+## Tech Stack
+- **Frontend**: React 19, Vite, Tailwind CSS 4
+- **Backend**: Firebase (Authentication, Firestore)
+- **Deployment**: Vercel
 
-### Milestone 1:
-- Setup the 4 core pages:
-  1. Home Page
-  2. Shop Page
-  3. Login Page 
-  4. Leaderboard Page
-- Setup Navigation rules between the 4 pages so that users can navigate between them
-- Setup basic 'popping' logic to increase counter on home page when the virtual can is clicked
+## Features
+- Click the can to pop chips and earn currency
+- Chip particles fly out of the can with physics-based animations
+- Shop with three upgrade tabs:
+  - **Pop!** — auto-clicker and click power upgrades
+  - **Specials** — unlock animals (seal, cow, dolphin) with spawn chance and chip value upgrades
+  - **Cosmetics** — unlock alternate can skins
+- Firebase Authentication (sign up, log in, log out, password reset)
+- Cloud-saved progress via Firestore — chip count, upgrades, and cosmetics persist across sessions
+- Global leaderboard showing top players by total chips popped
 
-### Milestone 2:
-- Implement buying logic so that the shop is functioning 
-- Setup advanced 'popping' logic so that items will pop out of the can
-- Setup game physics so that the items popped will fall after popping out of the can
-- Wire up backend features to Firebase so that:
-  1. Users can create their account to save progress
-  2. Users can login back to their account to access their previous progress
-  3. Leaderboard functions properly
- 
-### Milestone 3:
-- Populate the shop with cosmetics and gameplay upgrades
-- Finetune the game physics to make the popping logic more realistic
-- Implement user testing to check for bugs
+## Progress by Milestones
 
+### Milestone 1
+- Set up the 4 core pages: Home, Shop, Login, Leaderboard
+- Implemented navigation between pages using state-based routing
+- Basic popping logic to increment chip counter on click
 
-### Project Structure:
+### Milestone 2
+- Implemented shop buying logic with cost scaling per upgrade level
+- Chip particles spawn and fall from the can on each click (physics engine)
+- Wired up Firebase backend:
+  - Account creation and login with email/password
+  - Firestore profile creation and data persistence
+  - Leaderboard reads live data from Firestore
+
+### Milestone 3
+- Populated the shop with gameplay upgrades (auto-clicker, click power) and special animal upgrades
+- Added cosmetics tab with alternate can skins in a vertical card grid layout
+- Added password reset page connected to Firebase
+- Replaced text price labels with chip icon across all shop tabs
+- Extracted repeated layout patterns into shared CSS classes
+- Fine-tuned game physics for more realistic chip animations
+- User testing and bug fixes
+
+## Project Structure
 ```
 project-root/
 │
-├── backend/
-|
 ├── frontend/
-│    ├── public/
-|    ├── src/
-|    |    ├── assets/
-|    |    |    ├── back.png
-|    |    |    ├── chip1.png
-|    |    |    ├── chip2.png
-|    |    |    ├── chip3.png
-|    |    |    ├── cow.png
-|    |    |    ├── dolphin.png
-|    |    |    ├── home-icon.png
-|    |    |    ├── leaderboard.png
-|    |    |    ├── login.png
-|    |    |    ├── plain-can.png
-|    |    |    ├── seal-can.png
-|    |    |    ├── shop.png
-|    |    |    └── threechips.png
-|    |    |
-|    |    ├── lib/
-|    |    |    ├── playerService.js
-|    |    |    └── firebase.js
-|    |    |
-|    |    ├── App.css
-|    |    ├── App.jsx
-|    |    ├── index.css
-|    |    ├── Leaderboard.jsx
-|    |    ├── LoginPage.jsx
-|    |    ├── main.jsx
-|    |    └── ShopPage.jsx
-|    |
-│    ├── .env
-│    ├── eslint.config.js
-|    ├── index.html
-|    ├── package-lock.json
-|    ├── package.json
-|    └── vite.config.jst
-│   
+│   ├── public/
+│   ├── src/
+│   │   ├── assets/              # Images (chips, cans, animals, icons)
+│   │   │
+│   │   ├── lib/
+│   │   │   ├── firebase.js      # Firebase init, auth functions
+│   │   │   ├── playerService.js # Firestore read/write for user profiles
+│   │   │   └── gameplayLogic.js # Firestore updates for game state
+│   │   │
+│   │   ├── physics/
+│   │   │   └── physics.js       # Chip particle animation engine
+│   │   │
+│   │   ├── shoppages/
+│   │   │   ├── ShopPage.jsx
+│   │   │   ├── ClickUpgrades.jsx
+│   │   │   ├── SpecialUpgrades.jsx
+│   │   │   └── CosmeticUpgrades.jsx
+│   │   │
+│   │   ├── userpages/
+│   │   │   ├── LoginPage.jsx
+│   │   │   ├── CreateAccountPage.jsx
+│   │   │   ├── ResetPasswordPage.jsx
+│   │   │   └── LeaderboardPage.jsx
+│   │   │
+│   │   ├── App.jsx              # Root component with routing and game state
+│   │   ├── App.css
+│   │   ├── index.css            # Global styles and shared CSS classes
+│   │   └── main.jsx
+│   │
+│   ├── functions/               # Firebase Cloud Functions
+│   ├── .env                     # Firebase config (not committed)
+│   ├── firebase.json
+│   ├── firestore.rules
+│   ├── index.html
+│   ├── package.json
+│   └── vite.config.js
+│
 ├── .gitignore
 ├── package-lock.json
 └── README.md
 ```
-
