@@ -13,6 +13,7 @@ import CreateAccountPage from './userpages/CreateAccountPage'
 import ResetPasswordPage from './userpages/ResetPasswordPage'
 
 import { getCurrentUser, resetPassword, signInWithEmail, signOutUser, signUpWithEmail } from './lib/firebase'
+import { loadProfile, createProfile } from './lib/playerService'
 import { updateChips, updateClickPower, updateAutoPopper, updateSeal, updateCow, updateDol } from './lib/gameplayLogic'
 import { createChipParticles, updateParticles } from './physics/physics'
 
@@ -53,7 +54,8 @@ export default function App() {
         setProfile(profile)
         setCount(profile.curr_count ?? 0)
         setCumCount(profile.cum_count ?? 0)
-        setClickPower(profile.click_pow ?? 1)
+        setClickLevels({ 1: profile.auto_popper ?? 0, 2: profile.click_pow ?? 0 })
+        setClickPower(1 + (profile.click_pow ?? 0) * 2)
       }
       setSessionLoaded(true)
     }
@@ -75,8 +77,8 @@ export default function App() {
       setProfile(profile)
       setCount(profile.curr_count ?? 0)
       setCumCount(profile.cum_count ?? 0)
-      setClickPower(profile.click_power ?? 1)
-      setAutoClicker(profile.auto_popper ?? 0)
+      setClickLevels({ 1: profile.auto_popper ?? 0, 2: profile.click_pow ?? 0 })
+      setClickPower(1 + (profile.click_pow ?? 0) * 2)
       setAnimalLevels({ 
         1: {owned: profile.seal_prob > 0, chanceLvl: profile.seal_prob ?? 0, multLvl: profile.seal_cp ?? 0 },
         2: {owned: profile.cow_prob > 0, chanceLvl: profile.cow_prob ?? 0, multLvl: profile.cow_cp ?? 0 },
@@ -179,15 +181,17 @@ export default function App() {
   const handleSetClickPower = (updater) => {
     setClickPower((prev) => {
       const next = typeof updater === 'function' ? updater(prev) : updater
-      if (userEmail) updateClickPower(userEmail, next)
       return next
     })
   }
-  
+
   const handleSetAutoClicker = (updater) => {
     setClickLevels(prev => {
       const next = typeof updater === 'function' ? updater(prev) : updater
-      if (userEmail) updateAutoPopper(userEmail, next[1] ?? 0)
+      if (userEmail) {
+        updateAutoPopper(userEmail, next[1] ?? 0)
+        updateClickPower(userEmail, next[2] ?? 0)
+      }
       return next
     })
   }
@@ -213,10 +217,10 @@ export default function App() {
           setCount={handleSpendChips}
           clickPower={clickPower}
           setClickPower={handleSetClickPower}
-          clickLevels={clickLevels} 
-          setClickLevels={setClickLevels} 
+          clickLevels={clickLevels}
+          setClickLevels={handleSetAutoClicker}
           animalLevels={animalLevels}
-          setAnimalLevels={setAnimalLevels}
+          setAnimalLevels={handleSetAnimalLevels}
           cosmeticOwned={cosmeticOwned} 
           setCosmeticOwned={setCosmeticOwned}
           profile = {profile}

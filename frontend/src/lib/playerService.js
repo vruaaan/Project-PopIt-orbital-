@@ -19,7 +19,7 @@ export async function createProfile(email, username, userId) {
       curr_count: 0, // curr chip count
       cum_count:0, // cumulative chip count
       purchase_count:0, // number of purchases made
-      click_pow: 1, // how much 1 chip is worth
+      click_pow: 0, // upgrade level of Salt 'n Pepper Shaker (0 = locked)
       auto_popper: 0, // auto popper 
       created_at: serverTimestamp(), // created at
       updated_at: serverTimestamp(), // last updated
