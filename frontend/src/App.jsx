@@ -143,7 +143,10 @@ export default function App() {
     const tick = (now) => {
       const dt = Math.min((now - lastTime) / 1000, 0.03)
       lastTime = now
-      setParticles((prev) => updateParticles(prev, dt))
+      const floorY = overlayRef.current
+        ? overlayRef.current.getBoundingClientRect().height - 50
+        : undefined
+      setParticles((prev) => updateParticles(prev, dt, floorY))
       rafId = requestAnimationFrame(tick)
     }
 
