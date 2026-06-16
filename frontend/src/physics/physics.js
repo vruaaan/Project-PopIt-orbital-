@@ -8,7 +8,7 @@ export function createChipParticle(x, y) {
     x,
     y,
     vx: Math.cos(angle) * speed * 6.5,
-    vy: Math.sin(angle) * speed - 40,
+    vy: Math.sin(angle) * speed * 0.5 - 600,
     rotation: Math.random() * 360,
     angularVelocity: (Math.random() - 0.5) * 720,
     life: 0,
