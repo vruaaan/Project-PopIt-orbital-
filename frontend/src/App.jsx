@@ -1,5 +1,5 @@
 import './App.css'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState, useCallback} from 'react'
 import threechips from './assets/threechips.png'
 import chip1 from './assets/chip1.png'
 import shop from './assets/shop.png'
@@ -15,7 +15,9 @@ import ResetPasswordPage from './userpages/ResetPasswordPage'
 import { getCurrentUser, resetPassword, signInWithEmail, signOutUser, signUpWithEmail } from './lib/firebase'
 import { loadProfile, createProfile } from './lib/playerService'
 import { updateChips, updateClickPower, updateAutoPopper, updateSeal, updateCow, updateDol } from './lib/gameplayLogic'
-import { createChipParticles, updateParticles } from './physics/physics'
+import { createChipParticles, createAnimalParticle, updateParticles } from './physics/physics'
+import { calcAnimalBonus } from './shoppages/SpecialUpgrades'
+
 
 
 export default function App() {
@@ -56,6 +58,11 @@ export default function App() {
         setCumCount(profile.cum_count ?? 0)
         setClickLevels({ 1: profile.auto_popper ?? 0, 2: profile.click_pow ?? 0 })
         setClickPower(1 + (profile.click_pow ?? 0) * 2)
+        setAnimalLevels({
+          1: { owned: profile.seal_prob > 0, chanceLvl: profile.seal_prob ?? 0, multLvl: profile.seal_cp ?? 0 },
+          2: { owned: profile.cow_prob > 0, chanceLvl: profile.cow_prob ?? 0, multLvl: profile.cow_cp ?? 0 },
+          3: { owned: profile.dol_prob > 0, chanceLvl: profile.dol_prob ?? 0, multLvl: profile.dol_cp ?? 0 }
+        })
       }
       setSessionLoaded(true)
     }
@@ -127,14 +134,16 @@ export default function App() {
     setPage('home')
   }
 
-  const handleSetCount = (isEarning = false) => {
-    const earned = clickPower
-    const nextCount = count + earned
-    const nextCum = isEarning ? cumCount + earned : cumCount
-    setCount(nextCount)
-    if (isEarning) setCumCount(nextCum)
-    if (userEmail) updateChips(userEmail, nextCount, nextCum)
-  }
+  const handleSetCount = useCallback((isEarning = false) => { 
+  const { multiplier, procdAnimals } = calcAnimalBonus(animalLevels)
+  procdAnimals.forEach(img => spawnAnimalParticle(img))
+  const earned = Math.floor(clickPower * multiplier)
+  const nextCount = count + earned
+  const nextCum = isEarning ? cumCount + earned : cumCount
+  setCount(nextCount)
+  if (isEarning) setCumCount(nextCum)
+  if (userEmail) updateChips(userEmail, nextCount, nextCum)
+  }, [animalLevels, clickPower, count, cumCount, userEmail])
 
   useEffect(() => {
     let rafId
@@ -169,6 +178,15 @@ export default function App() {
     setIsPopping(true)
     clearTimeout(popTimeoutRef.current)
     popTimeoutRef.current = window.setTimeout(() => setIsPopping(false), 120)
+  }
+
+  const spawnAnimalParticle = (img) => {
+  if (!overlayRef.current || !canRef.current) return
+  const overlayRect = overlayRef.current.getBoundingClientRect()
+  const canRect = canRef.current.getBoundingClientRect()
+  const originX = canRect.left - overlayRect.left + canRect.width / 2
+  const originY = canRect.top - overlayRect.top + canRect.height * 0.12
+  setParticles(prev => [...prev, createAnimalParticle(originX, originY, img)])
   }
 
   const handlePop = () => {
@@ -249,7 +267,7 @@ export default function App() {
         {particles.map((particle) => (
           <img
             key={particle.id}
-            src={chip1}
+            src={particle.type === 'chip' ? chip1 : particle.type}
             alt=""
             className="chip-particle"
             style={{

@@ -28,8 +28,8 @@ const ANIMALS = [
   },
   {
     id: 3,
-    name: "What do i put here",
-    desc: "Anatomically accurate",
+    name: "What is this???",
+    desc: "Have we gone too far",
     img: dol,
     imgClass: "w-24 h-24",
     db_prob: "dol_prob",
@@ -46,6 +46,24 @@ function calcCost(baseCost, costScale, level) {
 function calcStat(base, perLevel, level) {
   return +(base + perLevel * level).toFixed(1);
 }
+
+export function calcAnimalBonus(animalLevels) {
+  let bonusMultiplier = 1
+  const procdAnimals = []
+  ANIMALS.forEach(animal => {
+    const state = animalLevels[animal.id]
+    if (!state.owned) return
+    const chance = animal.chance.base + animal.chance.perLevel * state.chanceLvl
+    const mult = animal.multiplier.base + animal.multiplier.perLevel * state.multLvl
+    if (Math.random() * 100 < chance) {
+      bonusMultiplier *= mult
+      procdAnimals.push(animal.img)
+    }
+  })
+  return { multiplier: bonusMultiplier, procdAnimals }
+}
+
+
 
 export default function SpecialUpgrades({ count, setCount, animalLevels, setAnimalLevels, profile }) {
   function unlockAnimal(animal) {
