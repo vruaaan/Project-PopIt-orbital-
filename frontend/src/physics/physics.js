@@ -1,19 +1,23 @@
 let nextParticleId = 1
 
-export function createChipParticle(x, y) {
+export function createChipParticle(x, y, type = 'chip') {
   const angle = Math.random() * Math.PI * 1.8 - Math.PI * 1.4  
   const speed = 220 + Math.random() * 120
   return {
     id: nextParticleId++,
-    x,
-    y,
+    type,  
+    x, y,
     vx: Math.cos(angle) * speed * 6.5,
-    vy: Math.sin(angle) * speed - 40,
+    vy: Math.sin(angle) * speed * 0.5 - 600,
     rotation: Math.random() * 360,
     angularVelocity: (Math.random() - 0.5) * 720,
     life: 0,
     duration: 1.55 + Math.random() * 0.35,
   }
+}
+
+export function createAnimalParticle(x, y, animalImg) {
+  return createChipParticle(x, y, animalImg) 
 }
 
 export function createChipParticles(x, y, count = 1) {
