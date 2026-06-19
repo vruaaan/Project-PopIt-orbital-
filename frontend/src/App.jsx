@@ -2,6 +2,8 @@ import './App.css'
 import { useEffect, useRef, useState, useCallback} from 'react'
 import threechips from './assets/threechips.png'
 import chip1 from './assets/chip1.png'
+import chip2 from './assets/chip2.png'
+import chip3 from './assets/chip3.png'
 import shop from './assets/shop.png'
 import loginIcon from './assets/Login.png'
 import leaderboard from './assets/leaderboard.png'
@@ -18,6 +20,7 @@ import { updateChips, updateClickPower, updateAutoPopper, updateSeal, updateCow,
 import { createChipParticles, createAnimalParticle, updateParticles } from './physics/physics'
 import { calcAnimalBonus } from './shoppages/SpecialUpgrades'
 
+const CHIP_IMGS = [chip1, chip2, chip3]
 
 
 export default function App() {
@@ -134,6 +137,15 @@ export default function App() {
     setPage('home')
   }
 
+  const spawnAnimalParticle = (img) => {
+  if (!overlayRef.current || !canRef.current) return
+  const overlayRect = overlayRef.current.getBoundingClientRect()
+  const canRect = canRef.current.getBoundingClientRect()
+  const originX = canRect.left - overlayRect.left + canRect.width / 2
+  const originY = canRect.top - overlayRect.top + canRect.height * 0.12
+  setParticles(prev => [...prev, createAnimalParticle(originX, originY, img)])
+  }
+
   const handleSetCount = useCallback((isEarning = false) => { 
   const { multiplier, procdAnimals } = calcAnimalBonus(animalLevels)
   procdAnimals.forEach(img => spawnAnimalParticle(img))
@@ -173,20 +185,11 @@ export default function App() {
     const canRect = canRef.current.getBoundingClientRect()
     const originX = canRect.left - overlayRect.left + canRect.width / 2
     const originY = canRect.top - overlayRect.top + canRect.height * 0.12
-
-    setParticles((prev) => [...prev, ...createChipParticles(originX, originY, 1)])
+    const randomChip = CHIP_IMGS[Math.floor(Math.random() * CHIP_IMGS.length)]
+    setParticles((prev) => [...prev, ...createChipParticles(originX, originY, 1, randomChip)])
     setIsPopping(true)
     clearTimeout(popTimeoutRef.current)
     popTimeoutRef.current = window.setTimeout(() => setIsPopping(false), 120)
-  }
-
-  const spawnAnimalParticle = (img) => {
-  if (!overlayRef.current || !canRef.current) return
-  const overlayRect = overlayRef.current.getBoundingClientRect()
-  const canRect = canRef.current.getBoundingClientRect()
-  const originX = canRect.left - overlayRect.left + canRect.width / 2
-  const originY = canRect.top - overlayRect.top + canRect.height * 0.12
-  setParticles(prev => [...prev, createAnimalParticle(originX, originY, img)])
   }
 
   const handlePop = () => {
@@ -267,7 +270,7 @@ export default function App() {
         {particles.map((particle) => (
           <img
             key={particle.id}
-            src={particle.type === 'chip' ? chip1 : particle.type}
+            src={particle.type}
             alt=""
             className="chip-particle"
             style={{

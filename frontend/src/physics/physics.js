@@ -20,8 +20,8 @@ export function createAnimalParticle(x, y, animalImg) {
   return createChipParticle(x, y, animalImg) 
 }
 
-export function createChipParticles(x, y, count = 1) {
-  return Array.from({ length: count }, () => createChipParticle(x, y))
+export function createChipParticles(x, y, count = 1, type = 'chip') {
+  return Array.from({ length: count }, () => createChipParticle(x, y, type))
 }
 
 export function updateParticles(particles, dt, floorY) {

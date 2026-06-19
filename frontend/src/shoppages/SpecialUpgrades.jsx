@@ -12,7 +12,7 @@ const ANIMALS = [
     imgClass: "w-24 h-24",
     db_prob: "seal_prob",
     db_cp: "seal_cp",
-    chance: { base: 5, perLevel: 2, baseCost: 200, costScale: 1.8 },
+    chance: {baseCost: 200, costScale: 1.8 },
     multiplier: { base: 2, perLevel: 1, baseCost: 300, costScale: 2.0 },
   },
   {
@@ -23,7 +23,7 @@ const ANIMALS = [
     imgClass: "w-24 h-24",
     db_prob: "cow_prob",
     db_cp: "cow_cp",
-    chance: { base: 3, perLevel: 1.5, baseCost: 350, costScale: 2.0 },
+    chance: {baseCost: 350, costScale: 2.0 },
     multiplier: { base: 3, perLevel: 1.5, baseCost: 500, costScale: 2.2 },
   },
   {
@@ -34,7 +34,7 @@ const ANIMALS = [
     imgClass: "w-24 h-24",
     db_prob: "dol_prob",
     db_cp: "dol_cp",
-    chance: { base: 3, perLevel: 1.5, baseCost: 350, costScale: 2.0 },
+    chance: {baseCost: 350, costScale: 2.0 },
     multiplier: { base: 3, perLevel: 1.5, baseCost: 500, costScale: 2.2 },
   }
 ];
@@ -53,7 +53,7 @@ export function calcAnimalBonus(animalLevels) {
   ANIMALS.forEach(animal => {
     const state = animalLevels[animal.id]
     if (!state.owned) return
-    const chance = animal.chance.base + animal.chance.perLevel * state.chanceLvl
+    const chance = Math.floor(5.6*Math.log2(state.chanceLvl + 1) + 5)
     const mult = animal.multiplier.base + animal.multiplier.perLevel * state.multLvl
     if (Math.random() * 100 < chance) {
       bonusMultiplier *= mult
@@ -109,7 +109,7 @@ export default function SpecialUpgrades({ count, setCount, animalLevels, setAnim
           ? (profile[animal.db_prob] ?? 0) > 0 || state.owned
           : state.owned;
 
-        const currentChance = calcStat(animal.chance.base, animal.chance.perLevel, state.chanceLvl);
+        const currentChance = Math.floor(5.6 * Math.log2(state.chanceLvl + 1) + 5)
         const currentMult = calcStat(animal.multiplier.base, animal.multiplier.perLevel, state.multLvl);
         const chanceCost = calcCost(animal.chance.baseCost, animal.chance.costScale, state.chanceLvl);
         const multCost = calcCost(animal.multiplier.baseCost, animal.multiplier.costScale, state.multLvl);
