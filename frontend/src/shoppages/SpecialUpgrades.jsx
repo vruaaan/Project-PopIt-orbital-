@@ -1,69 +1,5 @@
 import threechips from '../assets/threechips.png'
-import seal from '../assets/seal.png'
-import cow from '../assets/cow.png'
-import dol from '../assets/dolphin.png'
-
-const ANIMALS = [
-  {
-    id: 1,
-    name: "Hit the sealion!",
-    desc: "Not fake, not slim, not shady",
-    img: seal,
-    imgClass: "w-24 h-24",
-    db_prob: "seal_prob",
-    db_cp: "seal_cp",
-    chance: { base: 5, perLevel: 2, baseCost: 200, costScale: 1.8 },
-    multiplier: { base: 2, perLevel: 1, baseCost: 300, costScale: 2.0 },
-  },
-  {
-    id: 2,
-    name: "Got milk?",
-    desc: "Aerodynamically accurate",
-    img: cow,
-    imgClass: "w-24 h-24",
-    db_prob: "cow_prob",
-    db_cp: "cow_cp",
-    chance: { base: 3, perLevel: 1.5, baseCost: 350, costScale: 2.0 },
-    multiplier: { base: 3, perLevel: 1.5, baseCost: 500, costScale: 2.2 },
-  },
-  {
-    id: 3,
-    name: "What is this???",
-    desc: "Have we gone too far",
-    img: dol,
-    imgClass: "w-24 h-24",
-    db_prob: "dol_prob",
-    db_cp: "dol_cp",
-    chance: { base: 3, perLevel: 1.5, baseCost: 350, costScale: 2.0 },
-    multiplier: { base: 3, perLevel: 1.5, baseCost: 500, costScale: 2.2 },
-  }
-];
-
-function calcCost(baseCost, costScale, level) {
-  return Math.floor(baseCost * Math.pow(costScale, level));
-}
-
-function calcStat(base, perLevel, level) {
-  return +(base + perLevel * level).toFixed(1);
-}
-
-export function calcAnimalBonus(animalLevels) {
-  let bonusMultiplier = 1
-  const procdAnimals = []
-  ANIMALS.forEach(animal => {
-    const state = animalLevels[animal.id]
-    if (!state.owned) return
-    const chance = Math.floor(5.6*Math.log2(state.chanceLvl + 1) + 5)
-    const mult = animal.multiplier.base + animal.multiplier.perLevel * state.multLvl
-    if (Math.random() * 100 < chance) {
-      bonusMultiplier *= mult
-      procdAnimals.push(animal.img)
-    }
-  })
-  return { multiplier: bonusMultiplier, procdAnimals }
-}
-
-
+import { ANIMALS, calcCost, calcStat } from '../lib/animalLogic'
 
 export default function SpecialUpgrades({ count, setCount, animalLevels, setAnimalLevels, profile }) {
   function unlockAnimal(animal) {
@@ -104,7 +40,6 @@ export default function SpecialUpgrades({ count, setCount, animalLevels, setAnim
       {ANIMALS.map(animal => {
         const state = animalLevels[animal.id];
 
-        // check backend first, fall back to local state
         const isOwned = profile
           ? profile[animal.dbKey]?.owned || state.owned
           : state.owned;

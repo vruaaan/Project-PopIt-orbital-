@@ -20,9 +20,39 @@ import ResetPasswordPage from './userpages/ResetPasswordPage'
 
 import { getCurrentUser, resetPassword, signInWithEmail, signOutUser, signUpWithEmail } from './lib/firebase'
 import { loadProfile, createProfile } from './lib/playerService'
-import { updateChips, updateClickPower, updateAutoPopper, updateSeal, updateCow, updateDol } from './lib/gameplayLogic'
+import { updateChips, updateClickPower, updateAutoPopper, updateSeal, updateCow, updateDol, updateCosmetics } from './lib/gameplayLogic'
 import { createChipParticles, createAnimalParticle, updateParticles } from './physics/physics'
-import { calcAnimalBonus } from './shoppages/SpecialUpgrades'
+import { calcAnimalBonus } from './lib/animalLogic'
+
+const DEFAULT_COSMETIC_OWNED = { 1: true, 2: false, 3: false, 4: false }
+
+function getAnimalLevelsFromProfile(profile) {
+  const seal = profile.seal ?? {}
+  const cow = profile.cow ?? {}
+  const dol = profile.dol ?? {}
+
+  return {
+    1: {
+      owned: seal.owned ?? false,
+      chanceLvl: seal.prob ?? 0,
+      multLvl: seal.cp ?? 0
+    },
+    2: {
+      owned: cow.owned ?? false,
+      chanceLvl: cow.prob ?? 0,
+      multLvl: cow.cp ?? 0
+    },
+    3: {
+      owned: dol.owned ?? false,
+      chanceLvl: dol.prob ?? 0,
+      multLvl: dol.cp ?? 0
+    }
+  }
+}
+
+function getCosmeticOwnedFromProfile(profile) {
+  return { ...DEFAULT_COSMETIC_OWNED, ...(profile.cosmetic_owned ?? {}) }
+}
 
 
 
@@ -47,6 +77,7 @@ export default function App() {
     const overlayRef = useRef(null)
     const canRef = useRef(null)
     const popTimeoutRef = useRef(null)
+    const CHIP_IMGS = [chip1, chip2, chip3]
 
     const CAN_IMAGES = {
         1: plainCan,
