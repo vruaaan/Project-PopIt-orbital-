@@ -10,8 +10,7 @@ const ANIMALS = [
     desc: "Not fake, not slim, not shady",
     img: seal,
     imgClass: "w-24 h-24",
-    db_prob: "seal_prob",
-    db_cp: "seal_cp",
+    dbKey: "seal",
     chance: { base: 5, perLevel: 2, baseCost: 200, costScale: 1.8 },
     multiplier: { base: 2, perLevel: 1, baseCost: 300, costScale: 2.0 },
   },
@@ -21,8 +20,7 @@ const ANIMALS = [
     desc: "Aerodynamically accurate",
     img: cow,
     imgClass: "w-24 h-24",
-    db_prob: "cow_prob",
-    db_cp: "cow_cp",
+    dbKey: "cow",
     chance: { base: 3, perLevel: 1.5, baseCost: 350, costScale: 2.0 },
     multiplier: { base: 3, perLevel: 1.5, baseCost: 500, costScale: 2.2 },
   },
@@ -32,8 +30,7 @@ const ANIMALS = [
     desc: "Anatomically accurate",
     img: dol,
     imgClass: "w-24 h-24",
-    db_prob: "dol_prob",
-    db_cp: "dol_cp",
+    dbKey: "dol",
     chance: { base: 3, perLevel: 1.5, baseCost: 350, costScale: 2.0 },
     multiplier: { base: 3, perLevel: 1.5, baseCost: 500, costScale: 2.2 },
   }
@@ -88,7 +85,7 @@ export default function SpecialUpgrades({ count, setCount, animalLevels, setAnim
 
         // check backend first, fall back to local state
         const isOwned = profile
-          ? (profile[animal.db_prob] ?? 0) > 0 || state.owned
+          ? profile[animal.dbKey]?.owned || state.owned
           : state.owned;
 
         const currentChance = calcStat(animal.chance.base, animal.chance.perLevel, state.chanceLvl);

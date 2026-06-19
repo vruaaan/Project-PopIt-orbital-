@@ -8,13 +8,15 @@ import ClickUpgrades from "./ClickUpgrades"
 import CosmeticUpgrades from "./CosmeticUpgrades"
 
 export default function ShopPage({
-  onBack,
-  count, setCount,
-  clickPower, setClickPower,
-  clickLevels, setClickLevels,
-  animalLevels, setAnimalLevels,
-  cosmeticOwned, setCosmeticOwned,
-  profile
+    onBack,
+    count, setCount,
+    clickPower, setClickPower,
+    clickLevels, setClickLevels,
+    animalLevels, setAnimalLevels,
+    cosmeticOwned, setCosmeticOwned,
+    profile,
+    equippedCosmetic,
+    setEquippedCosmetic,
 }) {
   const [activeCategory, setActiveCategory] = useState("Pop!"); // default tab
   const categories = ["Pop!", "Specials", "Cosmetics"]; // initialising array of the 3 categories
@@ -52,30 +54,31 @@ export default function ShopPage({
         <div className="flex-1 mt-8 overflow-x-auto">
           {activeCategory === "Pop!" && ( // if active = Pop!
             <ClickUpgrades
-              count={count}
-              setCount={setCount}
-              clickLevels={clickLevels}
-              setClickLevels={setClickLevels}
-              setClickPower={setClickPower}
-              profile = {profile}
+                count={count}
+                setCount={setCount}
+                clickLevels={clickLevels}
+                setClickLevels={setClickLevels}
+                setClickPower={setClickPower}
             />
           )}
           {activeCategory === "Specials" && ( // if active = Specials
             <SpecialUpgrades
-              count={count}
-              setCount={setCount}
-              animalLevels={animalLevels}
-              setAnimalLevels={setAnimalLevels}
-              profile={profile}
+                count={count}
+                setCount={setCount}
+                animalLevels={animalLevels}
+                setAnimalLevels={setAnimalLevels}
+                profile={profile}
             />
           )}
           {activeCategory === "Cosmetics" && ( // if active = Cosmetics
             <CosmeticUpgrades
-              count={count}
-              setCount={setCount}
-              cosmeticOwned={cosmeticOwned}
-              setCosmeticOwned={setCosmeticOwned}
-              profile={profile}
+                count={count}
+                setCount={setCount}
+                cosmeticOwned={cosmeticOwned}
+                setCosmeticOwned={setCosmeticOwned}
+                equippedCosmetic={equippedCosmetic}
+                setEquippedCosmetic={setEquippedCosmetic}
+                profile={profile}
             />
           )}
         </div>

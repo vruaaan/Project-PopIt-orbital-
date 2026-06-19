@@ -1,4 +1,4 @@
-import { doc, getDoc, serverTimestamp, setDoc, updateDoc } from 'firebase/firestore'
+import { doc, serverTimestamp, setDoc } from 'firebase/firestore'
 import { db } from './firebase'
 
 //update chip coiunt 
@@ -35,20 +35,41 @@ export async function updateClickPower(email, clickPower) {
 
 // update auto_popper level
 export async function updateAutoPopper(email, level) {
-  await updateDoc(doc(db, 'users', email), { auto_popper: level })
+  await setDoc(doc(db, 'users', email), { auto_popper: level, updated_at: serverTimestamp() }, { merge: true })
 }
 
 // update seal upgrades
-export async function updateSeal(email, chanceLvl, multLvl) {
-  await updateDoc(doc(db, 'users', email), { seal_prob: chanceLvl, seal_cp: multLvl })
+export async function updateSeal(email, chanceLvl, multLvl, owned) {
+  await setDoc(
+    doc(db, 'users', email),
+    { seal: { prob: chanceLvl, cp: multLvl, owned }, updated_at: serverTimestamp() },
+    { merge: true }
+  )
 }
 
 // update cow upgrades
-export async function updateCow(email, chanceLvl, multLvl) {
-  await updateDoc(doc(db, 'users', email), { cow_prob: chanceLvl, cow_cp: multLvl })
+export async function updateCow(email, chanceLvl, multLvl, owned) {
+  await setDoc(
+    doc(db, 'users', email),
+    { cow: { prob: chanceLvl, cp: multLvl, owned }, updated_at: serverTimestamp() },
+    { merge: true }
+  )
 }
 
 // update dolphin upgrades
-export async function updateDol(email, chanceLvl, multLvl) {
-  await updateDoc(doc(db, 'users', email), { dol_prob: chanceLvl, dol_cp: multLvl })
+export async function updateDol(email, chanceLvl, multLvl, owned) {
+  await setDoc(
+    doc(db, 'users', email),
+    { dol: { prob: chanceLvl, cp: multLvl, owned }, updated_at: serverTimestamp() },
+    { merge: true }
+  )
+}
+
+// update cosmetic unlocks and equipped can
+export async function updateCosmetics(email, cosmeticOwned, equippedCosmetic) {
+  await setDoc(
+    doc(db, 'users', email),
+    { cosmetic_owned: cosmeticOwned, equipped_cosmetic: equippedCosmetic, updated_at: serverTimestamp() },
+    { merge: true }
+  )
 }

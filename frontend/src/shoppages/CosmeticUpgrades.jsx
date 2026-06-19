@@ -12,7 +12,14 @@ const COSMETICS = [
   { id: 4, name: "Barbeque", img: dolpcan, price:10000 }
 ];
 
-export default function CosmeticUpgrades({ count, setCount, cosmeticOwned, setCosmeticOwned }) {
+export default function CosmeticUpgrades({
+  count,
+  setCount,
+  cosmeticOwned,
+  setCosmeticOwned,
+  equippedCosmetic,
+  setEquippedCosmetic
+}) {
 
   function buy(item) {
     if (cosmeticOwned[item.id]) return;
@@ -23,6 +30,9 @@ export default function CosmeticUpgrades({ count, setCount, cosmeticOwned, setCo
       alert("Not enough chips!");
     }
   }
+
+
+  
 
   return (
     <div className="mt-8 grid grid-cols-4 gap-6">
@@ -36,7 +46,14 @@ export default function CosmeticUpgrades({ count, setCount, cosmeticOwned, setCo
               <p className="shop-upgrade-desc mt-1">{item.desc}</p>
             </div>
             {owned ? (
-              <span className="pill">Owned</span>
+              <button
+                type="button"
+                onClick={() => setEquippedCosmetic(item.id)}
+                className="btn-upgrade px-6 py-2"
+                disabled={equippedCosmetic === item.id}
+              >
+                {equippedCosmetic === item.id ? "Equipped" : "Equip"}
+              </button>
             ) : (
               <div className="upgrade-action">
                 <button

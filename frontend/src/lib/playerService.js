@@ -23,12 +23,11 @@ export async function createProfile(email, username, userId) {
       auto_popper: 0, // auto popper 
       created_at: serverTimestamp(), // created at
       updated_at: serverTimestamp(), // last updated
-      seal_cp: 0, // how much a seal is worth
-      seal_prob: 0, // probability of spawning a seal
-      cow_cp : 0, // how much a cow is worth
-      cow_prob: 0, // probability of spawning a cow
-      dol_cp: 0, // how much a dolphin is worth
-      dol_prob : 0 // probability of spawning a dolphin
+      seal: {cp : 0 , prob: 0, owned:0}, // data for seal
+      cow : {cp: 0, prob: 0, owned:0}, // data for cow
+      dol : {cp: 0, prob:0, owned:0}, // data for dolphin
+      cosmetic_owned: { 1: true, 2: false, 3: false, 4: false },
+      equipped_cosmetic: 1
     }
     await setDoc(userRef, payload, { merge: true }) // merge: true means re-signup won't wipe existing data
     const snapshot = await getDoc(userRef)

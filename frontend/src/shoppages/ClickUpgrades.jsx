@@ -10,7 +10,7 @@ function calcCost(baseCost, costScale, level) {
   return Math.floor(baseCost * Math.pow(costScale, level));
 }
 
-export default function ClickUpgrades({ count, setCount, clickLevels, setClickLevels, setClickPower, profile }) {
+export default function ClickUpgrades({ count, setCount, clickLevels, setClickLevels, setClickPower }) {
 
   function upgrade(item) {
     const lvl = clickLevels[item.id] ?? 0; // level of upgrade
@@ -30,7 +30,7 @@ export default function ClickUpgrades({ count, setCount, clickLevels, setClickLe
         const lvl = clickLevels[item.id] ?? 0;
         const cost = calcCost(item.baseCost, item.costScale, lvl);
         const totalPower = item.powerPerLevel * lvl;
-        const isUnlocked = profile ? (profile[item.db_name] ?? 0) > 0 : lvl > 0
+        const isUnlocked = lvl > 0
 
         return (
           <div key={item.id} className={`shop-upgrade-card ${lvl > 0 ? "shop-upgrade-card--owned" : ""}`}>

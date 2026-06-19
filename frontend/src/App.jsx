@@ -5,7 +5,11 @@ import chip1 from './assets/chip1.png'
 import shop from './assets/shop.png'
 import loginIcon from './assets/Login.png'
 import leaderboard from './assets/leaderboard.png'
-import can from './assets/plain can.png'
+import plainCan from './assets/plain can.png'
+import sealCan from './assets/sealcan.png'
+import cowCan from './assets/cowcan.png'
+import dolphinCan from './assets/dolphincan.png'
+
 import ShopPage from './shoppages/ShopPage'
 import LeaderboardPage from './userpages/LeaderboardPage'
 import LoginPage from './userpages/LoginPage'
@@ -14,31 +18,68 @@ import ResetPasswordPage from './userpages/ResetPasswordPage'
 
 import { getCurrentUser, resetPassword, signInWithEmail, signOutUser, signUpWithEmail } from './lib/firebase'
 import { loadProfile, createProfile } from './lib/playerService'
-import { updateChips, updateClickPower, updateAutoPopper, updateSeal, updateCow, updateDol } from './lib/gameplayLogic'
+import { updateChips, updateClickPower, updateAutoPopper, updateSeal, updateCow, updateDol, updateCosmetics } from './lib/gameplayLogic'
 import { createChipParticles, updateParticles } from './physics/physics'
 
+const DEFAULT_COSMETIC_OWNED = { 1: true, 2: false, 3: false, 4: false }
+
+function getAnimalLevelsFromProfile(profile) {
+  const seal = profile.seal ?? {}
+  const cow = profile.cow ?? {}
+  const dol = profile.dol ?? {}
+
+  return {
+    1: {
+      owned: seal.owned ?? false,
+      chanceLvl: seal.prob ?? 0,
+      multLvl: seal.cp ?? 0
+    },
+    2: {
+      owned: cow.owned ?? false,
+      chanceLvl: cow.prob ?? 0,
+      multLvl: cow.cp ?? 0
+    },
+    3: {
+      owned: dol.owned ?? false,
+      chanceLvl: dol.prob ?? 0,
+      multLvl: dol.cp ?? 0
+    }
+  }
+}
+
+function getCosmeticOwnedFromProfile(profile) {
+  return { ...DEFAULT_COSMETIC_OWNED, ...(profile.cosmetic_owned ?? {}) }
+}
 
 export default function App() {
-  const [count, setCount] = useState(0)
-  const [cumCount, setCumCount] = useState(0)
-  const [clickPower, setClickPower] = useState(1)
-  const [page, setPage] = useState('home')
-  const [isLoggedIn, setIsLoggedIn] = useState(false)
-  const [userEmail, setUserEmail] = useState(null)
-  const [profile, setProfile] = useState(null)
-  const [sessionLoaded, setSessionLoaded] = useState(false)
-  const [clickLevels, setClickLevels] = useState({ 1: 0, 2: 0, 3: 0 })
-  const [cosmeticOwned, setCosmeticOwned] = useState({ 1: false, 2: false })
-  const [animalLevels, setAnimalLevels] = useState({
-    1: { chanceLvl: 0, multLvl: 0, owned: false },
-    2: { chanceLvl: 0, multLvl: 0, owned: false },
-    3: { chanceLvl: 0, multLvl: 0, owned: false }
-  })
-  const [particles, setParticles] = useState([])
-  const [isPopping, setIsPopping] = useState(false)
-  const overlayRef = useRef(null)
-  const canRef = useRef(null)
-  const popTimeoutRef = useRef(null)
+    const [count, setCount] = useState(0)
+    const [cumCount, setCumCount] = useState(0)
+    const [clickPower, setClickPower] = useState(1)
+    const [page, setPage] = useState('home')
+    const [isLoggedIn, setIsLoggedIn] = useState(false)
+    const [userEmail, setUserEmail] = useState(null)
+    const [profile, setProfile] = useState(null)
+    const [sessionLoaded, setSessionLoaded] = useState(false)
+    const [clickLevels, setClickLevels] = useState({ 1: 0, 2: 0, 3: 0 })
+    const [cosmeticOwned, setCosmeticOwned] = useState(DEFAULT_COSMETIC_OWNED)
+    const [animalLevels, setAnimalLevels] = useState({
+        1: { chanceLvl: 0, multLvl: 0, owned: false },
+        2: { chanceLvl: 0, multLvl: 0, owned: false },
+        3: { chanceLvl: 0, multLvl: 0, owned: false }
+    })
+    const [particles, setParticles] = useState([])
+    const [isPopping, setIsPopping] = useState(false)
+    const overlayRef = useRef(null)
+    const canRef = useRef(null)
+    const popTimeoutRef = useRef(null)
+
+    const CAN_IMAGES = {
+        1: plainCan,
+        2: sealCan,
+        3: cowCan,
+        4: dolphinCan,
+    }
+    const [equippedCosmetic, setEquippedCosmetic] = useState(1)
 
   useEffect(() => {
     const loadSession = async () => {
@@ -56,6 +97,9 @@ export default function App() {
         setCumCount(profile.cum_count ?? 0)
         setClickLevels({ 1: profile.auto_popper ?? 0, 2: profile.click_pow ?? 0 })
         setClickPower(1 + (profile.click_pow ?? 0) * 2)
+        setAnimalLevels(getAnimalLevelsFromProfile(profile))
+        setCosmeticOwned(getCosmeticOwnedFromProfile(profile))
+        setEquippedCosmetic(profile.equipped_cosmetic ?? 1)
       }
       setSessionLoaded(true)
     }
@@ -79,11 +123,9 @@ export default function App() {
       setCumCount(profile.cum_count ?? 0)
       setClickLevels({ 1: profile.auto_popper ?? 0, 2: profile.click_pow ?? 0 })
       setClickPower(1 + (profile.click_pow ?? 0) * 2)
-      setAnimalLevels({ 
-        1: {owned: profile.seal_prob > 0, chanceLvl: profile.seal_prob ?? 0, multLvl: profile.seal_cp ?? 0 },
-        2: {owned: profile.cow_prob > 0, chanceLvl: profile.cow_prob ?? 0, multLvl: profile.cow_cp ?? 0 },
-        3: {owned: profile.dol_prob > 0, chanceLvl: profile.dol_prob ?? 0, multLvl: profile.dol_cp ?? 0 }
-      })
+      setAnimalLevels(getAnimalLevelsFromProfile(profile))
+      setCosmeticOwned(getCosmeticOwnedFromProfile(profile))
+      setEquippedCosmetic(profile.equipped_cosmetic ?? 1)
     }
     setPage('leaderboard')
     return { success: true }
@@ -107,7 +149,16 @@ export default function App() {
     setIsLoggedIn(true)
     setUserEmail(user.email)
     setCount(0)
+    setCumCount(0)
     setClickPower(1)
+    setClickLevels({ 1: 0, 2: 0, 3: 0 })
+    setAnimalLevels({
+      1: { chanceLvl: 0, multLvl: 0, owned: false },
+      2: { chanceLvl: 0, multLvl: 0, owned: false },
+      3: { chanceLvl: 0, multLvl: 0, owned: false }
+    })
+    setCosmeticOwned(DEFAULT_COSMETIC_OWNED)
+    setEquippedCosmetic(1)
     setPage('leaderboard')
     return { success: true }
   }
@@ -124,6 +175,9 @@ export default function App() {
     await signOutUser()
     setIsLoggedIn(false)
     setUserEmail(null)
+    setProfile(null)
+    setCosmeticOwned(DEFAULT_COSMETIC_OWNED)
+    setEquippedCosmetic(1)
     setPage('home')
   }
 
@@ -176,9 +230,12 @@ export default function App() {
     handleSetCount(true)
   }
 
-  const handleSpendChips = (newCount) => {
-    setCount(newCount)
-    if (userEmail) updateChips(userEmail, newCount, cumCount)
+  const handleSpendChips = (updater) => {
+    setCount((prev) => {
+      const next = typeof updater === 'function' ? updater(prev) : updater
+      if (userEmail) updateChips(userEmail, next, cumCount)
+      return next
+    })
   }
 
   const handleSetClickPower = (updater) => {
@@ -203,30 +260,52 @@ export default function App() {
     setAnimalLevels(prev => {
       const next = typeof updater === 'function' ? updater(prev) : updater
       if (userEmail) {
-        updateSeal(userEmail, next[1].chanceLvl, next[1].multLvl)
-        updateCow(userEmail, next[2].chanceLvl, next[2].multLvl)
-        updateDol(userEmail, next[3].chanceLvl, next[3].multLvl)
+        updateSeal(userEmail, next[1].chanceLvl, next[1].multLvl, next[1].owned)
+        updateCow(userEmail, next[2].chanceLvl, next[2].multLvl, next[2].owned)
+        updateDol(userEmail, next[3].chanceLvl, next[3].multLvl, next[3].owned)
       }
       return next
     })
   }
 
+  const handleSetCosmeticOwned = (updater) => {
+    setCosmeticOwned((prev) => {
+      const next = typeof updater === 'function' ? updater(prev) : updater
+      if (userEmail) updateCosmetics(userEmail, next, equippedCosmetic)
+      return next
+    })
+  }
+
+  const handleSetEquippedCosmetic = (updater) => {
+    setEquippedCosmetic((prev) => {
+      const next = typeof updater === 'function' ? updater(prev) : updater
+      if (userEmail) updateCosmetics(userEmail, cosmeticOwned, next)
+      return next
+    })
+  }
+
   // NAVIGATION
+  if (!sessionLoaded) {
+    return <div className="page-base">Loading...</div>
+  }
+
   if (page === 'shop') {
       return (
         <ShopPage
-          onBack={() => setPage('home')}
-          count={count}
-          setCount={handleSpendChips}
-          clickPower={clickPower}
-          setClickPower={handleSetClickPower}
-          clickLevels={clickLevels}
-          setClickLevels={handleSetAutoClicker}
-          animalLevels={animalLevels}
-          setAnimalLevels={handleSetAnimalLevels}
-          cosmeticOwned={cosmeticOwned} 
-          setCosmeticOwned={setCosmeticOwned}
-          profile = {profile}
+            onBack={() => setPage('home')}
+            count={count}
+            setCount={handleSpendChips}
+            clickPower={clickPower}
+            setClickPower={handleSetClickPower}
+            clickLevels={clickLevels}
+            setClickLevels={handleSetAutoClicker}
+            animalLevels={animalLevels}
+            setAnimalLevels={handleSetAnimalLevels}
+            cosmeticOwned={cosmeticOwned} 
+            setCosmeticOwned={handleSetCosmeticOwned}
+            profile = {profile}
+            equippedCosmetic={equippedCosmetic}
+            setEquippedCosmetic={handleSetEquippedCosmetic}
         />
       )
   }
@@ -281,7 +360,7 @@ export default function App() {
             className="mt-8 p-0 bg-transparent border-0 focus:outline-none rounded-full fixed bottom-0 left-1/2 -translate-x-1/2">
             <span className="block w-44 shrink-0">
               <img
-                src={can}
+                src={CAN_IMAGES[equippedCosmetic]}
                 alt="PopIt Can"
                 className={`block w-full h-110 origin-center hover:scale-105 transition-transform ${isPopping ? 'pop-can-active' : ''}`}
               />

@@ -3,8 +3,6 @@ import back from '../assets/back.png'
 import {getLeaderboardDefault} from '../lib/leaderboardLogic'
 
 
-const leaderboardData = getLeaderboardDefault()
-
 export default function LeaderboardPage({ onBack, onLogout }) {
   const [leaderboardData, setLeaderboardData] = useState([])
   const [loading, setLoading] = useState(true)
