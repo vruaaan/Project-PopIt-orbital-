@@ -2,6 +2,8 @@ import './App.css'
 import { useEffect, useRef, useState, useCallback} from 'react'
 import threechips from './assets/threechips.png'
 import chip1 from './assets/chip1.png'
+import chip2 from './assets/chip2.png'
+import chip3 from './assets/chip3.png'
 import shop from './assets/shop.png'
 import loginIcon from './assets/Login.png'
 import leaderboard from './assets/leaderboard.png'
@@ -19,37 +21,10 @@ import ResetPasswordPage from './userpages/ResetPasswordPage'
 import { getCurrentUser, resetPassword, signInWithEmail, signOutUser, signUpWithEmail } from './lib/firebase'
 import { loadProfile, createProfile } from './lib/playerService'
 import { updateChips, updateClickPower, updateAutoPopper, updateSeal, updateCow, updateDol } from './lib/gameplayLogic'
-import { createChipParticles, updateParticles } from './physics/physics'
+import { createChipParticles, createAnimalParticle, updateParticles } from './physics/physics'
+import { calcAnimalBonus } from './shoppages/SpecialUpgrades'
 
-const DEFAULT_COSMETIC_OWNED = { 1: true, 2: false, 3: false, 4: false }
 
-function getAnimalLevelsFromProfile(profile) {
-  const seal = profile.seal ?? {}
-  const cow = profile.cow ?? {}
-  const dol = profile.dol ?? {}
-
-  return {
-    1: {
-      owned: seal.owned ?? false,
-      chanceLvl: seal.prob ?? 0,
-      multLvl: seal.cp ?? 0
-    },
-    2: {
-      owned: cow.owned ?? false,
-      chanceLvl: cow.prob ?? 0,
-      multLvl: cow.cp ?? 0
-    },
-    3: {
-      owned: dol.owned ?? false,
-      chanceLvl: dol.prob ?? 0,
-      multLvl: dol.cp ?? 0
-    }
-  }
-}
-
-function getCosmeticOwnedFromProfile(profile) {
-  return { ...DEFAULT_COSMETIC_OWNED, ...(profile.cosmetic_owned ?? {}) }
-}
 
 export default function App() {
     const [count, setCount] = useState(0)
@@ -178,6 +153,15 @@ export default function App() {
     setPage('home')
   }
 
+  const spawnAnimalParticle = (img) => {
+  if (!overlayRef.current || !canRef.current) return
+  const overlayRect = overlayRef.current.getBoundingClientRect()
+  const canRect = canRef.current.getBoundingClientRect()
+  const originX = canRect.left - overlayRect.left + canRect.width / 2
+  const originY = canRect.top - overlayRect.top + canRect.height * 0.12
+  setParticles(prev => [...prev, createAnimalParticle(originX, originY, img)])
+  }
+
   const handleSetCount = useCallback((isEarning = false) => { 
   const { multiplier, procdAnimals } = calcAnimalBonus(animalLevels)
   procdAnimals.forEach(img => spawnAnimalParticle(img))
@@ -217,20 +201,11 @@ export default function App() {
     const canRect = canRef.current.getBoundingClientRect()
     const originX = canRect.left - overlayRect.left + canRect.width / 2
     const originY = canRect.top - overlayRect.top + canRect.height * 0.12
-
-    setParticles((prev) => [...prev, ...createChipParticles(originX, originY, 1)])
+    const randomChip = CHIP_IMGS[Math.floor(Math.random() * CHIP_IMGS.length)]
+    setParticles((prev) => [...prev, ...createChipParticles(originX, originY, 1, randomChip)])
     setIsPopping(true)
     clearTimeout(popTimeoutRef.current)
     popTimeoutRef.current = window.setTimeout(() => setIsPopping(false), 120)
-  }
-
-  const spawnAnimalParticle = (img) => {
-  if (!overlayRef.current || !canRef.current) return
-  const overlayRect = overlayRef.current.getBoundingClientRect()
-  const canRect = canRef.current.getBoundingClientRect()
-  const originX = canRect.left - overlayRect.left + canRect.width / 2
-  const originY = canRect.top - overlayRect.top + canRect.height * 0.12
-  setParticles(prev => [...prev, createAnimalParticle(originX, originY, img)])
   }
 
   const handlePop = () => {
@@ -336,7 +311,7 @@ export default function App() {
         {particles.map((particle) => (
           <img
             key={particle.id}
-            src={particle.type === 'chip' ? chip1 : particle.type}
+            src={particle.type}
             alt=""
             className="chip-particle"
             style={{
