@@ -42,8 +42,7 @@ export default function CosmeticUpgrades({
           <div key={item.id} className={`cosmetic-card ${owned ? "cosmetic-card--owned" : ""}`}>
             <img src={item.img} alt={item.name} className="w-48 h-48 object-contain" />
             <div className="text-center flex-1">
-              <h3 className="shop-upgrade-title">{item.name}</h3>
-              <p className="shop-upgrade-desc mt-1">{item.desc}</p>
+              <h3 className="shop-cosmetic-title">{item.name}</h3>
             </div>
             {owned ? (
               <button
