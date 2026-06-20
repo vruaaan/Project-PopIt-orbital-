@@ -23,9 +23,9 @@ import { loadProfile, createProfile } from './lib/playerService'
 import { updateChips, updateClickPower, updateAutoPopper, updateSeal, updateCow, updateDol, updateCosmetics } from './lib/gameplayLogic'
 import { createChipParticles, createAnimalParticle, updateParticles } from './physics/physics'
 import { calcAnimalBonus } from './lib/animalLogic'
-import { CLICK_POWER_BASE, CLICK_UPGRADE_BALANCE } from './lib/gameConstants'
+import { CLICK_POWER_BASE, CLICK_UPGRADE_BALANCE, DEFAULT_ANIMALS_UNLOCKED } from './lib/gameConstants'
 
-const DEFAULT_COSMETIC_OWNED = { 1: true, 2: false, 3: false, 4: false }
+const DEFAULT_COSMETIC_OWNED = { 1: true, 2: false, 3: false, 4: false } // if user dont log in
 
 function calcClickPower(clickPowerLevel) {
   return CLICK_POWER_BASE + clickPowerLevel * CLICK_UPGRADE_BALANCE[2].powerPerLevel
@@ -35,7 +35,6 @@ function getAnimalLevelsFromProfile(profile) {
   const seal = profile.seal ?? {}
   const cow = profile.cow ?? {}
   const dol = profile.dol ?? {}
-
   return {
     1: {
       owned: seal.owned ?? false,
@@ -62,21 +61,17 @@ function getCosmeticOwnedFromProfile(profile) {
 
 
 export default function App() {
-    const [count, setCount] = useState(0)
-    const [cumCount, setCumCount] = useState(0)
-    const [clickPower, setClickPower] = useState(CLICK_POWER_BASE)
-    const [page, setPage] = useState('home')
-    const [isLoggedIn, setIsLoggedIn] = useState(false)
-    const [userEmail, setUserEmail] = useState(null)
-    const [profile, setProfile] = useState(null)
-    const [sessionLoaded, setSessionLoaded] = useState(false)
+    const [count, setCount] = useState(0) // equal to doing count = 0
+    const [cumCount, setCumCount] = useState(0) // equal to doing cumCount = cumCount = 0
+    const [clickPower, setClickPower] = useState(CLICK_POWER_BASE) 
+    const [page, setPage] = useState('home') // default home page
+    const [isLoggedIn, setIsLoggedIn] = useState(false) // default not logged in
+    const [userEmail, setUserEmail] = useState(null) // email is null by default
+    const [profile, setProfile] = useState(null) // profile is null by default
+    const [sessionLoaded, setSessionLoaded] = useState(false) // 
     const [clickLevels, setClickLevels] = useState({ 1: 0, 2: 0, 3: 0 })
     const [cosmeticOwned, setCosmeticOwned] = useState(DEFAULT_COSMETIC_OWNED)
-    const [animalLevels, setAnimalLevels] = useState({
-        1: { chanceLvl: 0, multLvl: 0, owned: false },
-        2: { chanceLvl: 0, multLvl: 0, owned: false },
-        3: { chanceLvl: 0, multLvl: 0, owned: false }
-    })
+    const [animalLevels, setAnimalLevels] = useState(DEFAULT_ANIMALS_UNLOCKED)
     const [particles, setParticles] = useState([])
     const [isPopping, setIsPopping] = useState(false)
     const overlayRef = useRef(null)
