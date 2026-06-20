@@ -45,7 +45,7 @@ export default function LeaderboardPage({ onBack, onLogout }) {
           <div className="grid grid-cols-[120px_1fr_1fr_120px] items-center table-headers mb-6">
             <div>Rankings</div>
             <div>User</div>
-            <div>Cosmetics unlocked</div>
+            <div>Purchases</div>
             <div className="text-right">Popped!</div>
           </div>
           {/* Rows */}
