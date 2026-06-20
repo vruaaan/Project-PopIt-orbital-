@@ -20,7 +20,7 @@ import ResetPasswordPage from './userpages/ResetPasswordPage'
 
 import { getCurrentUser, resetPassword, signInWithEmail, signOutUser, signUpWithEmail } from './lib/firebase'
 import { loadProfile, createProfile } from './lib/playerService'
-import { updateChips, updateClickPower, updateAutoPopper, updateSeal, updateCow, updateDol, updateCosmetics } from './lib/gameplayLogic'
+import { updateChips, updateClickPower, updateAutoPopper, updateSeal, updateCow, updateDol, updateCosmetics, calcClickPower } from './lib/gameplayLogic'
 import { createChipParticles, createAnimalParticle, updateParticles } from './physics/physics'
 import { calcAnimalBonus } from './lib/animalLogic'
 
@@ -59,7 +59,6 @@ function getCosmeticOwnedFromProfile(profile) {
 export default function App() {
     const [count, setCount] = useState(0)
     const [cumCount, setCumCount] = useState(0)
-    const [clickPower, setClickPower] = useState(1)
     const [page, setPage] = useState('home')
     const [isLoggedIn, setIsLoggedIn] = useState(false)
     const [userEmail, setUserEmail] = useState(null)
@@ -74,6 +73,7 @@ export default function App() {
     })
     const [particles, setParticles] = useState([])
     const [isPopping, setIsPopping] = useState(false)
+    const clickPower = calcClickPower(clickLevels)
     const overlayRef = useRef(null)
     const canRef = useRef(null)
     const popTimeoutRef = useRef(null)
@@ -102,7 +102,6 @@ export default function App() {
         setCount(profile.curr_count ?? 0)
         setCumCount(profile.cum_count ?? 0)
         setClickLevels({ 1: profile.auto_popper ?? 0, 2: profile.click_pow ?? 0 })
-        setClickPower(1 + (profile.click_pow ?? 0) * 2)
       }
       setSessionLoaded(true)
     }
@@ -125,7 +124,6 @@ export default function App() {
       setCount(profile.curr_count ?? 0)
       setCumCount(profile.cum_count ?? 0)
       setClickLevels({ 1: profile.auto_popper ?? 0, 2: profile.click_pow ?? 0 })
-      setClickPower(1 + (profile.click_pow ?? 0) * 2)
       setAnimalLevels(getAnimalLevelsFromProfile(profile))
       setCosmeticOwned(getCosmeticOwnedFromProfile(profile))
       setEquippedCosmetic(profile.equipped_cosmetic ?? 1)
@@ -153,7 +151,6 @@ export default function App() {
     setUserEmail(user.email)
     setCount(0)
     setCumCount(0)
-    setClickPower(1)
     setClickLevels({ 1: 0, 2: 0, 3: 0 })
     setAnimalLevels({
       1: { chanceLvl: 0, multLvl: 0, owned: false },
@@ -184,24 +181,24 @@ export default function App() {
     setPage('home')
   }
 
-  const spawnAnimalParticle = (img) => {
-  if (!overlayRef.current || !canRef.current) return
-  const overlayRect = overlayRef.current.getBoundingClientRect()
-  const canRect = canRef.current.getBoundingClientRect()
-  const originX = canRect.left - overlayRect.left + canRect.width / 2
-  const originY = canRect.top - overlayRect.top + canRect.height * 0.12
-  setParticles(prev => [...prev, createAnimalParticle(originX, originY, img)])
-  }
-
   const handleSetCount = useCallback((isEarning = false) => { 
-  const { multiplier, procdAnimals } = calcAnimalBonus(animalLevels)
-  procdAnimals.forEach(img => spawnAnimalParticle(img))
-  const earned = Math.floor(clickPower * multiplier)
-  const nextCount = count + earned
-  const nextCum = isEarning ? cumCount + earned : cumCount
-  setCount(nextCount)
-  if (isEarning) setCumCount(nextCum)
-  if (userEmail) updateChips(userEmail, nextCount, nextCum)
+    if (!overlayRef.current || !canRef.current) return 
+    const { multiplier, procdAnimals } = calcAnimalBonus(animalLevels)
+
+    const overlayRect = overlayRef.current.getBoundingClientRect()
+    const canRect = canRef.current.getBoundingClientRect()
+    const originX = canRect.left - overlayRect.left + canRect.width / 2
+    const originY = canRect.top - overlayRect.top + canRect.height * 0.12
+    procdAnimals.forEach(img => {
+      setParticles(prev => [...prev, createAnimalParticle(originX, originY, img)])
+    })
+
+    const earned = Math.floor(clickPower * multiplier)
+    const nextCount = count + earned
+    const nextCum = isEarning ? cumCount + earned : cumCount
+    setCount(nextCount)
+    if (isEarning) setCumCount(nextCum)
+    if (userEmail) updateChips(userEmail, nextCount, nextCum)
   }, [animalLevels, clickPower, count, cumCount, userEmail])
 
   useEffect(() => {
@@ -248,13 +245,6 @@ export default function App() {
     setCount((prev) => {
       const next = typeof updater === 'function' ? updater(prev) : updater
       if (userEmail) updateChips(userEmail, next, cumCount)
-      return next
-    })
-  }
-
-  const handleSetClickPower = (updater) => {
-    setClickPower((prev) => {
-      const next = typeof updater === 'function' ? updater(prev) : updater
       return next
     })
   }
@@ -310,7 +300,6 @@ export default function App() {
             count={count}
             setCount={handleSpendChips}
             clickPower={clickPower}
-            setClickPower={handleSetClickPower}
             clickLevels={clickLevels}
             setClickLevels={handleSetAutoClicker}
             animalLevels={animalLevels}
