@@ -39,8 +39,9 @@ export default function CosmeticUpgrades({
     <div className="mt-8 grid grid-cols-4 gap-6">
       {COSMETICS.map(item => {
         const owned = cosmeticOwned[item.id] ?? false;
+        const equipped = equippedCosmetic === item.id;
         return (
-          <div key={item.id} className={`cosmetic-card ${owned ? "cosmetic-card--owned" : ""}`}>
+          <div key={item.id} className={`cosmetic-card ${equipped ? "cosmetic-card--owned" : ""}`}>
             <img src={item.img} alt={item.name} className="w-48 h-48 object-contain" />
             <div className="text-center flex-1">
               <h3 className="shop-cosmetic-title">{item.name}</h3>
@@ -50,9 +51,9 @@ export default function CosmeticUpgrades({
                 type="button"
                 onClick={() => setEquippedCosmetic(item.id)}
                 className="btn-upgrade px-6 py-2"
-                disabled={equippedCosmetic === item.id}
+                disabled={equipped}
               >
-                {equippedCosmetic === item.id ? "Equipped" : "Equip"}
+                {equipped ? "Equipped" : "Equip"}
               </button>
             ) : (
               <div className="upgrade-action">
