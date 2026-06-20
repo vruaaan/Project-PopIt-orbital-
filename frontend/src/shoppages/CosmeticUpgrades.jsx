@@ -3,13 +3,14 @@ import defaultcan from '../assets/plain can.png'
 import sealcan from '../assets/sealcan.png'
 import cowcan from '../assets/cowcan.png'
 import dolpcan from '../assets/dolphincan.png'
+import { COSMETIC_PRICES } from '../lib/gameConstants'
 
 
 const COSMETICS = [
-  { id: 1, name: "Original", img : defaultcan, price :10000 },
-  { id: 2, name: "Truffle", img: sealcan, price: 10000 },
-  { id: 3, name: "Sour Cream 'n Onion", img: cowcan, price: 10000 },
-  { id: 4, name: "Barbeque", img: dolpcan, price:10000 }
+  { id: 1, name: "Original", img : defaultcan, price: COSMETIC_PRICES[1] },
+  { id: 2, name: "Truffle", img: sealcan, price: COSMETIC_PRICES[2] },
+  { id: 3, name: "Sour Cream 'n Onion", img: cowcan, price: COSMETIC_PRICES[3] },
+  { id: 4, name: "Barbeque", img: dolpcan, price: COSMETIC_PRICES[4] }
 ];
 
 export default function CosmeticUpgrades({

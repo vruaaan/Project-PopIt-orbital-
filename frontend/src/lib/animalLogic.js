@@ -1,6 +1,7 @@
 import seal from '../assets/seal.png'
 import cow from '../assets/cow.png'
 import dol from '../assets/dolphin.png'
+import { ANIMAL_BALANCE, calcAnimalChance } from './gameConstants'
 
 export const ANIMALS = [
   {
@@ -10,8 +11,7 @@ export const ANIMALS = [
     img: seal,
     imgClass: "w-24 h-24",
     dbKey: "seal",
-    chance: { base: 5, perLevel: 2, baseCost: 200, costScale: 1.8 },
-    multiplier: { base: 2, perLevel: 1, baseCost: 300, costScale: 2.0 },
+    ...ANIMAL_BALANCE[1],
   },
   {
     id: 2,
@@ -20,8 +20,7 @@ export const ANIMALS = [
     img: cow,
     imgClass: "w-24 h-24",
     dbKey: "cow",
-    chance: { base: 3, perLevel: 1.5, baseCost: 350, costScale: 2.0 },
-    multiplier: { base: 3, perLevel: 1.5, baseCost: 500, costScale: 2.2 },
+    ...ANIMAL_BALANCE[2],
   },
   {
     id: 3,
@@ -30,18 +29,9 @@ export const ANIMALS = [
     img: dol,
     imgClass: "w-24 h-24",
     dbKey: "dol",
-    chance: { base: 3, perLevel: 1.5, baseCost: 350, costScale: 2.0 },
-    multiplier: { base: 3, perLevel: 1.5, baseCost: 500, costScale: 2.2 },
+    ...ANIMAL_BALANCE[3],
   }
 ]
-
-export function calcCost(baseCost, costScale, level) {
-  return Math.floor(baseCost * Math.pow(costScale, level))
-}
-
-export function calcStat(base, perLevel, level) {
-  return +(base + perLevel * level).toFixed(1)
-}
 
 export function calcAnimalBonus(animalLevels) {
   let bonusMultiplier = 1
@@ -51,7 +41,7 @@ export function calcAnimalBonus(animalLevels) {
     const state = animalLevels[animal.id]
     if (!state?.owned) return
 
-    const chance = Math.floor(5.6 * Math.log2(state.chanceLvl + 1) + 5)
+    const chance = calcAnimalChance(state.chanceLvl)
     const mult = animal.multiplier.base + animal.multiplier.perLevel * state.multLvl
     if (Math.random() * 100 < chance) {
       bonusMultiplier *= mult

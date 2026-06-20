@@ -23,8 +23,13 @@ import { loadProfile, createProfile } from './lib/playerService'
 import { updateChips, updateClickPower, updateAutoPopper, updateSeal, updateCow, updateDol, updateCosmetics } from './lib/gameplayLogic'
 import { createChipParticles, createAnimalParticle, updateParticles } from './physics/physics'
 import { calcAnimalBonus } from './lib/animalLogic'
+import { CLICK_POWER_BASE, CLICK_UPGRADE_BALANCE } from './lib/gameConstants'
 
 const DEFAULT_COSMETIC_OWNED = { 1: true, 2: false, 3: false, 4: false }
+
+function calcClickPower(clickPowerLevel) {
+  return CLICK_POWER_BASE + clickPowerLevel * CLICK_UPGRADE_BALANCE[2].powerPerLevel
+}
 
 function getAnimalLevelsFromProfile(profile) {
   const seal = profile.seal ?? {}
@@ -59,7 +64,7 @@ function getCosmeticOwnedFromProfile(profile) {
 export default function App() {
     const [count, setCount] = useState(0)
     const [cumCount, setCumCount] = useState(0)
-    const [clickPower, setClickPower] = useState(1)
+    const [clickPower, setClickPower] = useState(CLICK_POWER_BASE)
     const [page, setPage] = useState('home')
     const [isLoggedIn, setIsLoggedIn] = useState(false)
     const [userEmail, setUserEmail] = useState(null)
@@ -102,7 +107,7 @@ export default function App() {
         setCount(profile.curr_count ?? 0)
         setCumCount(profile.cum_count ?? 0)
         setClickLevels({ 1: profile.auto_popper ?? 0, 2: profile.click_pow ?? 0 })
-        setClickPower(1 + (profile.click_pow ?? 0) * 2)
+        setClickPower(calcClickPower(profile.click_pow ?? 0))
       }
       setSessionLoaded(true)
     }
@@ -125,7 +130,7 @@ export default function App() {
       setCount(profile.curr_count ?? 0)
       setCumCount(profile.cum_count ?? 0)
       setClickLevels({ 1: profile.auto_popper ?? 0, 2: profile.click_pow ?? 0 })
-      setClickPower(1 + (profile.click_pow ?? 0) * 2)
+      setClickPower(calcClickPower(profile.click_pow ?? 0))
       setAnimalLevels(getAnimalLevelsFromProfile(profile))
       setCosmeticOwned(getCosmeticOwnedFromProfile(profile))
       setEquippedCosmetic(profile.equipped_cosmetic ?? 1)
@@ -153,7 +158,7 @@ export default function App() {
     setUserEmail(user.email)
     setCount(0)
     setCumCount(0)
-    setClickPower(1)
+    setClickPower(CLICK_POWER_BASE)
     setClickLevels({ 1: 0, 2: 0, 3: 0 })
     setAnimalLevels({
       1: { chanceLvl: 0, multLvl: 0, owned: false },
