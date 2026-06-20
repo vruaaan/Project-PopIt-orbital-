@@ -1,6 +1,12 @@
 import threechips from '../assets/threechips.png'
 import clicker from '../assets/clicker icon.png'
 import saltnpepper from '../assets/saltnpepper.png'
+import { CLICK_UPGRADE_BALANCE, calcCost } from '../lib/gameConstants'
+
+const CLICK_UPGRADES = [
+  { id: 1, name: "Click...Click...Boom!", db_name: "auto_popper", img: clicker, imgClass:"w-25 h-25", desc: "Free your hand, click your can ", ...CLICK_UPGRADE_BALANCE[1] },
+  { id: 2, name: "Salt 'n Pepper Shaker", db_name: "click_pow", img: saltnpepper, imgClass:"w-30 h-30", desc: "Flavour your chips with each upgrade, increasing the value of each chip popped !", ...CLICK_UPGRADE_BALANCE[2] },
+];
 import { CLICK_UPGRADES } from '../lib/gameplayLogic'
 
 
@@ -31,7 +37,7 @@ export default function ClickUpgrades({ count, setCount, clickLevels, setClickLe
         const isUnlocked = lvl > 0
 
         return (
-          <div key={item.id} className={`shop-upgrade-card ${lvl > 0 ? "shop-upgrade-card--owned" : ""}`}>
+          <div key={item.id} className="shop-upgrade-card">
             <div className="shop-upgrade-row">
               <div className="upgrade-img-box">
                 <img src={item.img} alt={item.name} className={`${item.imgClass} object-contain`}/>

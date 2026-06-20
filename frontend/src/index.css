@@ -331,6 +331,13 @@ code {
   text-align: left;
 }
 
+.shop-cosmetic-title {
+  font-family: var(--heading);
+  font-size: 1.5rem;
+  color: #b55334;
+  text-align: center;
+}
+
 .shop-upgrade-desc {
   margin-top: 0.25rem;
   color: #8d5d46;

@@ -3,13 +3,14 @@ import defaultcan from '../assets/plain can.png'
 import sealcan from '../assets/sealcan.png'
 import cowcan from '../assets/cowcan.png'
 import dolpcan from '../assets/dolphincan.png'
+import { COSMETIC_PRICES } from '../lib/gameConstants'
 
 
 const COSMETICS = [
-  { id: 1, name: "Original", img : defaultcan, price :10000 },
-  { id: 2, name: "Truffle", img: sealcan, price: 10000 },
-  { id: 3, name: "Sour Cream 'n Onion", img: cowcan, price: 10000 },
-  { id: 4, name: "Barbeque", img: dolpcan, price:10000 }
+  { id: 1, name: "Original", img : defaultcan, price: COSMETIC_PRICES[1] },
+  { id: 2, name: "Truffle", img: sealcan, price: COSMETIC_PRICES[2] },
+  { id: 3, name: "Sour Cream 'n Onion", img: cowcan, price: COSMETIC_PRICES[3] },
+  { id: 4, name: "Barbeque", img: dolpcan, price: COSMETIC_PRICES[4] }
 ];
 
 export default function CosmeticUpgrades({
@@ -38,21 +39,21 @@ export default function CosmeticUpgrades({
     <div className="mt-8 grid grid-cols-4 gap-6">
       {COSMETICS.map(item => {
         const owned = cosmeticOwned[item.id] ?? false;
+        const equipped = equippedCosmetic === item.id;
         return (
-          <div key={item.id} className={`cosmetic-card ${owned ? "cosmetic-card--owned" : ""}`}>
+          <div key={item.id} className={`cosmetic-card ${equipped ? "cosmetic-card--owned" : ""}`}>
             <img src={item.img} alt={item.name} className="w-48 h-48 object-contain" />
             <div className="text-center flex-1">
-              <h3 className="shop-upgrade-title">{item.name}</h3>
-              <p className="shop-upgrade-desc mt-1">{item.desc}</p>
+              <h3 className="shop-cosmetic-title">{item.name}</h3>
             </div>
             {owned ? (
               <button
                 type="button"
                 onClick={() => setEquippedCosmetic(item.id)}
                 className="btn-upgrade px-6 py-2"
-                disabled={equippedCosmetic === item.id}
+                disabled={equipped}
               >
-                {equippedCosmetic === item.id ? "Equipped" : "Equip"}
+                {equipped ? "Equipped" : "Equip"}
               </button>
             ) : (
               <div className="upgrade-action">

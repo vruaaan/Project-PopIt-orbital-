@@ -1,5 +1,6 @@
 import threechips from '../assets/threechips.png'
-import { ANIMALS, calcCost, calcStat } from '../lib/animalLogic'
+import { ANIMALS } from '../lib/animalLogic'
+import { calcAnimalChance, calcCost, calcStat } from '../lib/gameConstants'
 
 export default function SpecialUpgrades({ count, setCount, animalLevels, setAnimalLevels, profile }) {
   function unlockAnimal(animal) {
@@ -44,13 +45,13 @@ export default function SpecialUpgrades({ count, setCount, animalLevels, setAnim
           ? profile[animal.dbKey]?.owned || state.owned
           : state.owned;
 
-        const currentChance = Math.floor(5.6 * Math.log2(state.chanceLvl + 1) + 5)
+        const currentChance = calcAnimalChance(state.chanceLvl)
         const currentMult = calcStat(animal.multiplier.base, animal.multiplier.perLevel, state.multLvl);
         const chanceCost = calcCost(animal.chance.baseCost, animal.chance.costScale, state.chanceLvl);
         const multCost = calcCost(animal.multiplier.baseCost, animal.multiplier.costScale, state.multLvl);
 
         return (
-          <div key={animal.id} className={`shop-upgrade-card ${isOwned ? "shop-upgrade-card--owned" : ""}`}>
+          <div key={animal.id} className="shop-upgrade-card">
             {/* Top row: image + name/desc + unlock or owned pill */}
             <div className="shop-upgrade-row gap-6">
               <img src={animal.img} alt={animal.name} className={`${animal.imgClass} object-contain shrink-0`} />
