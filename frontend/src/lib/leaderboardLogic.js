@@ -18,10 +18,11 @@ export async function getLeaderboardDefault(limitCount = 10) {
     const q = query( //checking the number of users, ordering in descending order of cumulative count
       usersRef,
       orderBy('cum_count', 'desc'),
-      limit(limitCount)
+      limit(limitCount + 1)
     )
     const snapshot = await getDocs(q)
-    const realEntries = snapshot.docs.map(formatLeaderboard)
+    const hasMore = snapshot.docs.length > limitCount
+    const realEntries = snapshot.docs.slice(0, limitCount).map(formatLeaderboard)
     const emptySlots = Array.from(
       { length: limitCount - realEntries.length },
       (_, index) => ({
@@ -31,8 +32,8 @@ export async function getLeaderboardDefault(limitCount = 10) {
         Chips: '-',
       })
     )
-    return { data: [...realEntries, ...emptySlots], error: null }
+    return { data: [...realEntries, ...emptySlots], hasMore, error: null }
   } catch (error) { // to handle error
-    return { data: null, error }
+    return { data: null, hasMore: false, error }
   }
 }

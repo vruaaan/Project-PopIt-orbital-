@@ -5,11 +5,15 @@ import {getLeaderboardDefault} from '../lib/leaderboardLogic'
 
 export default function LeaderboardPage({ onBack, onLogout }) {
   const [leaderboardData, setLeaderboardData] = useState([])
+  const [hasMorePlayers, setHasMorePlayers] = useState(false)
   const [loading, setLoading] = useState(true)
   useEffect(() => {
     const fetch = async () => {
-      const { data, error } = await getLeaderboardDefault()
-      if (!error) setLeaderboardData(data)
+      const { data, hasMore, error } = await getLeaderboardDefault()
+      if (!error) {
+        setLeaderboardData(data)
+        setHasMorePlayers(hasMore)
+      }
       setLoading(false)
     }
     fetch()
@@ -66,9 +70,11 @@ export default function LeaderboardPage({ onBack, onLogout }) {
           </div>
         </div>
         {/* Load More Button */}
-        <div className="flex justify-center mt-12">
-          <button className="btn-upgrade px-14 py-3 text-xl">load more</button>
-        </div>
+        {hasMorePlayers && (
+          <div className="flex justify-center mt-12">
+            <button className="btn-upgrade px-14 py-3 text-xl">load more</button>
+          </div>
+        )}
       </div>
     </div>
   )
