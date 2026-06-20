@@ -20,15 +20,17 @@ import ResetPasswordPage from './userpages/ResetPasswordPage'
 
 import { getCurrentUser, resetPassword, signInWithEmail, signOutUser, signUpWithEmail } from './lib/firebase'
 import { loadProfile, createProfile } from './lib/playerService'
-import { updateChips, updateClickPower, updateAutoPopper, updateSeal, updateCow, updateDol, updateCosmetics, calcClickPower } from './lib/gameplayLogic'
+import { updateChips, updateClickPower, updateAutoPopper, updateSeal, updateCow, updateDol, updateCosmetics } from './lib/gameplayLogic'
 import { createChipParticles, createAnimalParticle, updateParticles } from './physics/physics'
 import { calcAnimalBonus } from './lib/animalLogic'
 import { CLICK_POWER_BASE, CLICK_UPGRADE_BALANCE, DEFAULT_ANIMALS_UNLOCKED } from './lib/gameConstants'
 
 const DEFAULT_COSMETIC_OWNED = { 1: true, 2: false, 3: false, 4: false } // if user dont log in
 
-function calcClickPower(clickPowerLevel) {
-  return CLICK_POWER_BASE + clickPowerLevel * CLICK_UPGRADE_BALANCE[2].powerPerLevel
+function calcClickPower(clickLevels) {
+  return CLICK_POWER_BASE +
+    (clickLevels[1] ?? 0) * CLICK_UPGRADE_BALANCE[1].powerPerLevel +
+    (clickLevels[2] ?? 0) * CLICK_UPGRADE_BALANCE[2].powerPerLevel
 }
 
 function getAnimalLevelsFromProfile(profile) {

@@ -1,18 +1,5 @@
 import { doc, serverTimestamp, setDoc } from 'firebase/firestore'
 import { db } from './firebase'
-import clicker from '../assets/clicker icon.png'
-import saltnpepper from '../assets/saltnpepper.png'
-
-export const CLICK_UPGRADES = [
-  { id: 1, name: "Click...Click...Boom!", db_name: "auto_popper", img: clicker, imgClass:"w-25 h-25", desc: "Free your hand, click your can ", baseCost: 50,  costScale: 1.5, powerPerLevel: 1 },
-  { id: 2, name: "Salt 'n Pepper Shaker", db_name: "click_pow", img: saltnpepper, imgClass:"w-30 h-30", desc: "Flavour your chips with each upgrade, increasing the value of each chip popped !", baseCost: 150, costScale: 1.8, powerPerLevel: 2 },
-];
-
-export function calcClickPower(clickLevels) {
-  return 1 + CLICK_UPGRADES.reduce(
-    (sum, item) => sum + (clickLevels[item.id] ?? 0) * item.powerPerLevel, 0
-  )
-}
 
 //update chip coiunt 
 export async function updateChips(email, currCount, cumCount) {
