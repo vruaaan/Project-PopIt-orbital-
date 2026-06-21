@@ -1,6 +1,6 @@
-import seal from '../assets/seal.png'
-import cow from '../assets/cow.png'
-import dol from '../assets/dolphin.png'
+import seal from '../assets/seal.png' // update later
+import cow from '../assets/cow.webp' 
+import dol from '../assets/dolphin.webp'
 import { ANIMAL_BALANCE, calcAnimalChance } from './gameConstants'
 
 export const ANIMALS = [

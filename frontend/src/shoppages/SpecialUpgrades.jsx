@@ -1,4 +1,4 @@
-import threechips from '../assets/threechips.png'
+import threechips from '../assets/threechips.png' // update later
 import { ANIMALS } from '../lib/animalLogic'
 import { calcAnimalChance, calcCost, calcStat } from '../lib/gameConstants'
 

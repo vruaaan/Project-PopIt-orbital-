@@ -1,16 +1,16 @@
 import './App.css'
 import { useEffect, useRef, useState, useCallback} from 'react'
 import threechips from './assets/threechips.png'
-import chip1 from './assets/chip1.png'
-import chip2 from './assets/chip2.png'
-import chip3 from './assets/chip3.png'
+import chip1 from './assets/chip1.webp'
+import chip2 from './assets/chip2.webp'
+import chip3 from './assets/chip3.webp'
 import shop from './assets/shop.png'
 import loginIcon from './assets/Login.png'
 import leaderboard from './assets/leaderboard.png'
-import plainCan from './assets/plain can.png'
-import sealCan from './assets/sealcan.png'
-import cowCan from './assets/cowcan.png'
-import dolphinCan from './assets/dolphincan.png'
+import plainCan from './assets/plain can.png' // update later
+import sealCan from './assets/sealcan.png' // update later
+import cowCan from './assets/cowcan.webp'
+import dolphinCan from './assets/dolphincan.webp'
 
 import ShopPage from './shoppages/ShopPage'
 import LeaderboardPage from './userpages/LeaderboardPage'

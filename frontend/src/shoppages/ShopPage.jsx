@@ -2,7 +2,7 @@ import { useState } from "react"
 import back from '../assets/back.png'
 import threechips from '../assets/threechips.png'
 import star from '../assets/star.png'
-import can from '../assets/plain can.png'
+import can from '../assets/plain can.png' // update later
 import SpecialUpgrades from "./SpecialUpgrades"
 import ClickUpgrades from "./ClickUpgrades"
 import CosmeticUpgrades from "./CosmeticUpgrades"

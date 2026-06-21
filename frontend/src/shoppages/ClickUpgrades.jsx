@@ -1,6 +1,6 @@
-import threechips from '../assets/threechips.png'
+import threechips from '../assets/threechips.png' // update later
 import clicker from '../assets/clicker icon.png'
-import saltnpepper from '../assets/saltnpepper.png'
+import saltnpepper from '../assets/saltnpepper.png' // update later
 import { CLICK_UPGRADE_BALANCE, calcCost } from '../lib/gameConstants'
 
 const CLICK_UPGRADES = [
