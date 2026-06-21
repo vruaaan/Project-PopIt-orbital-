@@ -1,6 +1,6 @@
-import threechips from '../assets/threechips.png' // update later
-import defaultcan from '../assets/plain can.png' // update later
-import sealcan from '../assets/sealcan.png' // update later
+import threechips from '../assets2/threechips.webp' 
+import defaultcan from '../assets2/plain can.webp' 
+import sealcan from '../assets2/sealcan.webp' 
 import cowcan from '../assets2/cowcan.webp' 
 import dolpcan from '../assets2/dolphincan.webp'
 import { COSMETIC_PRICES } from '../lib/gameConstants'

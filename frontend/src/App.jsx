@@ -7,8 +7,8 @@ import chip3 from './assets2/chip3.webp'
 import shop from './assets/shop.png'
 import loginIcon from './assets/Login.png'
 import leaderboard from './assets/leaderboard.png'
-import plainCan from './assets/plain can.png' // update later
-import sealCan from './assets/sealcan.png' // update later
+import plainCan from './assets2/plain can.webp' 
+import sealCan from './assets2/sealcan.webp' 
 import cowCan from './assets2/cowcan.webp'
 import dolphinCan from './assets2/dolphincan.webp'
 
