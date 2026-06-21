@@ -12,7 +12,7 @@ export async function updateChips(email, currCount, cumCount) {
       },
       { merge: true }
     )
-    return { error: null }
+    return { error: null }  
   } catch (error) {
     return { error }
   }

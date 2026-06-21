@@ -8,7 +8,7 @@ const CLICK_UPGRADES = [
   { id: 2, name: "Salt 'n Pepper Shaker", db_name: "click_pow", img: saltnpepper, imgClass:"w-30 h-30", desc: "Flavour your chips with each upgrade, increasing the value of each chip popped !", ...CLICK_UPGRADE_BALANCE[2] },
 ];
 
-export default function ClickUpgrades({ count, setCount, clickLevels, setClickLevels, setClickPower }) {
+export default function ClickUpgrades({ count, setCount, clickLevels, setClickLevels}) {
 
   function upgrade(item) {
     const lvl = clickLevels[item.id] ?? 0; // level of upgrade
@@ -16,7 +16,6 @@ export default function ClickUpgrades({ count, setCount, clickLevels, setClickLe
     if (count >= cost) {
       setCount(c => c - cost);
       setClickLevels(prev => ({ ...prev, [item.id]: lvl + 1 }));
-      setClickPower(p => p + item.powerPerLevel);
     } else {
       alert("Not enough chips!");
     }

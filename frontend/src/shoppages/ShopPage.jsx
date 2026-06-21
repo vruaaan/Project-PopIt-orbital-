@@ -10,7 +10,7 @@ import CosmeticUpgrades from "./CosmeticUpgrades"
 export default function ShopPage({
     onBack,
     count, setCount,
-    clickPower, setClickPower,
+    clickPower,
     clickLevels, setClickLevels,
     animalLevels, setAnimalLevels,
     cosmeticOwned, setCosmeticOwned,
@@ -58,7 +58,6 @@ export default function ShopPage({
                 setCount={setCount}
                 clickLevels={clickLevels}
                 setClickLevels={setClickLevels}
-                setClickPower={setClickPower}
             />
           )}
           {activeCategory === "Specials" && ( // if active = Specials
