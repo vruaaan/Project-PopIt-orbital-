@@ -1,10 +1,10 @@
-import threechips from '../assets2/threechips.webp' // used at pricing, small scale so reduced in size
+import threechips from '../assets/threechips.webp' // used at pricing, small scale so reduced in size
 import clicker from '../assets/clicker icon.png' // static render use small
-import saltnpepper from '../assets2/saltnpepper.webp'  // webp version used as massively oversized
-import defaultcan from '../assets2/plain can.webp'
-import sealcan from '../assets2/sealcan.webp'
-import cowcan from '../assets2/cowcan.webp'
-import dolpcan from '../assets2/dolphincan.webp'
+import saltnpepper from '../assets/saltnpepper.webp'  // webp version used as massively oversized
+import defaultcan from '../assets/plain can.webp'
+import sealcan from '../assets/sealcan.webp'
+import cowcan from '../assets/cowcan.webp'
+import dolpcan from '../assets/dolphincan.webp'
 import star from '../assets/star.png'
 
 

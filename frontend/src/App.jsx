@@ -7,15 +7,15 @@ import shop from './assets/shop.png'
 import leaderboard from './assets/leaderboard.png'
 
 // webP files for repeated renders
-import chip1 from './assets2/chip1.webp'
-import chip2 from './assets2/chip2.webp'
-import chip3 from './assets2/chip3.webp'
+import chip1 from './assets/chip1.webp'
+import chip2 from './assets/chip2.webp'
+import chip3 from './assets/chip3.webp'
 
 // webP files for cans as the images are smaller in scale than png
-import plainCan from './assets2/plain can.webp' 
-import sealCan from './assets2/sealcan.webp' 
-import cowCan from './assets2/cowcan.webp'
-import dolphinCan from './assets2/dolphincan.webp'
+import plainCan from './assets/plain can.webp' 
+import sealCan from './assets/sealcan.webp' 
+import cowCan from './assets/cowcan.webp'
+import dolphinCan from './assets/dolphincan.webp'
 
 import ShopPage from './shoppages/ShopPage'
 import LeaderboardPage from './userpages/LeaderboardPage'
