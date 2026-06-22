@@ -1,16 +1,16 @@
 import { useState } from "react"
 import back from '../assets/back.png'
 import threechips from '../assets/threechips.png'
-import star from '../assets/star.png'
-import can from '../assets/plain can.png' // update later
 import SpecialUpgrades from "./SpecialUpgrades"
 import ClickUpgrades from "./ClickUpgrades"
 import CosmeticUpgrades from "./CosmeticUpgrades"
+import {SHOP_CATEGORIES } from "../lib/shopConstants"
 
 export default function ShopPage({
     onBack,
     count, setCount,
     clickPower,
+    
     clickLevels, setClickLevels,
     animalLevels, setAnimalLevels,
     cosmeticOwned, setCosmeticOwned,
@@ -19,8 +19,6 @@ export default function ShopPage({
     setEquippedCosmetic,
 }) {
   const [activeCategory, setActiveCategory] = useState("Pop!"); // default tab
-  const categories = ["Pop!", "Specials", "Cosmetics"]; // initialising array of the 3 categories
-  const cat_img = [threechips, star, can]
   return (
     <div className="page-base">
       <div className="main-card max-w-5xl">
@@ -37,15 +35,15 @@ export default function ShopPage({
         </div>
         {/* Category Tab*/}
         <div className="flex justify-center gap-5 mt-5">
-          {categories.map((cat, index) => ( // building the row of buttions 
+          {SHOP_CATEGORIES.map((category) => ( // building the row of buttons 
             <button
-              key={cat}
+              key={category.name}
               type="button"
-              onClick={() => setActiveCategory(cat)}
-              className={`tab-btn ${activeCategory === cat ? "tab-btn-active" : "tab-btn-inactive"}`}
+              onClick={() => setActiveCategory(category.name)}
+              className={`tab-btn ${activeCategory === category.name ? "tab-btn-active" : "tab-btn-inactive"}`}
             >
-              <img src={cat_img[index]} alt={cat} className="w-7 object-contain" />
-              {cat}
+              <img src={category.img} alt={category.name} className="w-7 object-contain" />
+              {category.name}
             </button>
           ))}
         </div>

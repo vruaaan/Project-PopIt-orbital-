@@ -1,12 +1,4 @@
-import threechips from '../assets2/threechips.webp' // update later
-import clicker from '../assets/clicker icon.png'
-import saltnpepper from '../assets2/saltnpepper.webp' // update later
-import { CLICK_UPGRADE_BALANCE, calcCost } from '../lib/gameConstants'
-
-const CLICK_UPGRADES = [
-  { id: 1, name: "Click...Click...Boom!", db_name: "auto_popper", img: clicker, imgClass:"w-25 h-25", desc: "Free your hand, click your can ", ...CLICK_UPGRADE_BALANCE[1] },
-  { id: 2, name: "Salt 'n Pepper Shaker", db_name: "click_pow", img: saltnpepper, imgClass:"w-30 h-30", desc: "Flavour your chips with each upgrade, increasing the value of each chip popped !", ...CLICK_UPGRADE_BALANCE[2] },
-];
+import { CLICK_UPGRADES, PRICE_CHIP_ICON, calcCost} from '../lib/shopConstants' 
 
 export default function ClickUpgrades({ count, setCount, clickLevels, setClickLevels}) {
 
@@ -44,7 +36,7 @@ export default function ClickUpgrades({ count, setCount, clickLevels, setClickLe
                 <button type="button" onClick={() => upgrade(item)} className="btn-upgrade px-6 py-2">
                   {isUnlocked ? "Upgrade" : "Unlock"}
                 </button>
-                <span className="pill flex items-center gap-1">{cost} <img src={threechips} alt="chips" className="w-8 h-8 object-contain" /></span>
+                <span className="pill flex items-center gap-1">{cost} <img src={PRICE_CHIP_ICON} alt="chips" className="w-8 h-8 object-contain" /></span>
               </div>
             </div>
           </div>

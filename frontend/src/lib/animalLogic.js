@@ -1,7 +1,7 @@
 import seal from '../assets2/seal.webp' 
 import cow from '../assets2/cow.webp' 
 import dol from '../assets2/dolphin.webp'
-import { ANIMAL_BALANCE, calcAnimalChance } from './gameConstants'
+import { ANIMAL_BALANCE, calcAnimalChance } from './shopConstants'
 
 export const ANIMALS = [
   {

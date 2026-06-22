@@ -1,6 +1,5 @@
-import threechips from '../assets2/threechips.webp' 
-import { ANIMALS } from '../lib/animalLogic'
-import { calcAnimalChance, calcCost, calcStat } from '../lib/gameConstants'
+import { ANIMALS } from '../lib/animalLogic' // animal images from here 
+import { PRICE_CHIP_ICON, calcAnimalChance, calcCost, calcStat } from '../lib/shopConstants' 
 
 export default function SpecialUpgrades({ count, setCount, animalLevels, setAnimalLevels, profile }) {
   function unlockAnimal(animal) {
@@ -68,7 +67,7 @@ export default function SpecialUpgrades({ count, setCount, animalLevels, setAnim
                   >
                     Unlock
                   </button>
-                  <span className="pill flex items-center gap-1">{animal.chance.baseCost} <img src={threechips} alt="chips" className="w-8 h-8 object-contain" /></span>
+                  <span className="pill flex items-center gap-1">{animal.chance.baseCost} <img src={PRICE_CHIP_ICON} alt="chips" className="w-8 h-8 object-contain" /></span>
                 </div>
               ) : (
                 <span className="pill ml-auto">Owned</span>
@@ -93,7 +92,7 @@ export default function SpecialUpgrades({ count, setCount, animalLevels, setAnim
                     >
                       Upgrade Chance
                     </button>
-                    <span className="pill flex items-center gap-1">{chanceCost} <img src={threechips} alt="chips" className="w-8 h-8 object-contain" /></span>
+                    <span className="pill flex items-center gap-1">{chanceCost} <img src={PRICE_CHIP_ICON} alt="chips" className="w-8 h-8 object-contain" /></span>
                   </div>
                 </div>
 
@@ -111,7 +110,7 @@ export default function SpecialUpgrades({ count, setCount, animalLevels, setAnim
                     >
                       Upgrade Value
                     </button>
-                    <span className="pill flex items-center gap-1">{multCost} <img src={threechips} alt="chips" className="w-8 h-8 object-contain" /></span>
+                    <span className="pill flex items-center gap-1">{multCost} <img src={PRICE_CHIP_ICON} alt="chips" className="w-8 h-8 object-contain" /></span>
                   </div>
                 </div>
 

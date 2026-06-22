@@ -1,17 +1,4 @@
-import threechips from '../assets2/threechips.webp' 
-import defaultcan from '../assets2/plain can.webp' 
-import sealcan from '../assets2/sealcan.webp' 
-import cowcan from '../assets2/cowcan.webp' 
-import dolpcan from '../assets2/dolphincan.webp'
-import { COSMETIC_PRICES } from '../lib/gameConstants'
-
-
-const COSMETICS = [
-  { id: 1, name: "Original", img : defaultcan, price: COSMETIC_PRICES[1] },
-  { id: 2, name: "Truffle", img: sealcan, price: COSMETIC_PRICES[2] },
-  { id: 3, name: "Sour Cream 'n Onion", img: cowcan, price: COSMETIC_PRICES[3] },
-  { id: 4, name: "Barbeque", img: dolpcan, price: COSMETIC_PRICES[4] }
-];
+import { COSMETICS, PRICE_CHIP_ICON } from '../lib/shopConstants'
 
 export default function CosmeticUpgrades({
   count,
@@ -31,9 +18,6 @@ export default function CosmeticUpgrades({
       alert("Not enough chips!");
     }
   }
-
-
-  
 
   return (
     <div className="mt-8 grid grid-cols-4 gap-6">
@@ -64,7 +48,7 @@ export default function CosmeticUpgrades({
                 >
                   Unlock
                 </button>
-                <span className="pill flex items-center gap-1">{item.price} <img src={threechips} alt="chips" className="w-8 h-8 object-contain" /></span>
+                <span className="pill flex items-center gap-1">{item.price} <img src={PRICE_CHIP_ICON} alt="chips" className="w-8 h-8 object-contain" /></span>
               </div>
             )}
           </div>

@@ -1,12 +1,17 @@
 import './App.css'
 import { useEffect, useRef, useState, useCallback} from 'react'
+// png used for static renders
 import threechips from './assets/threechips.png'
+import loginIcon from './assets/Login.png'
+import shop from './assets/shop.png'
+import leaderboard from './assets/leaderboard.png'
+
+// webP files for repeated renders
 import chip1 from './assets2/chip1.webp'
 import chip2 from './assets2/chip2.webp'
 import chip3 from './assets2/chip3.webp'
-import shop from './assets/shop.png'
-import loginIcon from './assets/Login.png'
-import leaderboard from './assets/leaderboard.png'
+
+// webP files for cans as the images are smaller in scale than png
 import plainCan from './assets2/plain can.webp' 
 import sealCan from './assets2/sealcan.webp' 
 import cowCan from './assets2/cowcan.webp'
@@ -23,7 +28,8 @@ import { loadProfile, createProfile } from './lib/playerService'
 import { updateChips, updateClickPower, updateAutoPopper, updateSeal, updateCow, updateDol, updateCosmetics } from './lib/gameplayLogic'
 import { createChipParticles, createAnimalParticle, updateParticles } from './physics/physics'
 import { calcAnimalBonus } from './lib/animalLogic'
-import { CLICK_POWER_BASE, CLICK_UPGRADE_BALANCE, DEFAULT_ANIMALS_UNLOCKED } from './lib/gameConstants'
+import { CLICK_POWER_BASE, DEFAULT_ANIMALS_UNLOCKED } from './lib/gameConstants'
+import { CLICK_UPGRADE_BALANCE } from './lib/shopConstants'
 
 const DEFAULT_COSMETIC_OWNED = { 1: true, 2: false, 3: false, 4: false } // if user dont log in
 
