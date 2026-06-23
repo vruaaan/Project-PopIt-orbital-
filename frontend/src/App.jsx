@@ -1,5 +1,5 @@
 import './App.css'
-import { useEffect, useRef, useState, useCallback} from 'react'
+import { useEffect, useRef, useState } from 'react'
 // png used for static renders
 import threechips from './assets/threechips.png'
 import loginIcon from './assets/Login.png'
@@ -26,8 +26,8 @@ import ResetPasswordPage from './userpages/ResetPasswordPage'
 import { getCurrentUser, resetPassword, signInWithEmail, signOutUser, signUpWithEmail } from './lib/firebase'
 import { loadProfile, createProfile } from './lib/playerService'
 import { updateChips, updateClickPower, updateAutoPopper, updateSeal, updateCow, updateDol, updateCosmetics } from './lib/gameplayLogic'
-import { createChipParticles, createAnimalParticle, updateParticles } from './physics/physics'
-import { calcAnimalBonus } from './lib/animalLogic'
+import { updateParticles } from './gameengine/physics'
+import { getPopResult, createPopParticles } from './gameengine/popLogic'
 import { CLICK_POWER_BASE, DEFAULT_ANIMALS_UNLOCKED } from './lib/gameConstants'
 import { CLICK_UPGRADE_BALANCE } from './lib/shopConstants'
 
@@ -189,25 +189,26 @@ export default function App() {
     setPage('home')
   }
 
-  const handleSetCount = useCallback((isEarning = false) => { 
-    if (!overlayRef.current || !canRef.current) return 
-    const { multiplier, procdAnimals } = calcAnimalBonus(animalLevels)
+  const handlePop = () => {
+    if (!overlayRef.current || !canRef.current) return
 
     const overlayRect = overlayRef.current.getBoundingClientRect()
     const canRect = canRef.current.getBoundingClientRect()
     const originX = canRect.left - overlayRect.left + canRect.width / 2
     const originY = canRect.top - overlayRect.top + canRect.height * 0.12
-    procdAnimals.forEach(img => {
-      setParticles(prev => [...prev, createAnimalParticle(originX, originY, img)])
-    })
 
-    const earned = Math.floor(clickPower * multiplier)
+    const { earned, animalImages } = getPopResult(clickPower, animalLevels)
+    setParticles((prev) => [...prev, ...createPopParticles(originX, originY, CHIP_IMGS, animalImages)])
+    setIsPopping(true)
+    clearTimeout(popTimeoutRef.current)
+    popTimeoutRef.current = window.setTimeout(() => setIsPopping(false), 120)
+
     const nextCount = count + earned
-    const nextCum = isEarning ? cumCount + earned : cumCount
+    const nextCum = cumCount + earned
     setCount(nextCount)
-    if (isEarning) setCumCount(nextCum)
+    setCumCount(nextCum)
     if (userEmail) updateChips(userEmail, nextCount, nextCum)
-  }, [animalLevels, clickPower, count, cumCount, userEmail])
+  }
 
   useEffect(() => {
     let rafId
@@ -229,25 +230,6 @@ export default function App() {
       clearTimeout(popTimeoutRef.current)
     }
   }, [])
-
-  const spawnChipParticles = () => {
-    if (!overlayRef.current || !canRef.current) return
-
-    const overlayRect = overlayRef.current.getBoundingClientRect()
-    const canRect = canRef.current.getBoundingClientRect()
-    const originX = canRect.left - overlayRect.left + canRect.width / 2
-    const originY = canRect.top - overlayRect.top + canRect.height * 0.12
-    const randomChip = CHIP_IMGS[Math.floor(Math.random() * CHIP_IMGS.length)]
-    setParticles((prev) => [...prev, ...createChipParticles(originX, originY, 1, randomChip)])
-    setIsPopping(true)
-    clearTimeout(popTimeoutRef.current)
-    popTimeoutRef.current = window.setTimeout(() => setIsPopping(false), 120)
-  }
-
-  const handlePop = () => {
-    spawnChipParticles()
-    handleSetCount(true)
-  }
 
   const handleSpendChips = (updater) => {
     setCount((prev) => {

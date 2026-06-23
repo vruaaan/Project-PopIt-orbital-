@@ -1,7 +1,7 @@
 import { doc, serverTimestamp, setDoc } from 'firebase/firestore'
 import { db } from './firebase'
 
-//update chip coiunt 
+//update chip count 
 export async function updateChips(email, currCount, cumCount) {
   try {
     const userRef = doc(db, 'users', email)
