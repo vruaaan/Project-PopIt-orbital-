@@ -110,6 +110,9 @@ export default function App() {
         setCount(profile.curr_count ?? 0)
         setCumCount(profile.cum_count ?? 0)
         setClickLevels({ 1: profile.auto_popper ?? 0, 2: profile.click_pow ?? 0 })
+        setAnimalLevels(getAnimalLevelsFromProfile(profile))
+        setCosmeticOwned(getCosmeticOwnedFromProfile(profile))
+        setEquippedCosmetic(profile.equipped_cosmetic ?? 1)
       }
       setSessionLoaded(true)
     }
