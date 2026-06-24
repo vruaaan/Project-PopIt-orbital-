@@ -7,7 +7,14 @@ export default function SpecialUpgrades({ count, setCount, animalLevels, setAnim
     if (state.owned) return;
     if (count >= animal.chance.baseCost) {
       setCount(c => c - animal.chance.baseCost);
-      setAnimalLevels(prev => ({ ...prev, [animal.id]: { ...prev[animal.id], owned: true } }));
+      setAnimalLevels(prev => ({
+        ...prev,
+        [animal.id]: {
+          ...prev[animal.id],
+          owned: true,
+          chanceLvl: 1
+        }
+      }));
     } else {
       alert("Not enough chips!");
     }
