@@ -18,8 +18,11 @@ export default function ClickUpgrades({ count, setCount, clickLevels, setClickLe
       {CLICK_UPGRADES.map(item => {
         const lvl = clickLevels[item.id] ?? 0;
         const cost = calcCost(item.baseCost, item.costScale, lvl);
-        const totalPower = item.powerPerLevel * lvl;
+        const totalPower = item.id === 3 ? 2 ** lvl : item.powerPerLevel * lvl;
         const isUnlocked = lvl > 0
+        const powerLabel = item.id === 3
+          ? `x${totalPower} chip power`
+          : `+${totalPower} click power total`
 
         return (
           <div key={item.id} className="shop-upgrade-card">
@@ -30,7 +33,7 @@ export default function ClickUpgrades({ count, setCount, clickLevels, setClickLe
               <div className="upgrade-text-block">
                 <h3 className="shop-upgrade-title">{item.name}</h3>
                 <p className="shop-upgrade-desc">{item.desc}</p>
-                <p className="shop-upgrade-meta">Level {lvl} — +{totalPower} click power total</p>
+                <p className="shop-upgrade-meta">Level {lvl} — {powerLabel}</p>
               </div>
               <div className="upgrade-action upgrade-action--right">
                 <button type="button" onClick={() => upgrade(item)} className="btn-upgrade px-6 py-2">
