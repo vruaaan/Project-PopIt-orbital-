@@ -10,11 +10,9 @@ export default function ShopPage({
     onBack,
     count, setCount,
     clickPower,
-    
     clickLevels, setClickLevels,
     animalLevels, setAnimalLevels,
     cosmeticOwned, setCosmeticOwned,
-    profile,
     equippedCosmetic,
     setEquippedCosmetic,
 }) {
@@ -64,7 +62,6 @@ export default function ShopPage({
                 setCount={setCount}
                 animalLevels={animalLevels}
                 setAnimalLevels={setAnimalLevels}
-                profile={profile}
             />
           )}
           {activeCategory === "Cosmetics" && ( // if active = Cosmetics
@@ -75,7 +72,6 @@ export default function ShopPage({
                 setCosmeticOwned={setCosmeticOwned}
                 equippedCosmetic={equippedCosmetic}
                 setEquippedCosmetic={setEquippedCosmetic}
-                profile={profile}
             />
           )}
         </div>
