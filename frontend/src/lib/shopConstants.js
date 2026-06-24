@@ -63,6 +63,18 @@ export const ANIMAL_BALANCE = {
     chance: { base: 3, perLevel: 1.5, baseCost: 350, costScale: 2.0 },
     multiplier: { base: 3, perLevel: 1.5, baseCost: 500, costScale: 2.2 },
   },
+  4: {
+    chance: { base: 3, perLevel: 1.5, baseCost: 350, costScale: 2.0 },
+    multiplier: { base: 3, perLevel: 1.5, baseCost: 500, costScale: 2.2 },
+  },
+   5: {
+    chance: { base: 3, perLevel: 1.5, baseCost: 350, costScale: 2.0 },
+    multiplier: { base: 3, perLevel: 1.5, baseCost: 500, costScale: 2.2 },
+  },
+  6: {
+    chance: { base: 3, perLevel: 1.5, baseCost: 350, costScale: 2.0 },
+    multiplier: { base: 3, perLevel: 1.5, baseCost: 500, costScale: 2.2 },
+  },
 }
 
 export function calcStat(base, perLevel, level) {
