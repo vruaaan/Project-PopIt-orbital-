@@ -244,7 +244,7 @@ code {
 .btn-upgrade {
   border-radius: 9999px;
   background: #b55334;
-  padding: 0.75rem 2rem;
+  padding: 0.4rem 2rem;
   font-size: 1.125rem;
   font-family: var(--heading);
   color: white;
@@ -252,6 +252,11 @@ code {
   transition: transform 120ms ease;
   border: 0;
   cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  min-width: 7rem;
 }
 .btn-upgrade:hover { transform: scale(1.05); }
 .btn-upgrade:active { transform: scale(0.95); }

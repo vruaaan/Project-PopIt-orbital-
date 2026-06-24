@@ -53,7 +53,7 @@ export default function SpecialUpgrades({ count, setCount, animalLevels, setAnim
                 <h3 className="shop-upgrade-title">{animal.name}</h3>
                 <p className="shop-upgrade-desc">{animal.desc}</p>
               </div>
-              {!isOwned ? (
+              {!isOwned && (
                 <div className="upgrade-action upgrade-action--right">
                   <button
                     type="button"
@@ -64,8 +64,6 @@ export default function SpecialUpgrades({ count, setCount, animalLevels, setAnim
                   </button>
                   <span className="pill flex items-center gap-1">{animal.chance.baseCost} <img src={PRICE_CHIP_ICON} alt="chips" className="w-8 h-8 object-contain" /></span>
                 </div>
-              ) : (
-                <span className="pill ml-auto">Owned</span>
               )}
             </div>
 
@@ -85,9 +83,8 @@ export default function SpecialUpgrades({ count, setCount, animalLevels, setAnim
                       onClick={() => upgradeChance(animal)}
                       className="btn-upgrade px-5 py-2"
                     >
-                      Upgrade Chance
+                      {chanceCost}<img src={PRICE_CHIP_ICON} alt="chips" className="w-8 h-8 object-contain" />
                     </button>
-                    <span className="pill flex items-center gap-1">{chanceCost} <img src={PRICE_CHIP_ICON} alt="chips" className="w-8 h-8 object-contain" /></span>
                   </div>
                 </div>
 
@@ -103,9 +100,8 @@ export default function SpecialUpgrades({ count, setCount, animalLevels, setAnim
                       onClick={() => upgradeMultiplier(animal)}
                       className="btn-upgrade px-5 py-2"
                     >
-                      Upgrade Value
+                      {multCost} <img src={PRICE_CHIP_ICON} alt="chips" className="w-8 h-8 object-contain" />
                     </button>
-                    <span className="pill flex items-center gap-1">{multCost} <img src={PRICE_CHIP_ICON} alt="chips" className="w-8 h-8 object-contain" /></span>
                   </div>
                 </div>
 
