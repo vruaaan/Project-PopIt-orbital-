@@ -98,7 +98,7 @@ export default function SpecialUpgrades({ count, setCount, animalLevels, setAnim
                 {/* Upgrade Value */}
                 <div className="shop-upgrade-row">
                   <div className="upgrade-text-block">
-                    <p className="shop-upgrade-title">Chip Value</p>
+                    <p className="shop-upgrade-title">Value</p>
                     <p className="shop-upgrade-meta">Level {state.multLvl} → {currentMult}x</p>
                   </div>
                   <div className="upgrade-action">

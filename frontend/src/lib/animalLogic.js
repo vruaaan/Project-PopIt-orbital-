@@ -36,7 +36,7 @@ export const ANIMALS = [
     name: "lawrence", dbKey: "egg",
     desc: "#eatan by the egg",
     img: egg,
-    imgClass: "w-35 h-35",
+    imgClass: "w-24 h-24 egg-big",
     ...ANIMAL_BALANCE[4],
   },
   {
