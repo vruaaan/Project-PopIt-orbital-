@@ -30,11 +30,18 @@ import { loadProfile, createProfile } from './lib/playerService'
 import { updateChips, updateClickUpgrades, updateSpecialUpgrades, updateCosmetics } from './lib/gameplayLogic'
 import { updateParticles } from './gameengine/physics'
 import { getPopResult, createPopParticles } from './gameengine/popLogic'
-import { CLICK_POWER_BASE, DEFAULT_ANIMALS_UNLOCKED } from './lib/gameConstants'
+import { CLICK_POWER_BASE } from './lib/gameConstants'
 import { CLICK_UPGRADE_BALANCE, CLICK_UPGRADES, COSMETICS } from './lib/shopConstants'
 import { ANIMALS } from './lib/animalLogic'
 
 const DEFAULT_COSMETIC_OWNED = { 1: true, 2: false, 3: false, 4: false } // if user dont log in
+
+function getDefaultAnimalLevels() {
+  return ANIMALS.reduce((levels, animal) => {
+    levels[animal.id] = { chanceLvl: 0, multLvl: 0, owned: false }
+    return levels
+  }, {})
+}
 
 function calcClickPower(clickLevels) {
   return CLICK_POWER_BASE +
@@ -123,7 +130,7 @@ export default function App() {
     const [clickLevels, setClickLevels] = useState({ 1: 0, 2: 0, 3: 0 })
     const [purchaseCount, setPurchaseCount] = useState(0)
     const [cosmeticOwned, setCosmeticOwned] = useState(DEFAULT_COSMETIC_OWNED)
-    const [animalLevels, setAnimalLevels] = useState(DEFAULT_ANIMALS_UNLOCKED)
+    const [animalLevels, setAnimalLevels] = useState(getDefaultAnimalLevels)
     const [particles, setParticles] = useState([])
     const [isPopping, setIsPopping] = useState(false)
     const clickPower = calcClickPower(clickLevels)
@@ -209,11 +216,7 @@ export default function App() {
     setCumCount(0)
     setPurchaseCount(0)
     setClickLevels({ 1: 0, 2: 0, 3: 0 })
-    setAnimalLevels({
-      1: { chanceLvl: 0, multLvl: 0, owned: false },
-      2: { chanceLvl: 0, multLvl: 0, owned: false },
-      3: { chanceLvl: 0, multLvl: 0, owned: false }
-    })
+    setAnimalLevels(getDefaultAnimalLevels())
     setCosmeticOwned(DEFAULT_COSMETIC_OWNED)
     setEquippedCosmetic(1)
     setPage('leaderboard')
