@@ -33,6 +33,7 @@ import { getPopResult, createPopParticles } from './gameengine/popLogic'
 import { CLICK_POWER_BASE } from './lib/gameConstants'
 import { CLICK_UPGRADE_BALANCE, CLICK_UPGRADES, COSMETICS } from './lib/shopConstants'
 import { ANIMALS } from './lib/animalLogic'
+import { DEFAULT_SETTINGS, setActiveSettings } from './lib/gameSettings'
 
 const DEFAULT_COSMETIC_OWNED = { 1: true, 2: false, 3: false, 4: false } // if user dont log in
 
@@ -146,6 +147,11 @@ export default function App() {
         4: dolphinCan,
     }
     const [equippedCosmetic, setEquippedCosmetic] = useState(1)
+    const [settings, setSettings] = useState(DEFAULT_SETTINGS)
+
+  useEffect(() => {
+    setActiveSettings(settings)
+  }, [settings])
 
   useEffect(() => {
     const loadSession = async () => {
@@ -330,6 +336,8 @@ export default function App() {
     })
   }
 
+  const canSizeClass = 'w-44'
+
   // NAVIGATION
   if (!sessionLoaded) {
     return <div className="page-base">Loading...</div>
@@ -353,10 +361,12 @@ export default function App() {
         />
       )
   }
-  if (page === 'settings') { // to be completed later 
+  if (page === 'settings') {
       return (
         <SettingsPage
             onBack={() => setPage('home')}
+            settings={settings}
+            setSettings={setSettings}
         />
       )
   }
@@ -409,8 +419,8 @@ export default function App() {
             type="button"
             onClick={handlePop}
             ref={canRef}
-            className="mt-8 p-0 bg-transparent border-0 focus:outline-none rounded-full fixed bottom-0 left-1/2 -translate-x-1/2">
-            <span className="block w-44 shrink-0">
+            className="absolute bottom-0 left-1/2 -translate-x-1/2 p-0 bg-transparent border-0 focus:outline-none rounded-full">
+            <span className={`block shrink-0 ${canSizeClass}`}>
               <img
                 src={CAN_IMAGES[equippedCosmetic]}
                 alt="PopIt Can"
