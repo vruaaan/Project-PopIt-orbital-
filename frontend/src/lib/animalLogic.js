@@ -5,30 +5,27 @@ import { ANIMAL_BALANCE, calcAnimalChance } from './shopConstants'
 
 export const ANIMALS = [
   {
-    id: 1,
-    name: "Hit the sealion!",
+    id: 1, 
+    name: "Hit the sealion!", dbKey: "seal",
     desc: "Not fake, not slim, not shady",
     img: seal,
     imgClass: "w-24 h-24",
-    dbKey: "seal",
     ...ANIMAL_BALANCE[1],
   },
   {
     id: 2,
-    name: "Got milk?",
+    name: "Got milk?", dbKey: "cow",
     desc: "Aerodynamically accurate",
     img: cow,
     imgClass: "w-24 h-24",
-    dbKey: "cow",
     ...ANIMAL_BALANCE[2],
   },
   {
     id: 3,
-    name: "What is this???",
+    name: "What is this???", dbKey: "dol",
     desc: "Have we gone too far",
     img: dol,
     imgClass: "w-24 h-24",
-    dbKey: "dol",
     ...ANIMAL_BALANCE[3],
   }
 ]

@@ -19,15 +19,11 @@ export async function createProfile(email, username, userId) {
       curr_count: 0, // curr chip count
       cum_count:0, // cumulative chip count
       purchase_count:0, // number of purchases made
-      click_pow: 0, // upgrade level of Salt 'n Pepper Shaker (0 = locked)
-      auto_popper: 0, // auto popper 
+      click_upgrades:{},
+      special_upgrades:{},
+      cosmetic_upgrades:{ original: true },
       created_at: serverTimestamp(), // created at
       updated_at: serverTimestamp(), // last updated
-      seal: {cp : 0 , prob: 0, owned:0}, // data for seal
-      cow : {cp: 0, prob: 0, owned:0}, // data for cow
-      dol : {cp: 0, prob:0, owned:0}, // data for dolphin
-      cosmetic_owned: { 1: true, 2: false, 3: false, 4: false },
-      equipped_cosmetic: 1
     }
     await setDoc(userRef, payload, { merge: true }) // merge: true means re-signup won't wipe existing data
     const snapshot = await getDoc(userRef)

@@ -13,8 +13,7 @@ export const PRICE_CHIP_ICON = threechips
 
 export const SHOP_CATEGORIES = [ // 3 tabs of the shop
   { name: "Pop!", img: threechips},
-  { name: "Specials", img: star
-  },
+  { name: "Specials", img: star},
   { name: "Cosmetics", img: defaultcan },
 ]
 
@@ -33,8 +32,8 @@ export const CLICK_UPGRADE_BALANCE = {
 }
 
 export const CLICK_UPGRADES = [
-  { id: 1, name: "Click...Click...Boom!", db_name: "auto_popper", img: clicker, imgClass:"w-25 h-25", desc: "Free your hand, click your can ", ...CLICK_UPGRADE_BALANCE[1] },
-  { id: 2, name: "Salt 'n Pepper Shaker", db_name: "click_pow", img: saltnpepper, imgClass:"w-30 h-30", desc: "Flavour your chips with each upgrade, increasing the value of each chip popped !", ...CLICK_UPGRADE_BALANCE[2] },
+  { id: 1, name: "Click...Click...Boom!", dbKey: "auto_popper", img: clicker, imgClass:"w-25 h-25", desc: "Free your hand, click your can ", ...CLICK_UPGRADE_BALANCE[1] },
+  { id: 2, name: "Salt 'n Pepper Shaker", dbKey: "click_pow", img: saltnpepper, imgClass:"w-30 h-30", desc: "Flavour your chips with each upgrade, increasing the value of each chip popped !", ...CLICK_UPGRADE_BALANCE[2] },
 ]
 
 
@@ -72,10 +71,10 @@ export function calcStat(base, perLevel, level) {
 
 // DETAILS FOR COSMETICS TAB
 export const COSMETICS = [
-  { id: 1, name: "Original", img : defaultcan, price: 10000 },
-  { id: 2, name: "Truffle", img: sealcan, price: 10000 },
-  { id: 3, name: "Sour Cream 'n Onion", img: cowcan, price: 10000 },
-  { id: 4, name: "Barbeque", img: dolpcan, price: 10000 },
+  { id: 1, name: "Original", dbKey: "original", img : defaultcan, price: 10000 },
+  { id: 2, name: "Truffle", dbKey: "truffle", img: sealcan, price: 10000 },
+  { id: 3, name: "Sour Cream 'n Onion", dbKey: "sour_cream_n_onion", img: cowcan, price: 10000 },
+  { id: 4, name: "Barbeque", dbKey: "barbeque", img: dolpcan, price: 10000 },
 ]
 
 // function to calculate cost for click and specials

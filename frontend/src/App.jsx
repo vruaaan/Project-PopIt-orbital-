@@ -27,11 +27,12 @@ import SettingsPage from './SettingsPage'
 
 import { getCurrentUser, resetPassword, signInWithEmail, signOutUser, signUpWithEmail } from './lib/firebase'
 import { loadProfile, createProfile } from './lib/playerService'
-import { updateChips, updateClickPower, updateAutoPopper, updateSeal, updateCow, updateDol, updateCosmetics } from './lib/gameplayLogic'
+import { updateChips, updateClickUpgrades, updateSpecialUpgrades, updateCosmetics } from './lib/gameplayLogic'
 import { updateParticles } from './gameengine/physics'
 import { getPopResult, createPopParticles } from './gameengine/popLogic'
 import { CLICK_POWER_BASE, DEFAULT_ANIMALS_UNLOCKED } from './lib/gameConstants'
-import { CLICK_UPGRADE_BALANCE } from './lib/shopConstants'
+import { CLICK_UPGRADE_BALANCE, CLICK_UPGRADES, COSMETICS } from './lib/shopConstants'
+import { ANIMALS } from './lib/animalLogic'
 
 const DEFAULT_COSMETIC_OWNED = { 1: true, 2: false, 3: false, 4: false } // if user dont log in
 
@@ -41,31 +42,73 @@ function calcClickPower(clickLevels) {
     (clickLevels[2] ?? 0) * CLICK_UPGRADE_BALANCE[2].powerPerLevel
 }
 
-function getAnimalLevelsFromProfile(profile) {
-  const seal = profile.seal ?? {}
-  const cow = profile.cow ?? {}
-  const dol = profile.dol ?? {}
-  return {
-    1: {
-      owned: seal.owned ?? false,
-      chanceLvl: seal.prob ?? 0,
-      multLvl: seal.cp ?? 0
-    },
-    2: {
-      owned: cow.owned ?? false,
-      chanceLvl: cow.prob ?? 0,
-      multLvl: cow.cp ?? 0
-    },
-    3: {
-      owned: dol.owned ?? false,
-      chanceLvl: dol.prob ?? 0,
-      multLvl: dol.cp ?? 0
-    }
-  }
+function getClickLevelsFromProfile(profile) { // converts the database field for click_upgrades into something usable for code
+  const upgrades = profile.click_upgrades ?? {} // default to empty dictionary if not present 
+  return CLICK_UPGRADES.reduce((levels, upgrade) => ({ // loops through the dictionary 
+    ...levels, // maps the data from database into an object that can be used 
+    [upgrade.id]: upgrades[upgrade.dbKey] ?? 0
+  }), {}) 
 }
 
-function getCosmeticOwnedFromProfile(profile) {
-  return { ...DEFAULT_COSMETIC_OWNED, ...(profile.cosmetic_owned ?? {}) }
+function getClickUpgradesForProfile(clickLevels) { // converts dictionary into database update
+  return CLICK_UPGRADES.reduce((upgrades, upgrade) => {
+    const level = clickLevels[upgrade.id] ?? 0
+    if (level > 0) { // safeguard so that entry only created when level > 0
+      upgrades[upgrade.dbKey] = level
+    }
+    return upgrades
+  }, {})
+}
+
+function getAnimalLevelsFromProfile(profile) { //converts the database field for special_upgrades into something usable for code
+  const upgrades = profile.special_upgrades ?? {}
+  return ANIMALS.reduce((levels, animal) => {
+    const upgrade = upgrades[animal.dbKey] ?? {}
+    levels[animal.id] = {
+      owned: Boolean(upgrades[animal.dbKey]),
+      chanceLvl: upgrade.prob ?? 0,
+      multLvl: upgrade.cp ?? 0
+    }
+    return levels
+  }, {})
+}
+
+function getSpecialUpgradesForProfile(animalLevels) { // converts dictionary into database update
+  return ANIMALS.reduce((upgrades, animal) => {
+    const level = animalLevels[animal.id]
+    if (level?.owned) {
+      upgrades[animal.dbKey] = {
+        prob: level.chanceLvl ?? 0,
+        cp: level.multLvl ?? 0
+      }
+    }
+    return upgrades
+  }, {})
+}
+
+function getCosmeticOwnedFromProfile(profile) { // converts the database field for cosmetic_upgrades into something usable for code
+  const upgrades = profile.cosmetic_upgrades ?? {}
+  return COSMETICS.reduce((owned, item) => ({
+    ...owned,
+    [item.id]: Boolean(owned[item.id] || upgrades[item.dbKey])
+  }), { ...DEFAULT_COSMETIC_OWNED })
+}
+
+function getEquippedCosmeticFromProfile(profile) { // reads the equipped cosmetic from database
+  const upgrades = profile.cosmetic_upgrades ?? {}
+  const equippedKey = Object.entries(upgrades).find(([, equipped]) => equipped)?.[0]
+  const equippedItem = COSMETICS.find((item) => item.dbKey === equippedKey)
+  return Number(equippedItem?.id ?? 1)
+}
+
+function getCosmeticUpgradesForProfile(cosmeticOwned, equippedCosmetic) { // converts the database field for  
+  return COSMETICS.reduce((upgrades, item) => { // loops over every cosmetic definition
+    const owned = cosmeticOwned[item.id] // uses local app state by id
+    if (owned) { // if owned == True
+      upgrades[item.dbKey] = item.id === equippedCosmetic  // adds a boolean to indicate if that cosmetic is equipped or not
+    }
+    return upgrades
+  }, {})
 }
 
 
@@ -76,9 +119,9 @@ export default function App() {
     const [page, setPage] = useState('home') // default home page
     const [isLoggedIn, setIsLoggedIn] = useState(false) // default not logged in
     const [userEmail, setUserEmail] = useState(null) // email is null by default
-    const [profile, setProfile] = useState(null) // profile is null by default
     const [sessionLoaded, setSessionLoaded] = useState(false) // 
     const [clickLevels, setClickLevels] = useState({ 1: 0, 2: 0, 3: 0 })
+    const [purchaseCount, setPurchaseCount] = useState(0)
     const [cosmeticOwned, setCosmeticOwned] = useState(DEFAULT_COSMETIC_OWNED)
     const [animalLevels, setAnimalLevels] = useState(DEFAULT_ANIMALS_UNLOCKED)
     const [particles, setParticles] = useState([])
@@ -108,13 +151,13 @@ export default function App() {
       setUserEmail(currentUser.email)
       const { data: profile, error: profileError } = await loadProfile(currentUser.email)
       if (!profileError && profile) {
-        setProfile(profile)
         setCount(profile.curr_count ?? 0)
         setCumCount(profile.cum_count ?? 0)
-        setClickLevels({ 1: profile.auto_popper ?? 0, 2: profile.click_pow ?? 0 })
+        setPurchaseCount(profile.purchase_count ?? 0)
+        setClickLevels(getClickLevelsFromProfile(profile))
         setAnimalLevels(getAnimalLevelsFromProfile(profile))
         setCosmeticOwned(getCosmeticOwnedFromProfile(profile))
-        setEquippedCosmetic(profile.equipped_cosmetic ?? 1)
+        setEquippedCosmetic(getEquippedCosmeticFromProfile(profile))
       }
       setSessionLoaded(true)
     }
@@ -133,13 +176,13 @@ export default function App() {
     setUserEmail(user.email)
     const { data: profile, error: profileError } = await loadProfile(user.email)
     if (!profileError && profile) { // loading user data
-      setProfile(profile)
       setCount(profile.curr_count ?? 0)
       setCumCount(profile.cum_count ?? 0)
-      setClickLevels({ 1: profile.auto_popper ?? 0, 2: profile.click_pow ?? 0 })
+      setPurchaseCount(profile.purchase_count ?? 0)
+      setClickLevels(getClickLevelsFromProfile(profile))
       setAnimalLevels(getAnimalLevelsFromProfile(profile))
       setCosmeticOwned(getCosmeticOwnedFromProfile(profile))
-      setEquippedCosmetic(profile.equipped_cosmetic ?? 1)
+      setEquippedCosmetic(getEquippedCosmeticFromProfile(profile))
     }
     setPage('leaderboard')
     return { success: true }
@@ -164,6 +207,7 @@ export default function App() {
     setUserEmail(user.email)
     setCount(0)
     setCumCount(0)
+    setPurchaseCount(0)
     setClickLevels({ 1: 0, 2: 0, 3: 0 })
     setAnimalLevels({
       1: { chanceLvl: 0, multLvl: 0, owned: false },
@@ -188,7 +232,6 @@ export default function App() {
     await signOutUser()
     setIsLoggedIn(false)
     setUserEmail(null)
-    setProfile(null)
     setCosmeticOwned(DEFAULT_COSMETIC_OWNED)
     setEquippedCosmetic(1)
     setPage('home')
@@ -239,7 +282,11 @@ export default function App() {
   const handleSpendChips = (updater) => {
     setCount((prev) => {
       const next = typeof updater === 'function' ? updater(prev) : updater
-      if (userEmail) updateChips(userEmail, next, cumCount)
+      const nextPurchaseCount = next < prev ? purchaseCount + 1 : purchaseCount
+      if (nextPurchaseCount !== purchaseCount) {
+        setPurchaseCount(nextPurchaseCount)
+      }
+      if (userEmail) updateChips(userEmail, next, cumCount, nextPurchaseCount)
       return next
     })
   }
@@ -248,8 +295,7 @@ export default function App() {
     setClickLevels(prev => {
       const next = typeof updater === 'function' ? updater(prev) : updater
       if (userEmail) {
-        updateAutoPopper(userEmail, next[1] ?? 0)
-        updateClickPower(userEmail, next[2] ?? 0)
+        updateClickUpgrades(userEmail, getClickUpgradesForProfile(next))
       }
       return next
     })
@@ -259,9 +305,7 @@ export default function App() {
     setAnimalLevels(prev => {
       const next = typeof updater === 'function' ? updater(prev) : updater
       if (userEmail) {
-        updateSeal(userEmail, next[1].chanceLvl, next[1].multLvl, next[1].owned)
-        updateCow(userEmail, next[2].chanceLvl, next[2].multLvl, next[2].owned)
-        updateDol(userEmail, next[3].chanceLvl, next[3].multLvl, next[3].owned)
+        updateSpecialUpgrades(userEmail, getSpecialUpgradesForProfile(next))
       }
       return next
     })
@@ -270,7 +314,7 @@ export default function App() {
   const handleSetCosmeticOwned = (updater) => {
     setCosmeticOwned((prev) => {
       const next = typeof updater === 'function' ? updater(prev) : updater
-      if (userEmail) updateCosmetics(userEmail, next, equippedCosmetic)
+      if (userEmail) updateCosmetics(userEmail, getCosmeticUpgradesForProfile(next, equippedCosmetic))
       return next
     })
   }
@@ -278,7 +322,7 @@ export default function App() {
   const handleSetEquippedCosmetic = (updater) => {
     setEquippedCosmetic((prev) => {
       const next = typeof updater === 'function' ? updater(prev) : updater
-      if (userEmail) updateCosmetics(userEmail, cosmeticOwned, next)
+      if (userEmail) updateCosmetics(userEmail, getCosmeticUpgradesForProfile(cosmeticOwned, next))
       return next
     })
   }
@@ -301,7 +345,6 @@ export default function App() {
             setAnimalLevels={handleSetAnimalLevels}
             cosmeticOwned={cosmeticOwned} 
             setCosmeticOwned={handleSetCosmeticOwned}
-            profile = {profile}
             equippedCosmetic={equippedCosmetic}
             setEquippedCosmetic={handleSetEquippedCosmetic}
         />

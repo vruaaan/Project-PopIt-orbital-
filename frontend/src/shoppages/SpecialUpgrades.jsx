@@ -1,7 +1,7 @@
 import { ANIMALS } from '../lib/animalLogic' // animal images from here 
 import { PRICE_CHIP_ICON, calcAnimalChance, calcCost, calcStat } from '../lib/shopConstants' 
 
-export default function SpecialUpgrades({ count, setCount, animalLevels, setAnimalLevels, profile }) {
+export default function SpecialUpgrades({ count, setCount, animalLevels, setAnimalLevels }) {
   function unlockAnimal(animal) {
     const state = animalLevels[animal.id];
     if (state.owned) return;
@@ -39,16 +39,11 @@ export default function SpecialUpgrades({ count, setCount, animalLevels, setAnim
     <div className="shop-upgrade-list">
       {ANIMALS.map(animal => {
         const state = animalLevels[animal.id];
-
-        const isOwned = profile
-          ? profile[animal.dbKey]?.owned || state.owned
-          : state.owned;
-
+        const isOwned = state.owned;
         const currentChance = calcAnimalChance(state.chanceLvl)
         const currentMult = calcStat(animal.multiplier.base, animal.multiplier.perLevel, state.multLvl);
         const chanceCost = calcCost(animal.chance.baseCost, animal.chance.costScale, state.chanceLvl);
         const multCost = calcCost(animal.multiplier.baseCost, animal.multiplier.costScale, state.multLvl);
-
         return (
           <div key={animal.id} className="shop-upgrade-card">
             {/* Top row: image + name/desc + unlock or owned pill */}
