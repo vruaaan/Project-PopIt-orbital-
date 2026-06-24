@@ -7,7 +7,14 @@ export default function SpecialUpgrades({ count, setCount, animalLevels, setAnim
     if (state.owned) return;
     if (count >= animal.chance.baseCost) {
       setCount(c => c - animal.chance.baseCost);
-      setAnimalLevels(prev => ({ ...prev, [animal.id]: { ...prev[animal.id], owned: true } }));
+      setAnimalLevels(prev => ({
+        ...prev,
+        [animal.id]: {
+          ...prev[animal.id],
+          owned: true,
+          chanceLvl: 1
+        }
+      }));
     } else {
       alert("Not enough chips!");
     }
@@ -91,7 +98,7 @@ export default function SpecialUpgrades({ count, setCount, animalLevels, setAnim
                 {/* Upgrade Value */}
                 <div className="shop-upgrade-row">
                   <div className="upgrade-text-block">
-                    <p className="shop-upgrade-title">Chip Value</p>
+                    <p className="shop-upgrade-title">Value</p>
                     <p className="shop-upgrade-meta">Level {state.multLvl} → {currentMult}x</p>
                   </div>
                   <div className="upgrade-action">
