@@ -5,6 +5,7 @@ import threechips from './assets/threechips.png'
 import loginIcon from './assets/Login.png'
 import shop from './assets/shop.png'
 import leaderboard from './assets/leaderboard.png'
+import gear from './assets/gear.png'
 
 // webP files for repeated renders
 import chip1 from './assets/chip1.webp'
@@ -22,6 +23,7 @@ import LeaderboardPage from './userpages/LeaderboardPage'
 import LoginPage from './userpages/LoginPage'
 import CreateAccountPage from './userpages/CreateAccountPage'
 import ResetPasswordPage from './userpages/ResetPasswordPage'
+import SettingsPage from './SettingsPage'
 
 import { getCurrentUser, resetPassword, signInWithEmail, signOutUser, signUpWithEmail } from './lib/firebase'
 import { loadProfile, createProfile } from './lib/playerService'
@@ -305,6 +307,13 @@ export default function App() {
         />
       )
   }
+  if (page === 'settings') { // to be completed later 
+      return (
+        <SettingsPage
+            onBack={() => setPage('home')}
+        />
+      )
+  }
   if (page === 'login') {
     return <LoginPage onBack={() => setPage('home')} onLogin={handleLogin} onToCreateAccount={() => setPage('createAccount')} onToResetPassword={() => setPage('resetPassword')} />
   }
@@ -317,6 +326,7 @@ export default function App() {
   if (page === 'leaderboard') {
     return <LeaderboardPage onBack={() => setPage('home')} onLogout={handleLogout} />
   }
+
 
   return (
     <div className="min-h-screen px-6 py-6 text-[var(--text)] relative">
@@ -382,6 +392,15 @@ export default function App() {
                 alt={isLoggedIn ? 'leaderboard icon' : 'login icon'}
                 className="block w-20 h-auto origin-center hover:scale-105 transition-transform"
               />
+            </span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setPage('settings')}
+            className="mt-8 p-0 bg-transparent border-0 focus:outline-none rounded-full">
+            <span className="fixed right-25 top-4">
+              <img src={gear} alt="settings" className="block w-20 h-auto origin-center hover:scale-105 transition-transform" />
             </span>
           </button>
         </div>
