@@ -66,7 +66,7 @@ export function calcAnimalBonus(animalLevels) {
     const state = animalLevels[animal.id]
     if (!state?.owned) return
 
-    const chance = calcAnimalChance(state.chanceLvl)
+    const chance = calcAnimalChance(animal.id, state.chanceLvl)
     const mult = animal.multiplier.base + animal.multiplier.perLevel * state.multLvl
     if (Math.random() * 100 < chance) {
       bonusMultiplier *= mult

@@ -63,35 +63,37 @@ export const ANIMAL_CHANCE_FORMULA = {
   baseChance: 5,
 }
 
-export function calcAnimalChance(level) {
+export function calcAnimalChance(id, level) {
   const { logScale, logOffset, baseChance } = ANIMAL_CHANCE_FORMULA
-  return Math.floor(logScale * Math.log2(level + logOffset) + baseChance)
+  const balance = ANIMAL_BALANCE[id]
+  const constant = balance?.chance?.constant ?? 0
+  return Math.floor((logScale * Math.log2(level + logOffset) + baseChance)*constant)
 }
 
 export const ANIMAL_BALANCE = {
   1: {
-    chance: { base: 5, perLevel: 2, baseCost: 200, costScale: 1.8 },
+    chance: {baseCost: 200, costScale: 1.8, constant: 1.0},
     multiplier: { base: 2, perLevel: 1, baseCost: 300, costScale: 2.0 },
   },
   2: {
-    chance: { base: 3, perLevel: 1.5, baseCost: 350, costScale: 2.0 },
+    chance: {baseCost: 350, costScale: 2.0, constant: 0.9 },
     multiplier: { base: 3, perLevel: 1.5, baseCost: 500, costScale: 2.2 },
   },
   3: {
-    chance: { base: 3, perLevel: 1.5, baseCost: 350, costScale: 2.0 },
-    multiplier: { base: 3, perLevel: 1.5, baseCost: 500, costScale: 2.2 },
+    chance: {baseCost: 350, costScale: 2.0, constant: 0.8 },
+    multiplier: { base: 5, perLevel: 1.5, baseCost: 500, costScale: 2.2 },
   },
   4: {
-    chance: { base: 3, perLevel: 1.5, baseCost: 350, costScale: 2.0 },
-    multiplier: { base: 3, perLevel: 1.5, baseCost: 500, costScale: 2.2 },
+    chance: {baseCost: 350, costScale: 2.0, constant: 0.7 },
+    multiplier: { base: 10, perLevel: 1.5, baseCost: 500, costScale: 2.2 },
   },
    5: {
-    chance: { base: 3, perLevel: 1.5, baseCost: 350, costScale: 2.0 },
-    multiplier: { base: 3, perLevel: 1.5, baseCost: 500, costScale: 2.2 },
+    chance: {baseCost: 350, costScale: 2.0, constant: 0.6 },
+    multiplier: { base: 20, perLevel: 1.5, baseCost: 500, costScale: 2.2 },
   },
   6: {
-    chance: { base: 3, perLevel: 1.5, baseCost: 350, costScale: 2.0 },
-    multiplier: { base: 3, perLevel: 1.5, baseCost: 500, costScale: 2.2 },
+    chance: {baseCost: 350, costScale: 2.0, constant: 0.5},
+    multiplier: { base: 50, perLevel: 1.5, baseCost: 500, costScale: 2.2 },
   },
 }
 
