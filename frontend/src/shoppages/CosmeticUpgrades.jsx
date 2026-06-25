@@ -20,12 +20,12 @@ export default function CosmeticUpgrades({
   }
 
   return (
-    <div className="mt-8 grid grid-cols-4 gap-6">
+    <div className="mt-8 flex gap-6 overflow-x-auto pb-4">
       {COSMETICS.map(item => {
         const owned = cosmeticOwned[item.id] ?? false;
         const equipped = equippedCosmetic === item.id;
         return (
-          <div key={item.id} className={`cosmetic-card ${equipped ? "cosmetic-card--owned" : ""}`}>
+          <div key={item.id} className={`cosmetic-card min-w-[240px] ${equipped ? "cosmetic-card--owned" : ""}`}>
             <img src={item.img} alt={item.name} className="w-48 h-48 object-contain" />
             <div className="text-center flex-1">
               <h3 className="shop-cosmetic-title">{item.name}</h3>
