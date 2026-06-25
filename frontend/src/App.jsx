@@ -45,11 +45,18 @@ function getDefaultAnimalLevels() {
 }
 
 function calcClickPower(clickLevels) {
-  const basePower = CLICK_POWER_BASE +
-    (clickLevels[1] ?? 0) * CLICK_UPGRADE_BALANCE[1].powerPerLevel +
-    (clickLevels[2] ?? 0) * CLICK_UPGRADE_BALANCE[2].powerPerLevel
-  const multiplierLevel = clickLevels[3] ?? 0
-  return multiplierLevel > 0 ? basePower * 2 ** multiplierLevel : basePower
+  return CLICK_UPGRADES.reduce((totalPower, upgrade) => {
+    const level = clickLevels[upgrade.id] ?? 0
+    const balance = CLICK_UPGRADE_BALANCE[upgrade.id]
+
+    if (!balance || level <= 0) return totalPower
+
+    if (balance.effectType === 'multiplier') {
+      return totalPower * (balance.multiplier ?? 2) ** level
+    }
+
+    return totalPower + level * balance.powerPerLevel
+  }, CLICK_POWER_BASE)
 }
 
 function getClickLevelsFromProfile(profile) { // converts the database field for click_upgrades into something usable for code

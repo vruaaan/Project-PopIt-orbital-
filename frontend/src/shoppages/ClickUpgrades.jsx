@@ -18,9 +18,9 @@ export default function ClickUpgrades({ count, setCount, clickLevels, setClickLe
       {CLICK_UPGRADES.map(item => {
         const lvl = clickLevels[item.id] ?? 0;
         const cost = calcCost(item.baseCost, item.costScale, lvl);
-        const totalPower = item.id === 3 ? 2 ** lvl : item.powerPerLevel * lvl;
+        const totalPower = item.id === 4 ? 2 ** lvl : item.powerPerLevel * lvl;
         const isUnlocked = lvl > 0
-        const powerLabel = item.id === 3
+        const powerLabel = item.id === 4
           ? `x${totalPower} chip power`
           : `+${totalPower} click power total`
 
