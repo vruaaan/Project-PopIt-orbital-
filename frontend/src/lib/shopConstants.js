@@ -6,6 +6,8 @@ import defaultcan from '../assets/plain can.webp'
 import sealcan from '../assets/sealcan.webp'
 import cowcan from '../assets/cowcan.webp'
 import dolpcan from '../assets/dolphincan.webp'
+import flamecan from '../assets/flamecan.png'
+import eggcan from '../assets/eggcan.png'
 import star from '../assets/star.png'
 import doubler from '../assets/doubler.webp'
 
@@ -108,6 +110,8 @@ export const COSMETICS = [
   { id: 2, name: "Truffle", dbKey: "truffle", img: sealcan, price: 10000 },
   { id: 3, name: "Sour Cream 'n Onion", dbKey: "sour_cream_n_onion", img: cowcan, price: 10000 },
   { id: 4, name: "Barbeque", dbKey: "barbeque", img: dolpcan, price: 10000 },
+  { id: 5, name: "Hot 'n Spicy", dbKey: "spicy", img: flamecan, price: 10000 },
+  { id: 6, name: "Milkshake", dbKey: "egg", img: eggcan, price: 10000 },
 ]
 
 // function to calculate cost for click and specials
