@@ -383,9 +383,3 @@ code {
   flex: 1;
   text-align: left;
 }
-
-
-.egg-big {
-  transform: scale(1.5);
-  transform-origin: center;
-}

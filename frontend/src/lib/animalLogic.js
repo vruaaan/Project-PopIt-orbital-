@@ -1,15 +1,15 @@
 import seal from '../assets/seal.webp' 
 import cow from '../assets/cow.webp' 
 import dol from '../assets/dolphin.webp'
-import egg from '../assets/egg.webp'
-import phx from '../assets/phx.webp'
+import egg from '../assets/egg.png' // egg png sufficiently small
+import flame from '../assets/flame.png'
 import ball from '../assets/ball.webp'
 import { ANIMAL_BALANCE, calcAnimalChance } from './shopConstants'
 
 export const ANIMALS = [
   {
     id: 1, 
-    name: "Hit the sealion!", dbKey: "seal",
+    name: "the original popit", dbKey: "seal",
     desc: "Not fake, not slim, not shady",
     img: seal,
     imgClass: "w-24 h-24",
@@ -17,7 +17,7 @@ export const ANIMALS = [
   },
   {
     id: 2,
-    name: "Got milk?", dbKey: "cow",
+    name: "moooooo", dbKey: "cow",
     desc: "aerodynamically accurate",
     img: cow,
     imgClass: "w-24 h-24",
@@ -25,7 +25,7 @@ export const ANIMALS = [
   },
   {
     id: 3,
-    name: "What is this???", dbKey: "dol",
+    name: "what is this???", dbKey: "dol",
     desc: "have we gone too far...",
     img: dol,
     imgClass: "w-24 h-24",
@@ -34,16 +34,16 @@ export const ANIMALS = [
   {
     id: 4,
     name: "lawrence", dbKey: "egg",
-    desc: "#eatan by the egg",
+    desc: "#eatanbytheegg",
     img: egg,
-    imgClass: "w-24 h-24 egg-big",
+    imgClass: "w-24 h-24",
     ...ANIMAL_BALANCE[4],
   },
   {
     id: 5,
-    name: "cooked?", dbKey: "phx",
+    name: "fire.", dbKey: "phx",
     desc: "burnt.",
-    img: phx,
+    img: flame,
     imgClass: "w-24 h-24",
     ...ANIMAL_BALANCE[5],
   },

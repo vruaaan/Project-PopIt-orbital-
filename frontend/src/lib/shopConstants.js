@@ -1,4 +1,5 @@
 import threechips from '../assets/threechips.webp' // used at pricing, small scale so reduced in size
+import chip from '../assets/chip1.webp'
 import clicker from '../assets/clicker icon.png' // static render use small
 import saltnpepper from '../assets/saltnpepper.webp'  // webp version used as massively oversized
 import defaultcan from '../assets/plain can.webp'
@@ -49,8 +50,8 @@ export const CLICK_UPGRADE_BALANCE = {
 
 export const CLICK_UPGRADES = [
   { id: 1, name: "Click...Click...Boom!", dbKey: "click_pow1", img: clicker, imgClass:"w-25 h-25", desc: "Free your hand, click your can ", ...CLICK_UPGRADE_BALANCE[1] },
-  { id: 2, name: "Salt 'n Pepper Shaker", dbKey: "click_pow2", img: saltnpepper, imgClass:"w-30 h-30", desc: "Flavour your chips with each upgrade, increasing the value of each chip popped !", ...CLICK_UPGRADE_BALANCE[2] },
-  { id: 3, name: "Mega Chip", dbKey: "click_pow5", img: threechips, imgClass:"w-30 h-25", desc: "Make your chips mega!", ...CLICK_UPGRADE_BALANCE[3] },
+  { id: 2, name: "Salt 'n Pepper", dbKey: "click_pow2", img: saltnpepper, imgClass:"w-30 h-30", desc: "Flavour your chips with each upgrade, increasing the value of each chip popped !", ...CLICK_UPGRADE_BALANCE[2] },
+  { id: 3, name: "Mega Chip", dbKey: "click_pow5", img: chip, imgClass:"w-30 h-25 rotate-290", desc: "Make your chips mega!", ...CLICK_UPGRADE_BALANCE[3] },
   { id: 4, name: "Double Down", dbKey: "chip_mult", img: doubler, imgClass:"w-25 h-35", desc: "Every purchase doubles your current chip power, so your clicks snowball fast.", ...CLICK_UPGRADE_BALANCE[4] },
 ]
 
