@@ -22,23 +22,33 @@ export const CLICK_UPGRADE_BALANCE = {
     baseCost: 50,
     costScale: 1.5,
     powerPerLevel: 1,
+    effectType: 'additive',
   },
   2: {
-    baseCost: 150,
+    baseCost: 250,
     costScale: 1.8,
     powerPerLevel: 2,
+    effectType: 'additive',
   },
   3: {
-    baseCost: 500,
+    baseCost: 1000,
+    costScale: 2.2,
+    powerPerLevel: 5,
+    effectType: 'additive',
+  },
+  4: {
+    baseCost: 2000,
     costScale: 100,
     powerPerLevel: 0,
+    effectType: 'multiplier',
+    multiplier: 2,
   },
 }
 
 export const CLICK_UPGRADES = [
   { id: 1, name: "Click...Click...Boom!", dbKey: "auto_popper", img: clicker, imgClass:"w-25 h-25", desc: "Free your hand, click your can ", ...CLICK_UPGRADE_BALANCE[1] },
   { id: 2, name: "Salt 'n Pepper Shaker", dbKey: "click_pow", img: saltnpepper, imgClass:"w-30 h-30", desc: "Flavour your chips with each upgrade, increasing the value of each chip popped !", ...CLICK_UPGRADE_BALANCE[2] },
-  { id: 3, name: "Double Down", dbKey: "chip_mult", img: doubler, imgClass:"w-25 h-35", desc: "Snowball your clicks", ...CLICK_UPGRADE_BALANCE[3] },
+  { id: 3, name: "Double Down", dbKey: "chip_mult", img: doubler, imgClass:"w-25 h-35", desc: "Every purchase doubles your current chip power, so your clicks snowball fast.", ...CLICK_UPGRADE_BALANCE[3] },
 ]
 
 
@@ -50,35 +60,37 @@ export const ANIMAL_CHANCE_FORMULA = {
   baseChance: 5,
 }
 
-export function calcAnimalChance(level) {
+export function calcAnimalChance(id, level) {
   const { logScale, logOffset, baseChance } = ANIMAL_CHANCE_FORMULA
-  return Math.floor(logScale * Math.log2(level + logOffset) + baseChance)
+  const balance = ANIMAL_BALANCE[id]
+  const constant = balance?.chance?.constant ?? 0
+  return Math.floor((logScale * Math.log2(level + logOffset) + baseChance)*constant)
 }
 
 export const ANIMAL_BALANCE = {
   1: {
-    chance: { base: 5, perLevel: 2, baseCost: 200, costScale: 1.8 },
+    chance: {baseCost: 200, costScale: 1.8, constant: 1.0},
     multiplier: { base: 2, perLevel: 1, baseCost: 300, costScale: 2.0 },
   },
   2: {
-    chance: { base: 3, perLevel: 1.5, baseCost: 350, costScale: 2.0 },
+    chance: {baseCost: 500, costScale: 2.0, constant: 0.9 },
     multiplier: { base: 3, perLevel: 1.5, baseCost: 500, costScale: 2.2 },
   },
   3: {
-    chance: { base: 3, perLevel: 1.5, baseCost: 350, costScale: 2.0 },
-    multiplier: { base: 3, perLevel: 1.5, baseCost: 500, costScale: 2.2 },
+    chance: {baseCost: 1000, costScale: 2.0, constant: 0.8 },
+    multiplier: { base: 5, perLevel: 1.5, baseCost: 1200, costScale: 2.5 },
   },
   4: {
-    chance: { base: 3, perLevel: 1.5, baseCost: 350, costScale: 2.0 },
-    multiplier: { base: 3, perLevel: 1.5, baseCost: 500, costScale: 2.2 },
+    chance: {baseCost: 1500, costScale: 2.0, constant: 0.7 },
+    multiplier: { base: 10, perLevel: 1.5, baseCost: 2000, costScale: 2.5 },
   },
    5: {
-    chance: { base: 3, perLevel: 1.5, baseCost: 350, costScale: 2.0 },
-    multiplier: { base: 3, perLevel: 1.5, baseCost: 500, costScale: 2.2 },
+    chance: {baseCost: 2500, costScale: 2.0, constant: 0.6 },
+    multiplier: { base: 20, perLevel: 1.5, baseCost: 3000, costScale: 2.5 },
   },
   6: {
-    chance: { base: 3, perLevel: 1.5, baseCost: 350, costScale: 2.0 },
-    multiplier: { base: 3, perLevel: 1.5, baseCost: 500, costScale: 2.2 },
+    chance: {baseCost: 5000, costScale: 2.0, constant: 0.5},
+    multiplier: { base: 50, perLevel: 1.5, baseCost: 6000, costScale: 2.5 },
   },
 }
 

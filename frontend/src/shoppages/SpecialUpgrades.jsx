@@ -1,12 +1,13 @@
 import { ANIMALS } from '../lib/animalLogic' // animal images from here 
-import { PRICE_CHIP_ICON, calcAnimalChance, calcCost, calcStat } from '../lib/shopConstants' 
+import { ANIMAL_BALANCE, PRICE_CHIP_ICON, calcAnimalChance, calcCost, calcStat } from '../lib/shopConstants' 
 
 export default function SpecialUpgrades({ count, setCount, animalLevels, setAnimalLevels }) {
   function unlockAnimal(animal) {
     const state = animalLevels[animal.id];
+    const balance = ANIMAL_BALANCE[animal.id]
     if (state.owned) return;
-    if (count >= animal.chance.baseCost) {
-      setCount(c => c - animal.chance.baseCost);
+    if (count >= balance.chance.baseCost) {
+      setCount(c => c - balance.chance.baseCost);
       setAnimalLevels(prev => ({
         ...prev,
         [animal.id]: {
@@ -22,7 +23,8 @@ export default function SpecialUpgrades({ count, setCount, animalLevels, setAnim
 
   function upgradeChance(animal) {
     const state = animalLevels[animal.id];
-    const cost = calcCost(animal.chance.baseCost, animal.chance.costScale, state.chanceLvl);
+    const balance = ANIMAL_BALANCE[animal.id]
+    const cost = calcCost(balance.chance.baseCost, balance.chance.costScale, state.chanceLvl);
     if (count >= cost) {
       setCount(c => c - cost);
       setAnimalLevels(prev => ({ ...prev, [animal.id]: { ...prev[animal.id], chanceLvl: prev[animal.id].chanceLvl + 1 } }));
@@ -33,7 +35,8 @@ export default function SpecialUpgrades({ count, setCount, animalLevels, setAnim
 
   function upgradeMultiplier(animal) {
     const state = animalLevels[animal.id];
-    const cost = calcCost(animal.multiplier.baseCost, animal.multiplier.costScale, state.multLvl);
+    const balance = ANIMAL_BALANCE[animal.id]
+    const cost = calcCost(balance.multiplier.baseCost, balance.multiplier.costScale, state.multLvl);
     if (count >= cost) {
       setCount(c => c - cost);
       setAnimalLevels(prev => ({ ...prev, [animal.id]: { ...prev[animal.id], multLvl: prev[animal.id].multLvl + 1 } }));
@@ -46,11 +49,12 @@ export default function SpecialUpgrades({ count, setCount, animalLevels, setAnim
     <div className="shop-upgrade-list">
       {ANIMALS.map(animal => {
         const state = animalLevels[animal.id];
+        const balance = ANIMAL_BALANCE[animal.id]
         const isOwned = state.owned;
-        const currentChance = calcAnimalChance(state.chanceLvl)
-        const currentMult = calcStat(animal.multiplier.base, animal.multiplier.perLevel, state.multLvl);
-        const chanceCost = calcCost(animal.chance.baseCost, animal.chance.costScale, state.chanceLvl);
-        const multCost = calcCost(animal.multiplier.baseCost, animal.multiplier.costScale, state.multLvl);
+        const currentChance = calcAnimalChance(animal.id, state.chanceLvl)
+        const currentMult = calcStat(balance.multiplier.base, balance.multiplier.perLevel, state.multLvl);
+        const chanceCost = calcCost(balance.chance.baseCost, balance.chance.costScale, state.chanceLvl);
+        const multCost = calcCost(balance.multiplier.baseCost, balance.multiplier.costScale, state.multLvl);
         return (
           <div key={animal.id} className="shop-upgrade-card">
             {/* Top row: image + name/desc + unlock or owned pill */}
@@ -69,7 +73,7 @@ export default function SpecialUpgrades({ count, setCount, animalLevels, setAnim
                   >
                     Unlock
                   </button>
-                  <span className="pill flex items-center gap-1">{animal.chance.baseCost} <img src={PRICE_CHIP_ICON} alt="chips" className="w-8 h-8 object-contain" /></span>
+                  <span className="pill flex items-center gap-1">{balance.chance.baseCost} <img src={PRICE_CHIP_ICON} alt="chips" className="w-8 h-8 object-contain" /></span>
                 </div>
               )}
             </div>
