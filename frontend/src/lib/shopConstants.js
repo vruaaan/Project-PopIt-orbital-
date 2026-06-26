@@ -62,7 +62,7 @@ export const CLICK_UPGRADES = [
 // DETAILS FOR Specials TAB
 export const ANIMAL_CHANCE_FORMULA = {
   logScale: 5.6,
-  logOffset: 1,
+  logOffset: 0,
   baseChance: 5,
 }
 
