@@ -6,8 +6,8 @@ import defaultcan from '../assets/plain can.webp'
 import sealcan from '../assets/sealcan.webp'
 import cowcan from '../assets/cowcan.webp'
 import dolpcan from '../assets/dolphincan.webp'
-import flamecan from '../assets/flamecan.png'
-import eggcan from '../assets/eggcan.png'
+import flamecan from '../assets/flamecan.webp'
+import eggcan from '../assets/eggcan.webp'
 import star from '../assets/star.png'
 import doubler from '../assets/doubler.webp'
 
@@ -95,6 +95,10 @@ export const ANIMAL_BALANCE = {
     multiplier: { base: 20, perLevel: 1.5, baseCost: 3000, costScale: 2.5 },
   },
   6: {
+    chance: {baseCost: 5000, costScale: 2.0, constant: 0.5},
+    multiplier: { base: 50, perLevel: 1.5, baseCost: 6000, costScale: 2.5 },
+  },
+  7: {
     chance: {baseCost: 5000, costScale: 2.0, constant: 0.5},
     multiplier: { base: 50, perLevel: 1.5, baseCost: 6000, costScale: 2.5 },
   },

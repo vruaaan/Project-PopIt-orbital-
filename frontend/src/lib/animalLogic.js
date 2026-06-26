@@ -4,6 +4,7 @@ import dol from '../assets/dolphin.webp'
 import egg from '../assets/egg.png' // egg png sufficiently small
 import flame from '../assets/flame.png'
 import ball from '../assets/ball.webp'
+import shuttle from '../assets/shuttlecock.webp'
 import { ANIMAL_BALANCE, calcAnimalChance } from './shopConstants'
 
 export const ANIMALS = [
@@ -34,14 +35,14 @@ export const ANIMALS = [
   {
     id: 4,
     name: "lawrence", dbKey: "egg",
-    desc: "#eatanbytheegg",
+    desc: "#eatenbytheegg",
     img: egg,
     imgClass: "w-24 h-24",
     ...ANIMAL_BALANCE[4],
   },
   {
     id: 5,
-    name: "fire.", dbKey: "phx",
+    name: "fire", dbKey: "phx",
     desc: "burnt.",
     img: flame,
     imgClass: "w-24 h-24",
@@ -54,6 +55,14 @@ export const ANIMALS = [
     img: ball,
     imgClass: "w-24 h-24",
     ...ANIMAL_BALANCE[6],
+  },
+  {
+    id: 7,
+    name: "batminton man", dbKey: "shuttle",
+    desc: "baddie",
+    img: shuttle,
+    imgClass: "w-24 h-24",
+    ...ANIMAL_BALANCE[7],
   },
 
 ]
