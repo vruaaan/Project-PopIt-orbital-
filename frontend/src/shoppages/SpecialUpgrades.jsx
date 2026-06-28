@@ -13,7 +13,8 @@ export default function SpecialUpgrades({ count, setCount, animalLevels, setAnim
         [animal.id]: {
           ...prev[animal.id],
           owned: true,
-          chanceLvl: 1
+          chanceLvl: 1,
+          multLvl: 1
         }
       }));
     } else {
