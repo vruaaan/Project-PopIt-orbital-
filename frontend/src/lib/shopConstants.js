@@ -100,7 +100,7 @@ export const ANIMAL_BALANCE = {
   },
   7: {
     chance: {baseCost: 10000, costScale: 2.0, constant: 0.5},
-    multiplier: { base: 100, perLevel: 40, baseCost: 6000, costScale: 2.5 },
+    multiplier: { base: 100, perLevel: 40, baseCost: 12000, costScale: 2.5 },
   },
 }
 
