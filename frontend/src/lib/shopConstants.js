@@ -84,23 +84,23 @@ export const ANIMAL_BALANCE = {
   },
   3: {
     chance: {baseCost: 1000, costScale: 2.0, constant: 0.8 },
-    multiplier: { base: 5, perLevel: 1.5, baseCost: 1200, costScale: 2.5 },
+    multiplier: { base: 5, perLevel: 2.5, baseCost: 1200, costScale: 2.5 },
   },
   4: {
     chance: {baseCost: 1500, costScale: 2.0, constant: 0.7 },
-    multiplier: { base: 10, perLevel: 1.5, baseCost: 2000, costScale: 2.5 },
+    multiplier: { base: 10, perLevel: 4, baseCost: 2000, costScale: 2.5 },
   },
    5: {
     chance: {baseCost: 2500, costScale: 2.0, constant: 0.6 },
-    multiplier: { base: 20, perLevel: 1.5, baseCost: 3000, costScale: 2.5 },
+    multiplier: { base: 20, perLevel: 8, baseCost: 3000, costScale: 2.5 },
   },
   6: {
     chance: {baseCost: 5000, costScale: 2.0, constant: 0.5},
-    multiplier: { base: 50, perLevel: 1.5, baseCost: 6000, costScale: 2.5 },
+    multiplier: { base: 50, perLevel: 20, baseCost: 6000, costScale: 2.5 },
   },
   7: {
-    chance: {baseCost: 5000, costScale: 2.0, constant: 0.5},
-    multiplier: { base: 50, perLevel: 1.5, baseCost: 6000, costScale: 2.5 },
+    chance: {baseCost: 10000, costScale: 2.0, constant: 0.5},
+    multiplier: { base: 100, perLevel: 40, baseCost: 6000, costScale: 2.5 },
   },
 }
 
