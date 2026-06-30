@@ -26,7 +26,6 @@ import CreateAccountPage from './userpages/CreateAccountPage'
 import ResetPasswordPage from './userpages/ResetPasswordPage'
 import SettingsPage from './SettingsPage'
 import TimerPage from './challengepages/TimerPage'
-import TimerLeaderboard from './challengepages/TimerLeaderboard'
 
 
 import { getCurrentUser, resetPassword, signInWithEmail, signOutUser, signUpWithEmail } from './lib/firebase'
@@ -387,14 +386,10 @@ export default function App() {
       return (
         <TimerPage
             onBack={() => setPage('home')}
-            onLeaderboard={() => setPage('timerLeaderboard')}
             settings={settings}
             setSettings={setSettings}
         />
       )
-  }
-  if (page === 'timerLeaderboard') {
-    return <TimerLeaderboard onBack={() => setPage('challenge')} />
   }
   if (page === 'login') {
     return <LoginPage onBack={() => setPage('home')} onLogin={handleLogin} onToCreateAccount={() => setPage('createAccount')} onToResetPassword={() => setPage('resetPassword')} />

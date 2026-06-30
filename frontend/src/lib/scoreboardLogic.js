@@ -1,7 +1,7 @@
 import { collection, getDocs, limit, orderBy, query } from 'firebase/firestore'
 import { db } from './firebase'
 
-function formatTimerLeaderboard(doc, index) {
+function formatScoreboard(doc, index) {
   const d = doc.data()
 
   return {
@@ -11,17 +11,16 @@ function formatTimerLeaderboard(doc, index) {
   }
 }
 
-export async function getTimerLeaderboard(limitCount = 10) {
+export async function getScoreboard(limitCount = 10) {
   try {
     const usersRef = collection(db, 'users')
     const q = query(
       usersRef,
       orderBy('score', 'desc'),
-      limit(limitCount + 1)
+      limit(limitCount)
     )
     const snapshot = await getDocs(q)
-    const hasMore = snapshot.docs.length > limitCount
-    const realEntries = snapshot.docs.slice(0, limitCount).map(formatTimerLeaderboard)
+    const realEntries = snapshot.docs.map(formatScoreboard)
 
     const emptySlots = Array.from(
       { length: limitCount - realEntries.length },
@@ -32,8 +31,8 @@ export async function getTimerLeaderboard(limitCount = 10) {
       })
     )
 
-    return { data: [...realEntries, ...emptySlots], hasMore, error: null }
+    return { data: [...realEntries, ...emptySlots], error: null }
   } catch (error) {
-    return { data: null, hasMore: false, error }
+    return { data: null, error }
   }
 }
