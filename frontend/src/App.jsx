@@ -6,6 +6,7 @@ import loginIcon from './assets/Login.png'
 import shop from './assets/shop.png'
 import leaderboard from './assets/leaderboard.png'
 import gear from './assets/gear.png'
+import timer from './assets/hourglass.png'
 
 // webP files for repeated renders
 import chip1 from './assets/chip1.webp'
@@ -24,6 +25,9 @@ import LoginPage from './userpages/LoginPage'
 import CreateAccountPage from './userpages/CreateAccountPage'
 import ResetPasswordPage from './userpages/ResetPasswordPage'
 import SettingsPage from './SettingsPage'
+import TimerPage from './challengepages/TimerPage'
+import TimerLeaderboard from './challengepages/TimerLeaderboard'
+
 
 import { getCurrentUser, resetPassword, signInWithEmail, signOutUser, signUpWithEmail } from './lib/firebase'
 import { loadProfile, createProfile } from './lib/playerService'
@@ -379,6 +383,19 @@ export default function App() {
         />
       )
   }
+  if (page === 'challenge') {
+      return (
+        <TimerPage
+            onBack={() => setPage('home')}
+            onLeaderboard={() => setPage('timerLeaderboard')}
+            settings={settings}
+            setSettings={setSettings}
+        />
+      )
+  }
+  if (page === 'timerLeaderboard') {
+    return <TimerLeaderboard onBack={() => setPage('challenge')} />
+  }
   if (page === 'login') {
     return <LoginPage onBack={() => setPage('home')} onLogin={handleLogin} onToCreateAccount={() => setPage('createAccount')} onToResetPassword={() => setPage('resetPassword')} />
   }
@@ -466,6 +483,15 @@ export default function App() {
             className="mt-8 p-0 bg-transparent border-0 focus:outline-none rounded-full">
             <span className="fixed right-25 top-4">
               <img src={gear} alt="settings" className="block w-20 h-auto origin-center hover:scale-105 transition-transform" />
+            </span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setPage('challenge')}
+            className="mt-8 p-0 bg-transparent border-0 focus:outline-none rounded-full">
+            <span className="fixed right-25 top-26">
+              <img src={timer} alt="timer" className="block w-18 h-auto origin-center hover:scale-105 transition-transform" />
             </span>
           </button>
         </div>
