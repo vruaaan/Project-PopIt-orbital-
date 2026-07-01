@@ -47,6 +47,17 @@ export default function TimerPage({ onBack, sessionLoaded, userEmail, highestSco
         }, 1000)
     }
 
+    const resetTimer = () => {
+        if (timerRef.current) {
+            window.clearInterval(timerRef.current)
+            timerRef.current = null
+        }
+
+        setTimerStarted(false)
+        setTimeLeft(30)
+        scoreSavedRef.current = false
+    }
+
     useEffect(() => {
         const saveScore = async () => {
             if (!userEmail || scoreSavedRef.current || !timerStarted || timeLeft !== 0) {
@@ -124,19 +135,26 @@ export default function TimerPage({ onBack, sessionLoaded, userEmail, highestSco
                     )}
                 </div>
 
-                {userEmail && (
-                    <div className="stats-bar flex items-center gap-6">
+                <div className="stats-bar flex items-center gap-6">
+                    {userEmail && (
                         <div className="flex items-center gap-3">
                             <span className="challenge-highest">Score: {highestScore}</span>
                         </div>
-                        <div className="flex items-center gap-3">
+                    )}
+                    {activeView === 'Challenge' && (
+                        <button
+                            type="button"
+                            onClick={resetTimer}
+                            className="flex items-center gap-3 bg-transparent border-0 p-0 text-left"
+                            aria-label="Reset timer"
+                        >
                             <img src={hourglass} alt="time left" className="w-8 h-auto" />
                             <span className="text-xl font-serif">
                                 {timerStarted ? `${timeLeft}s left` : 'Ready to start'}
                             </span>
-                        </div>
-                    </div>
-                )}
+                        </button>
+                    )}
+                </div>
             </div>
         </div>
     )
