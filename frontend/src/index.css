@@ -2,384 +2,438 @@
 @import "tailwindcss";
 
 :root {
-  /* colors */
-  --text: #B16650;
-  --text-h: #B04A30;
-  --bg: #EEE6D8;
-  --border: #AF4D32;
-  --code-bg: #e4ddd3;
-
-  --accent: #B04A30;
-  --accent-bg: rgba(192, 74, 42, 0.1);
-  --accent-border: rgba(192, 74, 42, 0.45);
-  --social-bg: rgba(192, 74, 42, 0.06);
-
-  /* shadows */
-  --shadow:
-    rgba(192, 74, 42, 0.12) 0 10px 15px -3px,
-    rgba(192, 74, 42, 0.06) 0 4px 6px -2px;
-
-  /* fonts */
-  --sans: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
-  --heading: 'Playfair Display', 'Times New Roman', serif;
-  --mono: ui-monospace, Consolas, monospace;
-  --normal: serif;
-}
-
-/* base font size: adjust here to scale the whole UI (1rem = 16px by default) */
-html { font-size: 16px; }
-
-/* Counter badge font + size */
-.counter-badge {
-  color: var(--text-h);
-  font-family: 'Libre Baskerville', sans-serif;
-  font-size: 6rem;
-  line-height: 1;
-  font-weight: 500;
-}
-
-/* shop counter font + size */
-.counter-shop {
-  color: var(--text-h);
-  font-family: 'Libre Baskerville', sans-serif;
-  font-size: 3rem;
-  line-height: 1;
-  font-weight: 500;
-}
-
-/* shop tab sizing*/
-.tab-btn {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 0.3rem;
-  padding: 0.1rem 1rem;
-  border-radius: 9999px;
-  font-family: var(--normal);
-  font-size: 2.2rem;
-  text-transform: capitalize;
-  transition: all 120ms ease;
-  cursor: pointer;
-  border: 0;
-}
-
-.tab-btn-active {
-  background: var(--accent);
-  color: var(--bg);
-  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-}
-
-
-.tab-btn-inactive {
-  background: transparent;
-  border: 1px solid #b55334;
-  color: #b55334;
-}
-
-.tab-btn-inactive:hover {
-  background: rgba(181, 83, 52, 0.1);
-}
-
-/* Page title used in small headers (e.g. Leaderboard) */
-.pagename {
-  color: var(--text-h);
-  font-family:'Libre Baskerville', sans-serif;
-  font-size: 4rem; 
-  font-weight: 500;
-}
-
-
-@media (prefers-color-scheme: dark) { /*DARK MODE, EDIT LATER*/
-  :root {
+    /* colors */
     --text: #B16650;
     --text-h: #B04A30;
     --bg: #EEE6D8;
     --border: #AF4D32;
     --code-bg: #e4ddd3;
-  }
+
+    --accent: #B04A30;
+    --accent-bg: rgba(192, 74, 42, 0.1);
+    --accent-border: rgba(192, 74, 42, 0.45);
+    --social-bg: rgba(192, 74, 42, 0.06);
+
+    /* shadows */
+    --shadow:
+        rgba(192, 74, 42, 0.12) 0 10px 15px -3px,
+        rgba(192, 74, 42, 0.06) 0 4px 6px -2px;
+
+    /* fonts */
+    --sans: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+    --heading: 'Playfair Display', 'Times New Roman', serif;
+    --mono: ui-monospace, Consolas, monospace;
+    --normal: serif;
+}
+
+/* base font size: adjust here to scale the whole UI (1rem = 16px by default) */
+html {
+    font-size: 16px;
+}
+
+/* Counter badge font + size */
+.counter-badge {
+    color: var(--text-h);
+    font-family: 'Libre Baskerville', sans-serif;
+    font-size: 6rem;
+    line-height: 1;
+    font-weight: 500;
+}
+
+/* shop counter font + size */
+.counter-shop {
+    color: var(--text-h);
+    font-family: 'Libre Baskerville', sans-serif;
+    font-size: 3rem;
+    line-height: 1;
+    font-weight: 500;
+}
+
+/* shop tab sizing*/
+.tab-btn {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.1rem 1rem;
+    border-radius: 9999px;
+    font-family: var(--normal);
+    font-size: 2.2rem;
+    text-transform: capitalize;
+    transition: all 120ms ease;
+    cursor: pointer;
+    border: 0;
+}
+
+.tab-btn-active {
+    background: var(--accent);
+    color: var(--bg);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+
+.tab-btn-inactive {
+    background: transparent;
+    border: 1px solid #b55334;
+    color: #b55334;
+}
+
+.tab-btn-inactive:hover {
+    background: rgba(181, 83, 52, 0.1);
+}
+
+/* Page title used in small headers (e.g. Leaderboard) */
+.pagename {
+    color: var(--text-h);
+    font-family: 'Libre Baskerville', sans-serif;
+    font-size: 4rem;
+    font-weight: 500;
+}
+
+
+@media (prefers-color-scheme: dark) {
+
+    /*DARK MODE, EDIT LATER*/
+    :root {
+        --text: #B16650;
+        --text-h: #B04A30;
+        --bg: #EEE6D8;
+        --border: #AF4D32;
+        --code-bg: #e4ddd3;
+    }
 }
 
 
 * {
-  box-sizing: border-box;
+    box-sizing: border-box;
 }
 
 body {
-  margin: 0;
-  background-color: var(--bg);
-  color: var(--text);
-  font-family: var(--sans);
+    margin: 0;
+    background-color: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
 }
 
 
 #root {
-  width: 1126px;
-  max-width: 100%;
-  min-height: 100vh;
+    width: 1126px;
+    max-width: 100%;
+    min-height: 100vh;
 
-  margin: 0 auto;
+    margin: 0 auto;
 
-  display: flex;
-  flex-direction: column;
+    display: flex;
+    flex-direction: column;
 
-  text-align: center;
+    text-align: center;
 
-  border-inline: 1px solid var(--border);
+    border-inline: 1px solid var(--border);
 }
 
 h1,
 h2 {
-  font-family: var(--heading);
-  font-weight: 500;
-  color: var(--text-h);
+    font-family: var(--heading);
+    font-weight: 500;
+    color: var(--text-h);
 }
 
 h1 {
-  font-size: 56px;
-  letter-spacing: -1.68px;
-  margin: 32px 0;
+    font-size: 56px;
+    letter-spacing: -1.68px;
+    margin: 32px 0;
 }
 
 h2 {
-  font-size: 24px;
-  line-height: 118%;
-  letter-spacing: -0.24px;
-  margin: 0 0 8px;
+    font-size: 24px;
+    line-height: 118%;
+    letter-spacing: -0.24px;
+    margin: 0 0 8px;
 }
 
 @media (max-width: 1024px) {
-  h1 {
-    font-size: 36px;
-    margin: 20px 0;
-  }
+    h1 {
+        font-size: 36px;
+        margin: 20px 0;
+    }
 
-  h2 {
-    font-size: 20px;
-  }
+    h2 {
+        font-size: 20px;
+    }
 }
 
 p {
-  margin: 0;
+    margin: 0;
 }
 
 code,
 .counter {
-  font-family: var(--mono);
-  display: inline-flex;
-  border-radius: 4px;
-  color: var(--text-h);
+    font-family: var(--mono);
+    display: inline-flex;
+    border-radius: 4px;
+    color: var(--text-h);
 }
 
 code {
-  font-size: 15px;
-  line-height: 135%;
-  padding: 4px 8px;
-  background: var(--code-bg);
+    font-size: 15px;
+    line-height: 135%;
+    padding: 4px 8px;
+    background: var(--code-bg);
 }
 
 /* Consolidated classes extracted from repeated component utilities */
 /* Page base used on top-level page wrappers */
 .page-base {
-  min-height: 100vh;
-  background-color: #e7dfd2;
-  padding: 1.5rem;
-  color: #b55334;
+    min-height: 100vh;
+    background-color: #e7dfd2;
+    padding: 1.5rem;
+    color: #b55334;
 }
 
 /* Card / main content container shared by pages */
 .main-card {
-  margin-left: auto;
-  margin-right: auto;
-  display: flex;
-  min-height: 100vh;
-  width: 100%;
-  flex-direction: column;
-  border-radius: 2rem;
-  border: 1px solid #d8c7b0;
-  background: rgba(238,230,216,0.72);
-  padding: 2.5rem;
-  box-shadow: var(--shadow);
+    margin-left: auto;
+    margin-right: auto;
+    display: flex;
+    min-height: 100vh;
+    width: 100%;
+    flex-direction: column;
+    border-radius: 2rem;
+    border: 1px solid #d8c7b0;
+    background: rgba(238, 230, 216, 0.72);
+    padding: 2.5rem;
+    box-shadow: var(--shadow);
 }
 
 /* Large page title used across screens */
 .title-huge {
-  font-size: 3.75rem; /* equivalent to text-6xl */
-  font-family: var(--heading);
-  color: var(--text-h);
-  text-shadow: 0 3px 2px rgba(0,0,0,0.2);
+    font-size: 3.75rem;
+    /* equivalent to text-6xl */
+    font-family: var(--heading);
+    color: var(--text-h);
+    text-shadow: 0 3px 2px rgba(0, 0, 0, 0.2);
 }
 
 /* Back button image */
 .back-img {
-  width: 5rem;
-  height: auto;
-  transition: transform 160ms ease;
+    width: 5rem;
+    height: auto;
+    transition: transform 160ms ease;
 }
-.back-img:hover { transform: scale(1.05); }
+
+.back-img:hover {
+    transform: scale(1.05);
+}
 
 /* Table and list rows */
 .table-headers {
-  border-bottom: 1px solid #cfae94;
-  font-size: 1.5rem; /* text-2xl */
-  font-family: var(--heading);
+    border-bottom: 1px solid #cfae94;
+    font-size: 1.5rem;
+    /* text-2xl */
+    font-family: var(--heading);
 }
+
 .row-hover {
-  border-bottom: 1px solid #d8c7b0;
-  transition: background-color 160ms ease;
+    border-bottom: 1px solid #d8c7b0;
+    transition: background-color 160ms ease;
 }
-.row-hover:hover { background: rgba(255,255,255,0.2); }
+
+.row-hover:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
 
 /* Price pill */
 .pill {
-  border-radius: 9999px;
-  background: #e5c5a8;
-  padding: 0.5rem 1.25rem;
-  font-size: 1.125rem;
-  font-family: var(--heading);
-  color: #8d3f26;
-  box-shadow: 0 1px 0 rgba(0,0,0,0.04);
+    border-radius: 9999px;
+    background: #e5c5a8;
+    padding: 0.5rem 1.25rem;
+    font-size: 1.125rem;
+    font-family: var(--heading);
+    color: #8d3f26;
+    box-shadow: 0 1px 0 rgba(0, 0, 0, 0.04);
 }
 
 /* Primary rounded button used for upgrades */
 .btn-upgrade {
-  border-radius: 9999px;
-  background: #b55334;
-  padding: 0.4rem 2rem;
-  font-size: 1.125rem;
-  font-family: var(--heading);
-  color: white;
-  box-shadow: 0 6px 10px -4px rgba(0,0,0,0.2);
-  transition: transform 120ms ease;
-  border: 0;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.5rem;
-  min-width: 7rem;
+    border-radius: 9999px;
+    background: #b55334;
+    padding: 0.4rem 2rem;
+    font-size: 1.125rem;
+    font-family: var(--heading);
+    color: white;
+    box-shadow: 0 6px 10px -4px rgba(0, 0, 0, 0.2);
+    transition: transform 120ms ease;
+    border: 0;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    min-width: 7rem;
 }
-.btn-upgrade:hover { transform: scale(1.05); }
-.btn-upgrade:active { transform: scale(0.95); }
+
+.btn-upgrade:hover {
+    transform: scale(1.05);
+}
+
+.btn-upgrade:active {
+    transform: scale(0.95);
+}
 
 /* Bottom stats bar */
 .stats-bar {
-  margin-top: 2.5rem;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  border-radius: 1rem;
-  background: rgba(255,255,255,0.2);
-  padding: 1rem 1.5rem;
+    margin-top: 2.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-radius: 1rem;
+    background: rgba(255, 255, 255, 0.2);
+    padding: 1rem 1.5rem;
 }
 
 /* Shared shop upgrade layout */
 .shop-upgrade-list {
-  margin-top: 2rem;
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
+    margin-top: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
 }
 
 .shop-upgrade-card {
-  border-radius: 1.5rem;
-  border: 1px solid #d4a792;
-  background: rgba(255,255,255,0.4);
-  padding: 1.5rem;
-  transition: all 160ms ease;
+    border-radius: 1.5rem;
+    border: 1px solid #d4a792;
+    background: rgba(255, 255, 255, 0.4);
+    padding: 1.5rem;
+    transition: all 160ms ease;
 }
 
 .shop-upgrade-card--owned {
-  border-color: #b55334;
-  background: rgba(181, 83, 52, 0.05);
+    border-color: #b55334;
+    background: rgba(181, 83, 52, 0.05);
 }
 
 /* Vertical card used in CosmeticUpgrades */
 .cosmetic-card {
-  border-radius: 1.5rem;
-  border: 1px solid #d4a792;
-  background: rgba(255, 255, 255, 0.4);
-  padding: 1.5rem;
-  transition: all 160ms ease;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1rem;
+    border-radius: 1.5rem;
+    border: 1px solid #d4a792;
+    background: rgba(255, 255, 255, 0.4);
+    padding: 1.5rem;
+    transition: all 160ms ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
 }
 
 .cosmetic-card--owned {
-  border-color: #b55334;
-  background: rgba(181, 83, 52, 0.05);
+    border-color: #b55334;
+    background: rgba(181, 83, 52, 0.05);
 }
 
 .shop-upgrade-row-top {
-  display: flex;
-  align-items: center;
-  padding-left: rem; /* adjust to taste */
+    display: flex;
+    align-items: center;
+    padding-left: rem;
+    /* adjust to taste */
 }
 
 .shop-upgrade-row-bottom {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
 
 .shop-upgrade-row {
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
 }
 
 .shop-upgrade-title {
-  font-family: var(--heading);
-  font-size: 1.5rem;
-  color: #b55334;
-  text-align: left;
+    font-family: var(--heading);
+    font-size: 1.5rem;
+    color: #b55334;
+    text-align: left;
 }
 
 .shop-cosmetic-title {
-  font-family: var(--heading);
-  font-size: 1.5rem;
-  color: #b55334;
-  text-align: center;
+    font-family: var(--heading);
+    font-size: 1.5rem;
+    color: #b55334;
+    text-align: center;
 }
 
 .shop-upgrade-desc {
-  margin-top: 0.25rem;
-  color: #8d5d46;
-  text-align: left;
+    margin-top: 0.25rem;
+    color: #8d5d46;
+    text-align: left;
 }
 
 .shop-upgrade-meta {
-  margin-top: 0.5rem;
-  color: #8d5d46;
-  font-size: 0.875rem;
-  text-align: left;
+    margin-top: 0.5rem;
+    color: #8d5d46;
+    font-size: 0.875rem;
+    text-align: left;
 }
 
 /* Button + price pill stacked vertically */
 .upgrade-action {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
 }
 
 /* Same as upgrade-action but pushed to the right */
 .upgrade-action--right {
-  margin-left: auto;
+    margin-left: auto;
 }
 
 /* Fixed-width image container so text aligns across cards */
 .upgrade-img-box {
-  width: 7.5rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
+    width: 7.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
 }
 
 /* Text block inside upgrade rows */
 .upgrade-text-block {
-  flex: 1;
-  text-align: left;
+    flex: 1;
+    text-align: left;
+}
+
+.challenge-counter {
+    position: absolute;
+    left: 3.2rem;
+    top: -0.1rem;
+    font-family: 'Libre Baskerville', sans-serif;
+    font-size: 4.5rem;
+    line-height: 1;
+    color: var(--text-h);
+}
+
+.challenge-badge {
+    position: absolute;
+    left: 0.2rem;
+    top: 0rem;
+}
+
+.challenge-timer {
+    position: absolute;
+    left: 0.2rem;
+    bottom: 0.25rem;
+    font-family: var(--heading);
+    font-size: 2.5rem;
+    line-height: 1;
+    color: var(--text-h);
+}
+
+.challenge-highest {
+    color: var(--text-h);
+    font-family: 'Libre Baskerville', sans-serif;
+    font-size: 2rem;
+    line-height: 1;
+    font-weight: 500;
 }
